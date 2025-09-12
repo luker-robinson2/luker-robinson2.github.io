@@ -69,3 +69,11 @@ glob.sync("*.hbs", { cwd: pagesDir }).forEach(file => {
 // Copy CSS
 fs.copySync(path.join(srcDir, "style.css"), path.join(distDir, "style.css"));
 console.log("Copied style.css");
+
+// Copy images
+const imgSrcDir = path.join(srcDir, "views/img");
+const imgDistDir = path.join(distDir, "img");
+if (fs.existsSync(imgSrcDir)) {
+  fs.copySync(imgSrcDir, imgDistDir);
+  console.log("Copied images to docs/img");
+}

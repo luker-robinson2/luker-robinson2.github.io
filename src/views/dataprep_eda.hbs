@@ -53,7 +53,7 @@
                             </div>
                         </div>
 
-                        <h4>📥 Download Data Files</h4>
+                        <h4>📥 Download Complete Dataset</h4>
                         
                         <!-- Dropbox Download Section -->
                         <div class="alert alert-primary mb-4">
@@ -71,102 +71,12 @@
                             </div>
                         </div>
                         
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h5>🗂️ Processed CSV Data</h5>
-                                <ul>
-                                    <li><a href="data/hltv_matches.csv" download>📊 Main HLTV Matches Data</a> (2.7 KB)</li>
-                                    <li><a href="data/hltv_matches_debug.csv" download>🔍 Debug HLTV Data</a> (46 KB)</li>
-                                    <li><strong>Individual Match Data:</strong></li>
-                                    <li><a href="data/hltv_data/aether-vs-full-send-m1-mirage_deaths.csv" download>💀 Aether vs Full Send - Mirage Deaths</a></li>
-                                    <li><a href="data/hltv_data/aether-vs-full-send-m1-mirage_bomb_events.csv" download>💣 Aether vs Full Send - Mirage Bomb Events</a></li>
-                                    <li><a href="data/hltv_data/aether-vs-full-send-m1-mirage_rounds.csv" download>🏆 Aether vs Full Send - Mirage Rounds</a></li>
-                                    <li><a href="#" onclick="downloadAllCSV()">📦 Download All CSV Files (Zip)</a></li>
-                                </ul>
-                            </div>
-                            <div class="col-md-6">
-                                <h5>🎮 Raw Demo Files</h5>
-                                <ul>
-                                    <li><a href="data/demos/2385025_99903.rar" download>📁 SemperFi vs Underground Match</a> (RAR)</li>
-                                    <li><a href="data/demos/2385383_99901.rar" download>📁 Aether vs Full Send Match</a> (RAR)</li>
-                                    <li><a href="data/demos/2385385_99900.rar" download>📁 InControl vs Nocturnal Match</a> (RAR)</li>
-                                </ul>
-                                
-                                <h5>💻 Code & Scripts</h5>
-                                <ul>
-                                    <li><a href="data/scripts/parse_demo_demoparser2.py" download>🐍 Main Parsing Script</a></li>
-                                    <li><a href="data/scripts/parse_demo.py" download>🐍 Alternative Parser</a></li>
-                                    <li><a href="data/scripts/scraping.py" download>🐍 HLTV Scraping Script</a></li>
-                                </ul>
-                                
-                                <h5>📓 Jupyter Notebooks</h5>
-                                <ul>
-                                    <li><a href="data/notebooks/data_prepeda.ipynb" download>📊 Data Prep & EDA Notebook</a></li>
-                                    <li><a href="data/notebooks/part1.ipynb" download>📈 Analysis Part 1 Notebook</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        
                         <div class="alert alert-info mt-3">
-                            <strong>📋 Dataset Overview:</strong> 26 CSV files, 3 demo archives, 3 Python scripts, 2 Jupyter notebooks
-                            <br><strong>💾 Total Size:</strong> Approximately 50+ MB of CS:GO professional match data
+                            <strong>📋 Dataset Contents:</strong> 26 CSV files, 3 demo archives, 3 Python scripts, 2 Jupyter notebooks
+                            <br><strong>💾 Total Size:</strong> Approximately 500MB of CS2 professional match data
+                            <br><strong>📁 Includes:</strong> Raw demo files, processed CSV data, parsing scripts, analysis notebooks, and cleaned datasets
                         </div>
                         
-                        <!-- Expandable section for all CSV files -->
-                        <div class="card mt-3">
-                            <div class="card-header">
-                                <h5 class="mb-0">
-                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#allCSVFiles" aria-expanded="false" aria-controls="allCSVFiles">
-                                        📂 View All Individual CSV Files (Click to expand)
-                                    </button>
-                                </h5>
-                            </div>
-                            <div id="allCSVFiles" class="collapse">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <h6>🎯 Aether vs Full Send</h6>
-                                            <ul class="small">
-                                                <li><a href="data/hltv_data/aether-vs-full-send-m1-mirage_deaths.csv" download>💀 Mirage Deaths</a></li>
-                                                <li><a href="data/hltv_data/aether-vs-full-send-m1-mirage_bomb_events.csv" download>💣 Mirage Bomb Events</a></li>
-                                                <li><a href="data/hltv_data/aether-vs-full-send-m1-mirage_rounds.csv" download>🏆 Mirage Rounds</a></li>
-                                                <li><a href="data/hltv_data/aether-vs-full-send-m2-inferno_deaths.csv" download>💀 Inferno Deaths</a></li>
-                                                <li><a href="data/hltv_data/aether-vs-full-send-m2-inferno_bomb_events.csv" download>💣 Inferno Bomb Events</a></li>
-                                                <li><a href="data/hltv_data/aether-vs-full-send-m2-inferno_rounds.csv" download>🏆 Inferno Rounds</a></li>
-                                                <li><a href="data/hltv_data/aether-vs-full-send-m3-train_deaths.csv" download>💀 Train Deaths</a></li>
-                                                <li><a href="data/hltv_data/aether-vs-full-send-m3-train_bomb_events.csv" download>💣 Train Bomb Events</a></li>
-                                                <li><a href="data/hltv_data/aether-vs-full-send-m3-train_rounds.csv" download>🏆 Train Rounds</a></li>
-                                            </ul>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <h6>🎯 InControl vs Nocturnal</h6>
-                                            <ul class="small">
-                                                <li><a href="data/hltv_data/incontrol-vs-nocturnal-m1-mirage_deaths.csv" download>💀 Mirage Deaths</a></li>
-                                                <li><a href="data/hltv_data/incontrol-vs-nocturnal-m1-mirage_bomb_events.csv" download>💣 Mirage Bomb Events</a></li>
-                                                <li><a href="data/hltv_data/incontrol-vs-nocturnal-m1-mirage_rounds.csv" download>🏆 Mirage Rounds</a></li>
-                                                <li><a href="data/hltv_data/incontrol-vs-nocturnal-m2-train_deaths.csv" download>💀 Train Deaths</a></li>
-                                                <li><a href="data/hltv_data/incontrol-vs-nocturnal-m2-train_bomb_events.csv" download>💣 Train Bomb Events</a></li>
-                                                <li><a href="data/hltv_data/incontrol-vs-nocturnal-m2-train_rounds.csv" download>🏆 Train Rounds</a></li>
-                                                <li><a href="data/hltv_data/incontrol-vs-nocturnal-m3-nuke_deaths.csv" download>💀 Nuke Deaths</a></li>
-                                                <li><a href="data/hltv_data/incontrol-vs-nocturnal-m3-nuke_bomb_events.csv" download>💣 Nuke Bomb Events</a></li>
-                                                <li><a href="data/hltv_data/incontrol-vs-nocturnal-m3-nuke_rounds.csv" download>🏆 Nuke Rounds</a></li>
-                                            </ul>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <h6>🎯 SemperFi vs Underground</h6>
-                                            <ul class="small">
-                                                <li><a href="data/hltv_data/semperfi-vs-underground-m1-nuke_deaths.csv" download>💀 Nuke Deaths</a></li>
-                                                <li><a href="data/hltv_data/semperfi-vs-underground-m1-nuke_bomb_events.csv" download>💣 Nuke Bomb Events</a></li>
-                                                <li><a href="data/hltv_data/semperfi-vs-underground-m1-nuke_rounds.csv" download>🏆 Nuke Rounds</a></li>
-                                                <li><a href="data/hltv_data/semperfi-vs-underground-m2-mirage_deaths.csv" download>💀 Mirage Deaths</a></li>
-                                                <li><a href="data/hltv_data/semperfi-vs-underground-m2-mirage_bomb_events.csv" download>💣 Mirage Bomb Events</a></li>
-                                                <li><a href="data/hltv_data/semperfi-vs-underground-m2-mirage_rounds.csv" download>🏆 Mirage Rounds</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
