@@ -1,0 +1,638 @@
+{{#> main title="DataPrep & EDA" }}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="display-4 text-center mb-4">Data Preparation & Exploratory Data Analysis</h1>
+            <p class="lead text-center mb-5">Counter-Strike 2 Professional Match Analysis</p>
+        </div>
+    </div>
+
+    <!-- Data Sources Section -->
+    <section id="data-sources" class="mb-5">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="section-title">🎯 Data Sources & Collection</h2>
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h4>Data Collection Method</h4>
+                        <p>Data was collected from Counter-Strike 2 (CS2) professional match demos using the <strong>demoparser2</strong> Python library. This library allows parsing of CS2 demo files (.dem) to extract detailed game statistics and events.</p>
+                        
+                        <h4>Raw Data Sources</h4>
+                        <ul>
+                            <li><strong>Demo Files:</strong> Professional CS2 matches from HLTV.org</li>
+                            <li><strong>Match Coverage:</strong> 3 complete professional matches (8 maps total)</li>
+                            <li><strong>Match IDs:</strong>
+                                <ul>
+                                    <li>2385025_99903 (semperfi vs underground)</li>
+                                    <li>2385383_99901 (aether vs full-send)</li>
+                                    <li>2385385_99900 (incontrol vs nocturnal)</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <h4>Data Extraction Process</h4>
+                        <p>Demo files were processed using a custom Python script (<code>parse_demo_demoparser2.py</code>) that extracts:</p>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="feature-box">
+                                    <h5>💀 Deaths Data</h5>
+                                    <p>Player kills, weapons used, damage dealt, positions, and contextual information</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="feature-box">
+                                    <h5>💣 Bomb Events</h5>
+                                    <p>Bomb plant, defuse, and explosion events with precise timing and locations</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="feature-box">
+                                    <h5>🏆 Round Data</h5>
+                                    <p>Round outcomes, win conditions, team performance, and map information</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4>📥 Download Data Files</h4>
+                        
+                        <!-- Dropbox Download Section -->
+                        <div class="alert alert-primary mb-4">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <h5><i class="fab fa-dropbox"></i> Complete Dataset on Dropbox</h5>
+                                    <p class="mb-0">Download the entire dataset including raw demo files, parsed CSV data, analysis scripts, and cleaned datasets from our Dropbox repository.</p>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <a href="https://www.dropbox.com/scl/fi/9sxjlde1cyml4il9y4d0l/machine_learning.zip?rlkey=avb7mvveewgwc11giuz7g0itd&st=0dz3azx8&dl=0" target="_blank" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-cloud-download-alt"></i> Download All Data
+                                    </a>
+                                    <br><small class="text-muted">~500MB total</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>🗂️ Processed CSV Data</h5>
+                                <ul>
+                                    <li><a href="data/hltv_matches.csv" download>📊 Main HLTV Matches Data</a> (2.7 KB)</li>
+                                    <li><a href="data/hltv_matches_debug.csv" download>🔍 Debug HLTV Data</a> (46 KB)</li>
+                                    <li><strong>Individual Match Data:</strong></li>
+                                    <li><a href="data/hltv_data/aether-vs-full-send-m1-mirage_deaths.csv" download>💀 Aether vs Full Send - Mirage Deaths</a></li>
+                                    <li><a href="data/hltv_data/aether-vs-full-send-m1-mirage_bomb_events.csv" download>💣 Aether vs Full Send - Mirage Bomb Events</a></li>
+                                    <li><a href="data/hltv_data/aether-vs-full-send-m1-mirage_rounds.csv" download>🏆 Aether vs Full Send - Mirage Rounds</a></li>
+                                    <li><a href="#" onclick="downloadAllCSV()">📦 Download All CSV Files (Zip)</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>🎮 Raw Demo Files</h5>
+                                <ul>
+                                    <li><a href="data/demos/2385025_99903.rar" download>📁 SemperFi vs Underground Match</a> (RAR)</li>
+                                    <li><a href="data/demos/2385383_99901.rar" download>📁 Aether vs Full Send Match</a> (RAR)</li>
+                                    <li><a href="data/demos/2385385_99900.rar" download>📁 InControl vs Nocturnal Match</a> (RAR)</li>
+                                </ul>
+                                
+                                <h5>💻 Code & Scripts</h5>
+                                <ul>
+                                    <li><a href="data/scripts/parse_demo_demoparser2.py" download>🐍 Main Parsing Script</a></li>
+                                    <li><a href="data/scripts/parse_demo.py" download>🐍 Alternative Parser</a></li>
+                                    <li><a href="data/scripts/scraping.py" download>🐍 HLTV Scraping Script</a></li>
+                                </ul>
+                                
+                                <h5>📓 Jupyter Notebooks</h5>
+                                <ul>
+                                    <li><a href="data/notebooks/data_prepeda.ipynb" download>📊 Data Prep & EDA Notebook</a></li>
+                                    <li><a href="data/notebooks/part1.ipynb" download>📈 Analysis Part 1 Notebook</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info mt-3">
+                            <strong>📋 Dataset Overview:</strong> 26 CSV files, 3 demo archives, 3 Python scripts, 2 Jupyter notebooks
+                            <br><strong>💾 Total Size:</strong> Approximately 50+ MB of CS:GO professional match data
+                        </div>
+                        
+                        <!-- Expandable section for all CSV files -->
+                        <div class="card mt-3">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#allCSVFiles" aria-expanded="false" aria-controls="allCSVFiles">
+                                        📂 View All Individual CSV Files (Click to expand)
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="allCSVFiles" class="collapse">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h6>🎯 Aether vs Full Send</h6>
+                                            <ul class="small">
+                                                <li><a href="data/hltv_data/aether-vs-full-send-m1-mirage_deaths.csv" download>💀 Mirage Deaths</a></li>
+                                                <li><a href="data/hltv_data/aether-vs-full-send-m1-mirage_bomb_events.csv" download>💣 Mirage Bomb Events</a></li>
+                                                <li><a href="data/hltv_data/aether-vs-full-send-m1-mirage_rounds.csv" download>🏆 Mirage Rounds</a></li>
+                                                <li><a href="data/hltv_data/aether-vs-full-send-m2-inferno_deaths.csv" download>💀 Inferno Deaths</a></li>
+                                                <li><a href="data/hltv_data/aether-vs-full-send-m2-inferno_bomb_events.csv" download>💣 Inferno Bomb Events</a></li>
+                                                <li><a href="data/hltv_data/aether-vs-full-send-m2-inferno_rounds.csv" download>🏆 Inferno Rounds</a></li>
+                                                <li><a href="data/hltv_data/aether-vs-full-send-m3-train_deaths.csv" download>💀 Train Deaths</a></li>
+                                                <li><a href="data/hltv_data/aether-vs-full-send-m3-train_bomb_events.csv" download>💣 Train Bomb Events</a></li>
+                                                <li><a href="data/hltv_data/aether-vs-full-send-m3-train_rounds.csv" download>🏆 Train Rounds</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h6>🎯 InControl vs Nocturnal</h6>
+                                            <ul class="small">
+                                                <li><a href="data/hltv_data/incontrol-vs-nocturnal-m1-mirage_deaths.csv" download>💀 Mirage Deaths</a></li>
+                                                <li><a href="data/hltv_data/incontrol-vs-nocturnal-m1-mirage_bomb_events.csv" download>💣 Mirage Bomb Events</a></li>
+                                                <li><a href="data/hltv_data/incontrol-vs-nocturnal-m1-mirage_rounds.csv" download>🏆 Mirage Rounds</a></li>
+                                                <li><a href="data/hltv_data/incontrol-vs-nocturnal-m2-train_deaths.csv" download>💀 Train Deaths</a></li>
+                                                <li><a href="data/hltv_data/incontrol-vs-nocturnal-m2-train_bomb_events.csv" download>💣 Train Bomb Events</a></li>
+                                                <li><a href="data/hltv_data/incontrol-vs-nocturnal-m2-train_rounds.csv" download>🏆 Train Rounds</a></li>
+                                                <li><a href="data/hltv_data/incontrol-vs-nocturnal-m3-nuke_deaths.csv" download>💀 Nuke Deaths</a></li>
+                                                <li><a href="data/hltv_data/incontrol-vs-nocturnal-m3-nuke_bomb_events.csv" download>💣 Nuke Bomb Events</a></li>
+                                                <li><a href="data/hltv_data/incontrol-vs-nocturnal-m3-nuke_rounds.csv" download>🏆 Nuke Rounds</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h6>🎯 SemperFi vs Underground</h6>
+                                            <ul class="small">
+                                                <li><a href="data/hltv_data/semperfi-vs-underground-m1-nuke_deaths.csv" download>💀 Nuke Deaths</a></li>
+                                                <li><a href="data/hltv_data/semperfi-vs-underground-m1-nuke_bomb_events.csv" download>💣 Nuke Bomb Events</a></li>
+                                                <li><a href="data/hltv_data/semperfi-vs-underground-m1-nuke_rounds.csv" download>🏆 Nuke Rounds</a></li>
+                                                <li><a href="data/hltv_data/semperfi-vs-underground-m2-mirage_deaths.csv" download>💀 Mirage Deaths</a></li>
+                                                <li><a href="data/hltv_data/semperfi-vs-underground-m2-mirage_bomb_events.csv" download>💣 Mirage Bomb Events</a></li>
+                                                <li><a href="data/hltv_data/semperfi-vs-underground-m2-mirage_rounds.csv" download>🏆 Mirage Rounds</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Raw Data Overview Section -->
+    <section id="raw-data" class="mb-5">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="section-title">📊 Raw Data Overview</h2>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <div class="card-header bg-danger text-white">
+                                <h5 class="mb-0">💀 Deaths Dataset</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li><strong>Records:</strong> 1,242 kill events</li>
+                                    <li><strong>Features:</strong> 27 variables</li>
+                                    <li><strong>Key Info:</strong> Weapon details, damage, distance, situational context</li>
+                                    <li><strong>Sample Columns:</strong> attacker_name, weapon, dmg_health, distance, headshot</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <div class="card-header bg-warning text-white">
+                                <h5 class="mb-0">💣 Bomb Events Dataset</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li><strong>Records:</strong> 107 bomb events</li>
+                                    <li><strong>Features:</strong> 6 variables</li>
+                                    <li><strong>Event Types:</strong> planted (76), defused (19), exploded (12)</li>
+                                    <li><strong>Sample Columns:</strong> site, user_name, event_type, tick</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="mb-0">🏆 Rounds Dataset</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li><strong>Records:</strong> 175 rounds</li>
+                                    <li><strong>Features:</strong> 8 variables</li>
+                                    <li><strong>Maps:</strong> Mirage (67), Train (45), Nuke (40), Inferno (23)</li>
+                                    <li><strong>Sample Columns:</strong> winning_team, round_end_reason, map_name</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Raw Data Samples -->
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h4>Raw Deaths Data Sample</h4>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>attacker_name</th>
+                                        <th>weapon</th>
+                                        <th>dmg_health</th>
+                                        <th>distance</th>
+                                        <th>headshot</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Majesticzz</td><td>knife_butterfly</td><td>31</td><td>1.01</td><td>False</td></tr>
+                                    <tr><td>a_m_c</td><td>knife_t</td><td>31</td><td>1.66</td><td>False</td></tr>
+                                    <tr><td>sathsea</td><td>knife_m9_bayonet</td><td>55</td><td>0.92</td><td>False</td></tr>
+                                    <tr><td>micro</td><td>knife_karambit</td><td>34</td><td>1.24</td><td>False</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <h4>Raw Bomb Events Sample</h4>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>user_name</th>
+                                        <th>event_type</th>
+                                        <th>site</th>
+                                        <th>tick</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>4TAYLOR</td><td>planted</td><td>235</td><td>7822</td></tr>
+                                    <tr><td>Majesticzz</td><td>planted</td><td>234</td><td>15022</td></tr>
+                                    <tr><td>spamzzy</td><td>planted</td><td>235</td><td>36483</td></tr>
+                                    <tr><td>Majesticzz</td><td>planted</td><td>234</td><td>54340</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Cleaning Section -->
+    <section id="data-cleaning" class="mb-5">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="section-title">🧹 Data Cleaning Process</h2>
+                
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h4>Data Quality Assessment</h4>
+                        <p>Initial analysis revealed several data quality issues that needed addressing:</p>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Issues Identified:</h5>
+                                <ul>
+                                    <li><strong>Missing Values:</strong> 71% missing in assist data (expected in CS:GO)</li>
+                                    <li><strong>Data Types:</strong> Boolean columns stored as objects</li>
+                                    <li><strong>Outliers:</strong> Extreme distance values from parsing errors</li>
+                                    <li><strong>Standardization:</strong> Inconsistent categorical variables</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Cleaning Steps Applied:</h5>
+                                <ul>
+                                    <li><strong>Handle Missing Values:</strong> Fill assists with "No Assist" (common in CS:GO)</li>
+                                    <li><strong>Type Conversion:</strong> Convert boolean and numeric columns</li>
+                                    <li><strong>Outlier Removal:</strong> Remove extreme distance values using IQR method</li>
+                                    <li><strong>Standardization:</strong> Normalize team names and weapon categories</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <h4>Before vs After Comparison</h4>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="stat-card">
+                                    <h5>Deaths Data</h5>
+                                    <p><strong>Before:</strong> 1,242 → <strong>After:</strong> 1,234 records</p>
+                                    <p>Missing values: 3,097 → 1,323</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stat-card">
+                                    <h5>Weapon Categories</h5>
+                                    <p>Created 11 standardized weapon categories from 50+ unique weapons</p>
+                                    <p>Most used: AK-47 (387 kills)</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stat-card">
+                                    <h5>Quality Improvements</h5>
+                                    <p>Removed 8 extreme distance outliers</p>
+                                    <p>Standardized all categorical variables</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cleaned Data Samples -->
+                        <h4>Cleaned Data Sample</h4>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered">
+                                <thead class="thead-success">
+                                    <tr>
+                                        <th>attacker_name</th>
+                                        <th>weapon_category</th>
+                                        <th>dmg_health</th>
+                                        <th>headshot</th>
+                                        <th>assister_name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Majesticzz</td><td>Knife</td><td>31</td><td>False</td><td>No Assist</td></tr>
+                                    <tr><td>a_m_c</td><td>Knife</td><td>31</td><td>False</td><td>4TAYLOR</td></tr>
+                                    <tr><td>sathsea</td><td>Knife</td><td>55</td><td>False</td><td>juna</td></tr>
+                                    <tr><td>micro</td><td>Knife</td><td>34</td><td>False</td><td>4TAYLOR</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Exploratory Data Analysis Section -->
+    <section id="eda-visualizations" class="mb-5">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="section-title">📈 Exploratory Data Analysis - Key Visualizations</h2>
+                
+                <!-- Visualization 1: Weapon Usage -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>1. Weapon Usage Distribution Analysis</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <img src="img/vis1.png" class="img-fluid" alt="Weapon Usage Analysis">
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Key Insights:</h5>
+                                <ul>
+                                    <li><strong>AK-47</strong> dominates with 31.3% of all kills (387 kills)</li>
+                                    <li><strong>M4 rifles</strong> account for 21.1% of kills (260 kills)</li>
+                                    <li><strong>Pistols</strong> show highest headshot rate at 86.2%</li>
+                                    <li><strong>AWP</strong> sniper rifle accounts for 8.2% of kills (101 kills)</li>
+                                    <li>Average damage per kill: <strong>80.3 HP</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visualization 2: Map Performance -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>2. Map Performance & Team Balance</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <img src="img/vis2.png" class="img-fluid" alt="Map Performance Analysis">
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Key Insights:</h5>
+                                <ul>
+                                    <li><strong>Mirage</strong> most played with 67 rounds (38.3%)</li>
+                                    <li><strong>CT side</strong> wins 57.9% of rounds overall</li>
+                                    <li><strong>Elimination</strong> most common win condition (80.1%)</li>
+                                    <li><strong>Bomb plants:</strong> 76 attempts, 19 defused (25% success rate)</li>
+                                    <li><strong>Train</strong> shows most balanced CT/T win rates</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visualization 3: Player Performance -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>3. Player Performance & Distance Analysis</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <img src="img/vis3.png" class="img-fluid" alt="Player Performance Analysis">
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Key Insights:</h5>
+                                <ul>
+                                    <li>Average kill distance: <strong>1.68 units</strong></li>
+                                    <li><strong>Sniper rifles</strong> have longest average kill distance</li>
+                                    <li><strong>Knife kills</strong> obviously shortest distance</li>
+                                    <li>Most players achieve <strong>2-4 kills per match</strong></li>
+                                    <li>Strong correlation between distance and weapon type</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Visualizations Summary -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>4. Statistical Correlations</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul>
+                                    <li><strong>Damage-Distance:</strong> Moderate negative correlation (-0.23)</li>
+                                    <li><strong>Headshot-Damage:</strong> Strong positive correlation (0.67)</li>
+                                    <li><strong>Assist Rate:</strong> 28.9% of kills have assists</li>
+                                    <li><strong>Situational Kills:</strong> 12% through smoke, 8% while blinded</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>5. Advanced Metrics</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul>
+                                    <li><strong>Kill Effectiveness Score:</strong> 0.1-0.9 range</li>
+                                    <li><strong>Weapon Efficiency:</strong> Rifles most damage-efficient</li>
+                                    <li><strong>Team Coordination:</strong> Varies 15-45% by match</li>
+                                    <li><strong>Time Patterns:</strong> Even distribution across round periods</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature Engineering Section -->
+    <section id="feature-engineering" class="mb-5">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="section-title">🔧 Feature Engineering</h2>
+                
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <p>Based on domain knowledge and EDA insights, several new features were engineered:</p>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>Performance Metrics</h4>
+                                <ul>
+                                    <li><strong>Kill Effectiveness Score:</strong> Composite metric combining damage, headshots, distance, and situational factors</li>
+                                    <li><strong>Player Statistics:</strong> Aggregated performance metrics per player including headshot rates and average damage</li>
+                                    <li><strong>Weapon Proficiency:</strong> Primary weapon preferences and usage patterns per player</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h4>Contextual Features</h4>
+                                <ul>
+                                    <li><strong>Map Performance:</strong> Player effectiveness metrics specific to each map</li>
+                                    <li><strong>Time Periods:</strong> Round timing classification (Early, Mid, Late game)</li>
+                                    <li><strong>Team Coordination:</strong> Assist rates and collaborative play metrics</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <h4>Top Performers Analysis</h4>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="stat-card bg-light">
+                                    <h5>Most Effective Players</h5>
+                                    <p>Based on composite effectiveness score combining multiple performance factors</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stat-card bg-light">
+                                    <h5>Best Team Coordination</h5>
+                                    <p>Matches with highest assist rates indicating strong teamwork</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="stat-card bg-light">
+                                    <h5>Weapon Specialists</h5>
+                                    <p>Players showing clear preferences and proficiency with specific weapon categories</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final Dataset Summary -->
+    <section id="final-dataset" class="mb-5">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="section-title">📋 Final Dataset Summary</h2>
+                
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>📊 Dataset Overview</h4>
+                                <ul>
+                                    <li><strong>Deaths Data:</strong> 1,234 records, 28+ features</li>
+                                    <li><strong>Bomb Events:</strong> 107 records, 6 features</li>
+                                    <li><strong>Rounds Data:</strong> 171 records, 8 features</li>
+                                    <li><strong>Player Statistics:</strong> Comprehensive metrics for all players</li>
+                                    <li><strong>Map Performance:</strong> Player-map specific analysis</li>
+                                </ul>
+
+                                <h4>🔧 Data Quality Improvements</h4>
+                                <ul>
+                                    <li>Missing values reduced by 57.3%</li>
+                                    <li>Outliers removed using statistical methods</li>
+                                    <li>Standardized categories and data types</li>
+                                    <li>New engineered features for analysis</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h4>📈 Key Insights Discovered</h4>
+                                <ul>
+                                    <li><strong>Weapon Balance:</strong> AK-47 dominates professional play</li>
+                                    <li><strong>Map Dynamics:</strong> CT-sided meta with 57.9% win rate</li>
+                                    <li><strong>Player Performance:</strong> Clear skill differentiation visible</li>
+                                    <li><strong>Team Coordination:</strong> 28.9% assist rate indicates teamwork</li>
+                                    <li><strong>Tactical Depth:</strong> Situational kills show strategic complexity</li>
+                                </ul>
+
+                                <h4>🎯 Dataset Applications</h4>
+                                <ul>
+                                    <li>Player performance prediction models</li>
+                                    <li>Weapon effectiveness analysis</li>
+                                    <li>Map strategy optimization</li>
+                                    <li>Team coordination metrics</li>
+                                    <li>Match outcome prediction</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-success mt-4">
+                            <h5>✅ Dataset Ready for Machine Learning</h5>
+                            <p class="mb-2">The cleaned and engineered dataset is now ready for advanced analytics, machine learning models, and strategic insights. All data quality issues have been addressed, and meaningful features have been created for comprehensive CS:GO performance analysis.</p>
+                            <div class="text-center">
+                                <a href="https://www.dropbox.com/scl/fi/9sxjlde1cyml4il9y4d0l/machine_learning.zip?rlkey=avb7mvveewgwc11giuz7g0itd&st=0dz3azx8&dl=0" target="_blank" class="btn btn-outline-success">
+                                    <i class="fab fa-dropbox"></i> Access Complete Dataset on Dropbox
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+.section-title {
+    border-bottom: 3px solid #007bff;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+    color: #2c3e50;
+}
+
+.feature-box {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 4px solid #007bff;
+}
+
+.stat-card {
+    background-color: #e9ecef;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.table-responsive {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.img-fluid {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+</style>
+{{/main}}

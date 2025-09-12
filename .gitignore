@@ -1,0 +1,10 @@
+node_modules
+machine_learning/demos_extracted/
+machine_learning/hltv_data/
+machine_learning/demos/
+machine_learning/_debug/
+*.zip
+*.rar
+*.DS_Store
+*.dem
+*.html
