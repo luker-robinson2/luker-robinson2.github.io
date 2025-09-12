@@ -299,91 +299,121 @@
             <div class="col-lg-12">
                 <h2 class="section-title">📈 Exploratory Data Analysis - Key Visualizations</h2>
                 
-                <!-- Visualization 1: Weapon Usage -->
+                <!-- Visualization 1: Data Cleaning -->
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h4>1. Weapon Usage Distribution Analysis</h4>
+                        <h4>1. Data Cleaning - Before vs After Comparison</h4>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-8">
-                                <img src="img/vis1.png" class="img-fluid" alt="Weapon Usage Analysis">
+                                <img src="img/vis1.png" class="img-fluid" alt="Data Cleaning Before vs After">
+                            </div>
+                            <div class="col-md-4">
+                                <h5>Key Improvements:</h5>
+                                <ul>
+                                    <li><strong>Missing values reduced:</strong> 3,097 → 1,323 (57.3% improvement)</li>
+                                    <li><strong>Outliers removed:</strong> 8 extreme distance values eliminated</li>
+                                    <li><strong>Dataset size:</strong> 1,242 → 1,234 records after cleaning</li>
+                                    <li><strong>Weapon categories:</strong> 11 standardized categories from 50+ weapons</li>
+                                    <li><strong>Data types:</strong> Boolean and numeric columns properly converted</li>
+                                    <li><strong>Assist data:</strong> 71% missing values filled with "No Assist"</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visualization 2: Weapon Usage -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>2. Weapon Usage Distribution Analysis</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <img src="img/vis2.png" class="img-fluid" alt="Weapon Usage Analysis">
                             </div>
                             <div class="col-md-4">
                                 <h5>Key Insights:</h5>
                                 <ul>
-                                    <li><strong>AK-47</strong> dominates with 31.3% of all kills (387 kills)</li>
+                                    <li><strong>AK-47</strong> dominates with 31.3% of all kills (386 kills)</li>
                                     <li><strong>M4 rifles</strong> account for 21.1% of kills (260 kills)</li>
-                                    <li><strong>Pistols</strong> show highest headshot rate at 86.2%</li>
+                                    <li><strong>Pistols</strong> show highest headshot rate at <strong>86.2%</strong></li>
                                     <li><strong>AWP</strong> sniper rifle accounts for 8.2% of kills (101 kills)</li>
                                     <li>Average damage per kill: <strong>80.3 HP</strong></li>
+                                    <li><strong>11 weapon categories</strong> created from 50+ unique weapons</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Visualization 2: Map Performance -->
+                <!-- Visualization 3: Map Performance -->
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h4>2. Map Performance & Team Balance</h4>
+                        <h4>3. Map Performance & Team Balance Analysis</h4>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-8">
-                                <img src="img/vis2.png" class="img-fluid" alt="Map Performance Analysis">
+                                <img src="img/vis3.png" class="img-fluid" alt="Map Performance Analysis">
                             </div>
                             <div class="col-md-4">
                                 <h5>Key Insights:</h5>
                                 <ul>
-                                    <li><strong>Mirage</strong> most played with 67 rounds (38.3%)</li>
+                                    <li><strong>Mirage</strong> most played with <strong>66 rounds</strong> (38.6%)</li>
                                     <li><strong>CT side</strong> wins 57.9% of rounds overall</li>
                                     <li><strong>Elimination</strong> most common win condition (80.1%)</li>
-                                    <li><strong>Bomb plants:</strong> 76 attempts, 19 defused (25% success rate)</li>
+                                    <li><strong>Bomb plants:</strong> 76 attempts, 19 defused (<strong>25% defuse success rate</strong>)</li>
                                     <li><strong>Train</strong> shows most balanced CT/T win rates</li>
+                                    <li>Maps covered: <strong>Mirage, Train, Nuke, Inferno</strong></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Visualization 3: Player Performance -->
+                <!-- Visualization 4: Player Performance -->
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h4>3. Player Performance & Distance Analysis</h4>
+                        <h4>4. Player Performance & Distance Analysis</h4>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-8">
-                                <img src="img/vis3.png" class="img-fluid" alt="Player Performance Analysis">
+                                <img src="img/vis4.png" class="img-fluid" alt="Player Performance Analysis">
                             </div>
                             <div class="col-md-4">
                                 <h5>Key Insights:</h5>
                                 <ul>
-                                    <li>Average kill distance: <strong>1.68 units</strong></li>
+                                    <li>Average kill distance: <strong>16.3 units</strong></li>
                                     <li><strong>Sniper rifles</strong> have longest average kill distance</li>
                                     <li><strong>Knife kills</strong> obviously shortest distance</li>
                                     <li>Most players achieve <strong>2-4 kills per match</strong></li>
-                                    <li>Strong correlation between distance and weapon type</li>
+                                    <li>Strong correlation between <strong>distance and weapon type</strong></li>
+                                    <li><strong>30 unique players</strong> analyzed across all matches</li>
+                                    <li><strong>Team assist rate:</strong> 29.0% of kills have assists</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Additional Visualizations Summary -->
+                <!-- Summary Statistics -->
                 <div class="row">
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-header">
-                                <h5>4. Statistical Correlations</h5>
+                                <h5>📊 Dataset Summary</h5>
                             </div>
                             <div class="card-body">
                                 <ul>
-                                    <li><strong>Damage-Distance:</strong> Moderate negative correlation (-0.23)</li>
-                                    <li><strong>Headshot-Damage:</strong> Strong positive correlation (0.67)</li>
-                                    <li><strong>Assist Rate:</strong> 28.9% of kills have assists</li>
-                                    <li><strong>Situational Kills:</strong> 12% through smoke, 8% while blinded</li>
+                                    <li><strong>Deaths Data:</strong> 1,234 records, 31 features</li>
+                                    <li><strong>Bomb Events:</strong> 107 records, 6 features</li>
+                                    <li><strong>Rounds Data:</strong> 171 records, 8 features</li>
+                                    <li><strong>Player Statistics:</strong> 30 unique players analyzed</li>
+                                    <li><strong>Map Performance:</strong> 80 player-match combinations</li>
                                 </ul>
                             </div>
                         </div>
@@ -391,14 +421,15 @@
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-header">
-                                <h5>5. Advanced Metrics</h5>
+                                <h5>🎯 Key Discoveries</h5>
                             </div>
                             <div class="card-body">
                                 <ul>
-                                    <li><strong>Kill Effectiveness Score:</strong> 0.1-0.9 range</li>
-                                    <li><strong>Weapon Efficiency:</strong> Rifles most damage-efficient</li>
-                                    <li><strong>Team Coordination:</strong> Varies 15-45% by match</li>
-                                    <li><strong>Time Patterns:</strong> Even distribution across round periods</li>
+                                    <li><strong>Most effective weapon:</strong> AK-47 (386 kills)</li>
+                                    <li><strong>Highest headshot rate:</strong> Pistols (86.2%)</li>
+                                    <li><strong>Most played map:</strong> de_mirage (66 rounds)</li>
+                                    <li><strong>Team coordination:</strong> 29% assist rate</li>
+                                    <li><strong>Data quality:</strong> Missing values reduced by 57.3%</li>
                                 </ul>
                             </div>
                         </div>
