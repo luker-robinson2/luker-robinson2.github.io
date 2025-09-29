@@ -77,3 +77,28 @@ if (fs.existsSync(imgSrcDir)) {
   fs.copySync(imgSrcDir, imgDistDir);
   console.log("Copied images to docs/img");
 }
+
+// Copy specific machine learning files needed for downloads
+const mlDistDir = path.join(distDir, "machine_learning", "clustering");
+if (fs.existsSync("machine_learning")) {
+  // Create the target directory
+  fs.ensureDirSync(mlDistDir);
+  
+  // Copy only the files that are referenced in download links
+  const filesToCopy = [
+    "machine_learning/clustering/player_role_features_combined.csv",
+    "machine_learning/clustering/cluster_centroids.csv", 
+    "machine_learning/clustering/feature_summary.csv",
+    "machine_learning/clustering/player_role_clusters.csv",
+    "machine_learning/clustering/player_role_clustering.ipynb"
+  ];
+  
+  filesToCopy.forEach(filePath => {
+    if (fs.existsSync(filePath)) {
+      const fileName = path.basename(filePath);
+      fs.copySync(filePath, path.join(mlDistDir, fileName));
+    }
+  });
+  
+  console.log("Copied essential machine learning files to docs/machine_learning/clustering");
+}
