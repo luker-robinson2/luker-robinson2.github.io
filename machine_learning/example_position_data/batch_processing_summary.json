@@ -1,0 +1,352 @@
+{
+  "processed_at": "2025-09-15T23:13:17.267806",
+  "total_demos": 8,
+  "successful": 8,
+  "failed": 0,
+  "results": [
+    {
+      "status": "success",
+      "demo_file": "aether-vs-full-send-m2-inferno.dem",
+      "records_extracted": 17270,
+      "saved_files": {
+        "csv": "example_position_data/aether-vs-full-send-m2-inferno_positions_timeseries.csv"
+      },
+      "report": {
+        "data_summary": {
+          "total_records": 17270,
+          "unique_players": 11,
+          "unique_demos": 1,
+          "time_range_seconds": 1569.0,
+          "maps": [
+            "de_inferno"
+          ]
+        },
+        "position_stats": {
+          "x_range": [
+            "-1711.7148",
+            "2620.9182"
+          ],
+          "y_range": [
+            "-755.3244",
+            "3513.9426"
+          ],
+          "z_range": [
+            "-64.09158",
+            "300.03125"
+          ],
+          "position_variance": {
+            "x_var": "2.0567782e+06",
+            "y_var": "961708.0",
+            "z_var": "8267.428"
+          }
+        },
+        "movement_stats": {
+          "avg_speed": 104.26087712776608,
+          "max_speed": 3739.88623046875,
+          "speed_std": 258.7831390786016
+        }
+      }
+    },
+    {
+      "status": "success",
+      "demo_file": "aether-vs-full-send-m1-mirage.dem",
+      "records_extracted": 14377,
+      "saved_files": {
+        "csv": "example_position_data/aether-vs-full-send-m1-mirage_positions_timeseries.csv"
+      },
+      "report": {
+        "data_summary": {
+          "total_records": 14377,
+          "unique_players": 11,
+          "unique_demos": 1,
+          "time_range_seconds": 1306.0,
+          "maps": [
+            "de_mirage"
+          ]
+        },
+        "position_stats": {
+          "x_range": [
+            "-2560.858",
+            "1420.6951"
+          ],
+          "y_range": [
+            "-2595.876",
+            "850.0999"
+          ],
+          "z_range": [
+            "-367.96875",
+            "-7.081956"
+          ],
+          "position_variance": {
+            "x_var": "1.2454224e+06",
+            "y_var": "926649.0",
+            "z_var": "4923.9985"
+          }
+        },
+        "movement_stats": {
+          "avg_speed": 112.54571179130335,
+          "max_speed": 3648.587158203125,
+          "speed_std": 247.72210636121025
+        }
+      }
+    },
+    {
+      "status": "success",
+      "demo_file": "aether-vs-full-send-m3-train.dem",
+      "records_extracted": 16819,
+      "saved_files": {
+        "csv": "example_position_data/aether-vs-full-send-m3-train_positions_timeseries.csv"
+      },
+      "report": {
+        "data_summary": {
+          "total_records": 16819,
+          "unique_players": 11,
+          "unique_demos": 1,
+          "time_range_seconds": 1528.0,
+          "maps": [
+            "de_train"
+          ]
+        },
+        "position_stats": {
+          "x_range": [
+            "-2100.9727",
+            "1729.7714"
+          ],
+          "y_range": [
+            "-1788.8112",
+            "1743.8564"
+          ],
+          "z_range": [
+            "-350.96875",
+            "41.03125"
+          ],
+          "position_variance": {
+            "x_var": "1.233289e+06",
+            "y_var": "1.0743234e+06",
+            "z_var": "6540.3438"
+          }
+        },
+        "movement_stats": {
+          "avg_speed": 113.4582271759606,
+          "max_speed": 4446.5263671875,
+          "speed_std": 258.36619604338176
+        }
+      }
+    },
+    {
+      "status": "success",
+      "demo_file": "incontrol-vs-nocturnal-m3-nuke.dem",
+      "records_extracted": 15444,
+      "saved_files": {
+        "csv": "example_position_data/incontrol-vs-nocturnal-m3-nuke_positions_timeseries.csv"
+      },
+      "report": {
+        "data_summary": {
+          "total_records": 15444,
+          "unique_players": 12,
+          "unique_demos": 1,
+          "time_range_seconds": 1286.0,
+          "maps": [
+            "de_nuke"
+          ]
+        },
+        "position_stats": {
+          "x_range": [
+            "-2365.772",
+            "3334.9883"
+          ],
+          "y_range": [
+            "-2464.033",
+            "903.8642"
+          ],
+          "z_range": [
+            "-775.96875",
+            "-19.688318"
+          ],
+          "position_variance": {
+            "x_var": "1.9827664e+06",
+            "y_var": "385510.66",
+            "z_var": "14052.866"
+          }
+        },
+        "movement_stats": {
+          "avg_speed": 111.53315025660844,
+          "max_speed": 3636.9404296875,
+          "speed_std": 267.14262000067384
+        }
+      }
+    },
+    {
+      "status": "success",
+      "demo_file": "incontrol-vs-nocturnal-m1-mirage.dem",
+      "records_extracted": 17868,
+      "saved_files": {
+        "csv": "example_position_data/incontrol-vs-nocturnal-m1-mirage_positions_timeseries.csv"
+      },
+      "report": {
+        "data_summary": {
+          "total_records": 17868,
+          "unique_players": 12,
+          "unique_demos": 1,
+          "time_range_seconds": 1488.0,
+          "maps": [
+            "de_mirage"
+          ]
+        },
+        "position_stats": {
+          "x_range": [
+            "-2621.3806",
+            "1436.8596"
+          ],
+          "y_range": [
+            "-2582.8574",
+            "880.8773"
+          ],
+          "z_range": [
+            "-367.96875",
+            "-3.96875"
+          ],
+          "position_variance": {
+            "x_var": "1.3585178e+06",
+            "y_var": "889066.9",
+            "z_var": "4380.7817"
+          }
+        },
+        "movement_stats": {
+          "avg_speed": 101.79859630806729,
+          "max_speed": 3243.59716796875,
+          "speed_std": 235.019442598706
+        }
+      }
+    },
+    {
+      "status": "success",
+      "demo_file": "incontrol-vs-nocturnal-m2-train.dem",
+      "records_extracted": 20040,
+      "saved_files": {
+        "csv": "example_position_data/incontrol-vs-nocturnal-m2-train_positions_timeseries.csv"
+      },
+      "report": {
+        "data_summary": {
+          "total_records": 20040,
+          "unique_players": 12,
+          "unique_demos": 1,
+          "time_range_seconds": 1669.0,
+          "maps": [
+            "de_train"
+          ]
+        },
+        "position_stats": {
+          "x_range": [
+            "-2164.1667",
+            "1767.9714"
+          ],
+          "y_range": [
+            "-1776.881",
+            "1743.328"
+          ],
+          "z_range": [
+            "-350.96875",
+            "53.0084"
+          ],
+          "position_variance": {
+            "x_var": "1.934362e+06",
+            "y_var": "1.3420171e+06",
+            "z_var": "6307.4106"
+          }
+        },
+        "movement_stats": {
+          "avg_speed": 74.93922087059731,
+          "max_speed": 4083.971435546875,
+          "speed_std": 230.83425912660798
+        }
+      }
+    },
+    {
+      "status": "success",
+      "demo_file": "semperfi-vs-underground-m1-nuke.dem",
+      "records_extracted": 8790,
+      "saved_files": {
+        "csv": "example_position_data/semperfi-vs-underground-m1-nuke_positions_timeseries.csv"
+      },
+      "report": {
+        "data_summary": {
+          "total_records": 8790,
+          "unique_players": 10,
+          "unique_demos": 1,
+          "time_range_seconds": 878.0,
+          "maps": [
+            "de_nuke"
+          ]
+        },
+        "position_stats": {
+          "x_range": [
+            "-2402.8953",
+            "3458.906"
+          ],
+          "y_range": [
+            "-2477.1682",
+            "902.57947"
+          ],
+          "z_range": [
+            "-775.96875",
+            "-18.96875"
+          ],
+          "position_variance": {
+            "x_var": "1.2688451e+06",
+            "y_var": "410476.12",
+            "z_var": "12495.97"
+          }
+        },
+        "movement_stats": {
+          "avg_speed": 137.54467706953062,
+          "max_speed": 5146.14013671875,
+          "speed_std": 294.25587071270826
+        }
+      }
+    },
+    {
+      "status": "success",
+      "demo_file": "semperfi-vs-underground-m2-mirage.dem",
+      "records_extracted": 8940,
+      "saved_files": {
+        "csv": "example_position_data/semperfi-vs-underground-m2-mirage_positions_timeseries.csv"
+      },
+      "report": {
+        "data_summary": {
+          "total_records": 8940,
+          "unique_players": 10,
+          "unique_demos": 1,
+          "time_range_seconds": 893.0,
+          "maps": [
+            "de_mirage"
+          ]
+        },
+        "position_stats": {
+          "x_range": [
+            "-2550.767",
+            "1422.946"
+          ],
+          "y_range": [
+            "-2603.0789",
+            "858.881"
+          ],
+          "z_range": [
+            "-367.96875",
+            "-7.96875"
+          ],
+          "position_variance": {
+            "x_var": "1.0905879e+06",
+            "y_var": "861695.75",
+            "z_var": "3977.495"
+          }
+        },
+        "movement_stats": {
+          "avg_speed": 141.89051058007448,
+          "max_speed": 3252.90771484375,
+          "speed_std": 264.9036160126709
+        }
+      }
+    }
+  ]
+}

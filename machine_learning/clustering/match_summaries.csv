@@ -1,0 +1,9 @@
+demo_file,map_name,match_id,num_players,total_kills,total_deaths,processing_status
+aether-vs-full-send-m2-inferno,de_inferno,unknown,10,172,176,success
+aether-vs-full-send-m1-mirage,de_mirage,unknown,10,170,170,success
+aether-vs-full-send-m3-train,de_train,unknown,10,185,186,success
+incontrol-vs-nocturnal-m3-nuke,de_nuke,unknown,10,152,153,success
+incontrol-vs-nocturnal-m1-mirage,de_mirage,unknown,10,184,188,success
+incontrol-vs-nocturnal-m2-train,de_train,unknown,10,141,142,success
+semperfi-vs-underground-m1-nuke,de_nuke,unknown,10,110,110,success
+semperfi-vs-underground-m2-mirage,de_mirage,unknown,10,117,117,success

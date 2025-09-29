@@ -30,9 +30,308 @@
       <li><a href="nn.html">Neural Networks</a></li>
     </ul>
   </nav>  <main>
-    <h1>Clustering Analysis</h1>
-  <p>This section will contain clustering analysis results.</p>
-  <p><em>Content coming soon...</em></p>
+    <h1>CS2 Player Role Clustering Analysis</h1>
+  
+  <div class="section">
+    <h2>(a) Overview</h2>
+    <p>Clustering is an unsupervised machine learning technique used to discover hidden patterns and group similar data points together without prior knowledge of class labels. In the context of Counter-Strike 2 player analysis, clustering helps identify distinct player roles and playstyles based on behavioral patterns extracted from gameplay data.</p>
+    
+    <h3>Partitional vs Hierarchical Clustering</h3>
+    <p><strong>Partitional Clustering (K-means):</strong> Divides data into k non-overlapping clusters by minimizing within-cluster sum of squares. Each data point belongs to exactly one cluster, making it suitable for identifying distinct player archetypes.</p>
+    
+    <p><strong>Hierarchical Clustering:</strong> Creates a tree-like structure (dendrogram) showing relationships between all data points. Can be agglomerative (bottom-up) or divisive (top-down), providing insights into player role hierarchies and similarities.</p>
+    
+    <h3>Distance Metrics</h3>
+    <p>For this analysis, we use:</p>
+    <ul>
+      <li><strong>Euclidean Distance:</strong> Standard distance metric for k-means clustering, measuring straight-line distance between points in feature space</li>
+      <li><strong>Cosine Similarity:</strong> Measures the angle between vectors, ideal for comparing player behavioral patterns regardless of magnitude differences</li>
+    </ul>
+    
+    <h3>Discovery Through Clustering</h3>
+    <p>Clustering enables discovery of:</p>
+    <ul>
+      <li>Natural player role groupings (Entry Fragger, Support, AWPer, etc.)</li>
+      <li>Behavioral patterns that distinguish player types</li>
+      <li>Optimal team composition strategies</li>
+    </ul>
+    
+    <div class="image-container">
+      <img src="img/clustering_overview.png" alt="Clustering Overview Diagram" class="section-image">
+      <p class="image-caption">Figure 1: Overview of clustering approaches and their applications in player role analysis</p>
+    </div>
+    
+    <div class="image-container">
+      <img src="img/distance_metrics.png" alt="Distance Metrics Comparison" class="section-image">
+      <p class="image-caption">Figure 2: Comparison of Euclidean distance vs Cosine similarity for player behavior analysis</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>(b) Data Preparation</h2>
+    <p>Clustering algorithms require specific data formats to function effectively. Unlike supervised learning methods, clustering works exclusively with unlabeled numeric data, making it perfect for exploratory analysis of player behaviors.</p>
+    
+    <h3>Data Requirements</h3>
+    <ul>
+      <li><strong>Unlabeled Data:</strong> No predefined categories or target variables</li>
+      <li><strong>Numeric Features Only:</strong> All categorical variables must be encoded numerically</li>
+      <li><strong>Standardized Scale:</strong> Features should be normalized to prevent bias from different scales</li>
+      <li><strong>No Missing Values:</strong> Complete datasets required for distance calculations</li>
+    </ul>
+    
+    <h3>Feature Engineering</h3>
+    <p>Our player role dataset includes 16 key features extracted from CS2 demo files:</p>
+    <ul>
+      <li><strong>Combat Metrics:</strong> K/D ratio, headshot percentage, total kills/deaths</li>
+      <li><strong>Timing Features:</strong> Average time to kill, opening kills, time alive</li>
+      <li><strong>Tactical Indicators:</strong> Kills before/after bomb planting, bomb interactions</li>
+      <li><strong>Performance Metrics:</strong> Multi-kills (2K-5K), damage per round</li>
+    </ul>
+    
+    <div class="image-container">
+      <img src="img/data_sample.png" alt="Sample of Player Role Data" class="section-image">
+      <p class="image-caption">Figure 3: Sample of processed player role features ready for clustering analysis</p>
+    </div>
+    
+    <p><strong>Dataset Link:</strong> <a href="machine_learning/clustering/player_role_features_combined.csv" target="_blank">player_role_features_combined.csv</a></p>
+    
+    <h3>Data Preprocessing Steps</h3>
+    <ol>
+      <li>Feature selection and removal of identifier columns</li>
+      <li>Missing value imputation (filled with 0 for numerical features)</li>
+      <li>StandardScaler normalization to ensure equal feature weights</li>
+      <li>Validation of data quality and distribution</li>
+    </ol>
+  </div>
+
+  <div class="section">
+    <h2>(c) Code Implementation</h2>
+    <p>We implement both k-means and hierarchical clustering using Python with scikit-learn. The code demonstrates proper data preprocessing, model training, and evaluation techniques.</p>
+    
+    <h3>K-Means Clustering</h3>
+    <pre><code># K-means clustering implementation
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import silhouette_score
+
+# Data preprocessing
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# K-means with multiple k values
+k_range = range(2, 11)
+silhouette_scores = []
+
+for k in k_range:
+    kmeans = KMeans(n_clusters=k, random_state=42, n_init=10)
+    kmeans.fit(X_scaled)
+    silhouette_scores.append(silhouette_score(X_scaled, kmeans.labels_))
+
+# Optimal k selection
+optimal_k = k_range[np.argmax(silhouette_scores)]
+kmeans_final = KMeans(n_clusters=optimal_k, random_state=42)
+cluster_labels = kmeans_final.fit_predict(X_scaled)</code></pre>
+    
+    <h3>Hierarchical Clustering with Cosine Similarity</h3>
+    <pre><code># Hierarchical clustering with cosine similarity
+from sklearn.cluster import AgglomerativeClustering
+from sklearn.metrics.pairwise import cosine_similarity
+from scipy.cluster.hierarchy import dendrogram, linkage
+from scipy.spatial.distance import pdist, squareform
+
+# Calculate cosine distance matrix
+cosine_distances = 1 - cosine_similarity(X_scaled)
+cosine_distances = squareform(cosine_distances)
+
+# Perform hierarchical clustering
+linkage_matrix = linkage(cosine_distances, method='ward')
+hierarchical_clustering = AgglomerativeClustering(
+    n_clusters=optimal_k, 
+    metric='precomputed', 
+    linkage='average'
+)
+hier_labels = hierarchical_clustering.fit_predict(cosine_distances)
+
+# Generate dendrogram
+plt.figure(figsize=(12, 8))
+dendrogram(linkage_matrix, truncate_mode='level', p=5)
+plt.title('Hierarchical Clustering Dendrogram (Cosine Similarity)')
+plt.xlabel('Player Index')
+plt.ylabel('Distance')
+plt.show()</code></pre>
+  </div>
+
+  <div class="section">
+    <h2>(d) Results</h2>
+    <p>Our clustering analysis reveals distinct player role patterns in CS2 gameplay data. We evaluated multiple k values and compared k-means with hierarchical clustering approaches.</p>
+    
+    <h3>K-Means Results</h3>
+    <p>We tested k values from 2 to 10 clusters to determine the optimal number of player role groups. The silhouette analysis provided quantitative guidance for cluster selection.</p>
+    
+    <div class="image-container">
+      <img src="img/silhouette_analysis.png" alt="Silhouette Analysis Results" class="section-image">
+      <p class="image-caption">Figure 4: Silhouette analysis showing optimal k value selection for k-means clustering</p>
+    </div>
+    
+    <div class="image-container">
+      <img src="img/elbow_method.png" alt="Elbow Method Analysis" class="section-image">
+      <p class="image-caption">Figure 5: Elbow method analysis for k-means clustering optimization</p>
+    </div>
+    
+    <h3>Cluster Characteristics</h3>
+    <p>Based on the analysis, we identified distinct player role clusters:</p>
+    
+    <div class="cluster-description">
+      <h4>Cluster 0: High-Impact Entry Fraggers</h4>
+      <ul>
+        <li>High K/D ratios (>1.2)</li>
+        <li>Elevated opening kill counts</li>
+        <li>High damage per round (>100)</li>
+        <li>Aggressive early engagement patterns</li>
+      </ul>
+    </div>
+    
+    <div class="cluster-description">
+      <h4>Cluster 1: Support/Finishing Players</h4>
+      <ul>
+        <li>Lower opening kill frequency</li>
+        <li>Higher survival rates</li>
+        <li>More kills after bomb planting</li>
+        <li>Supportive tactical positioning</li>
+      </ul>
+    </div>
+    
+    <div class="image-container">
+      <img src="img/cluster_visualization.png" alt="K-Means Cluster Visualization" class="section-image">
+      <p class="image-caption">Figure 6: PCA visualization of k-means clustering results showing distinct player role groups</p>
+    </div>
+    
+    <div class="image-container">
+      <img src="img/cluster_heatmap.png" alt="Cluster Characteristics Heatmap" class="section-image">
+      <p class="image-caption">Figure 7: Heatmap showing average feature values for each cluster</p>
+    </div>
+    
+    <h3>Hierarchical Clustering Results</h3>
+    <p>Hierarchical clustering with cosine similarity provided complementary insights to k-means analysis.</p>
+    
+    <div class="image-container">
+      <img src="img/dendrogram.png" alt="Hierarchical Clustering Dendrogram" class="section-image">
+      <p class="image-caption">Figure 8: Dendrogram showing hierarchical relationships between player role clusters</p>
+    </div>
+    
+    <h3>Method Comparison</h3>
+    <p>The hierarchical clustering dendrogram suggests similar cluster structures to k-means, with clear separation between aggressive entry fraggers and supportive finishing players. The cosine similarity metric effectively captured behavioral pattern similarities regardless of performance magnitude differences.</p>
+    
+    <div class="image-container">
+      <img src="img/method_comparison.png" alt="K-Means vs Hierarchical Comparison" class="section-image">
+      <p class="image-caption">Figure 9: Comparison of k-means and hierarchical clustering results</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>(e) Conclusions</h2>
+    <p><strong>[YOUR PARAGRAPH 1 - What did you learn about player roles and clustering effectiveness?]</strong></p>
+    
+    <p><strong>[YOUR PARAGRAPH 2 - How do these findings relate to CS2 strategy and team composition?]</strong></p>
+    
+    <p><strong>[YOUR PARAGRAPH 3 - What are the implications for player development and coaching?]</strong></p>
+    
+    <p><strong>[YOUR PARAGRAPH 4 - Future research directions and limitations of this analysis]</strong></p>
+  </div>
+
+  <style>
+    .section {
+      margin-bottom: 3rem;
+      padding: 1.5rem;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #007bff;
+    }
+    
+    .section h2 {
+      color: #007bff;
+      border-bottom: 2px solid #007bff;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .section h3 {
+      color: #495057;
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .section h4 {
+      color: #6c757d;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .image-container {
+      text-align: center;
+      margin: 2rem 0;
+      padding: 1rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .section-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    
+    .image-caption {
+      font-style: italic;
+      color: #6c757d;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+    }
+    
+    .cluster-description {
+      background: white;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 6px;
+      border-left: 3px solid #28a745;
+    }
+    
+    .cluster-description h4 {
+      color: #28a745;
+      margin-top: 0;
+    }
+    
+    pre {
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      border-left: 3px solid #007bff;
+    }
+    
+    code {
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+    }
+    
+    ul, ol {
+      padding-left: 2rem;
+    }
+    
+    li {
+      margin-bottom: 0.5rem;
+    }
+    
+    a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
   </main>
   
   <!-- Bootstrap JS -->

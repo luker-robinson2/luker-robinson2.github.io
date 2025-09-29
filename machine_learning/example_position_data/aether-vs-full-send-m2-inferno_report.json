@@ -1,0 +1,35 @@
+{
+  "data_summary": {
+    "total_records": 17270,
+    "unique_players": 11,
+    "unique_demos": 1,
+    "time_range_seconds": 1569.0,
+    "maps": [
+      "de_inferno"
+    ]
+  },
+  "position_stats": {
+    "x_range": [
+      "-1711.7148",
+      "2620.9182"
+    ],
+    "y_range": [
+      "-755.3244",
+      "3513.9426"
+    ],
+    "z_range": [
+      "-64.09158",
+      "300.03125"
+    ],
+    "position_variance": {
+      "x_var": "2.0567782e+06",
+      "y_var": "961708.0",
+      "z_var": "8267.428"
+    }
+  },
+  "movement_stats": {
+    "avg_speed": 104.26087712776608,
+    "max_speed": 3739.88623046875,
+    "speed_std": 258.7831390786016
+  }
+}

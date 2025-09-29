@@ -1,0 +1,35 @@
+{
+  "data_summary": {
+    "total_records": 20040,
+    "unique_players": 12,
+    "unique_demos": 1,
+    "time_range_seconds": 1669.0,
+    "maps": [
+      "de_train"
+    ]
+  },
+  "position_stats": {
+    "x_range": [
+      "-2164.1667",
+      "1767.9714"
+    ],
+    "y_range": [
+      "-1776.881",
+      "1743.328"
+    ],
+    "z_range": [
+      "-350.96875",
+      "53.0084"
+    ],
+    "position_variance": {
+      "x_var": "1.934362e+06",
+      "y_var": "1.3420171e+06",
+      "z_var": "6307.4106"
+    }
+  },
+  "movement_stats": {
+    "avg_speed": 74.93922087059731,
+    "max_speed": 4083.971435546875,
+    "speed_std": 230.83425912660798
+  }
+}

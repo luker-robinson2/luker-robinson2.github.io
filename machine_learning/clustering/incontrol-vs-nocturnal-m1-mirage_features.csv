@@ -1,0 +1,11 @@
+player_name,demo_file,map_name,kills,deaths,kd_ratio,headshot_percentage,avg_time_to_kill_ticks,opening_kills,kills_before_bomb,kills_after_bomb,avg_time_alive_ticks,multi_kill_2k,multi_kill_3k,multi_kill_4k,multi_kill_5k,total_damage,damage_per_round,bombs_planted,bombs_defused
+1TyRa,incontrol-vs-nocturnal-m1-mirage,de_mirage,21,18,1.1666666666666667,47.61904761904761,62830.0,25,203,112,7864.444444444444,6,3,0,0,2769,110.76,1,0
+madss,incontrol-vs-nocturnal-m1-mirage,de_mirage,29,16,1.8125,34.48275862068966,81511.93103448275,27,239,196,9039.037037037036,10,3,1,0,3532,141.28,3,1
+---Beast,incontrol-vs-nocturnal-m1-mirage,de_mirage,14,17,0.8235294117647058,85.71428571428571,82542.64285714286,27,115,95,7589.7037037037035,4,1,0,0,2394,95.76,2,0
+violet_,incontrol-vs-nocturnal-m1-mirage,de_mirage,14,21,0.6666666666666666,21.428571428571427,105234.5,27,86,124,5514.0,2,0,0,0,2066,82.64,0,0
+calamity,incontrol-vs-nocturnal-m1-mirage,de_mirage,13,20,0.65,53.84615384615385,64750.0,25,125,70,6083.555555555556,1,0,0,0,2372,94.88,0,0
+lunari,incontrol-vs-nocturnal-m1-mirage,de_mirage,21,19,1.105263157894737,42.857142857142854,92838.80952380953,27,159,156,7569.407407407408,7,2,0,0,3002,120.08,2,0
+gadflyy,incontrol-vs-nocturnal-m1-mirage,de_mirage,15,22,0.6818181818181818,40.0,74279.2,25,132,93,5644.777777777777,4,1,0,0,2393,95.72,2,0
+torii,incontrol-vs-nocturnal-m1-mirage,de_mirage,9,20,0.45,66.66666666666666,68696.88888888889,18,84,51,6160.185185185185,1,1,0,0,1224,48.96,1,0
+Scorchyy,incontrol-vs-nocturnal-m1-mirage,de_mirage,19,17,1.1176470588235294,21.052631578947366,70527.68421052632,27,175,110,8568.666666666666,5,2,0,0,2786,111.44,3,0
+jsfeltner,incontrol-vs-nocturnal-m1-mirage,de_mirage,29,18,1.6111111111111112,34.48275862068966,91612.06896551725,27,220,215,7227.481481481482,6,4,2,1,3646,145.84,1,1
