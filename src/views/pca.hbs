@@ -1,5 +1,275 @@
 {{#> main title="PCA" }}
-  <h1>Principal Component Analysis</h1>
-  <p>This section will contain PCA analysis results.</p>
-  <p><em>Content coming soon...</em></p>
+  <h1>CS2 Player Role Principal Component Analysis</h1>
+  
+  <div class="section">
+    <h2>(a) Overview</h2>
+    <p>Principal Component Analysis (PCA) is a powerful dimensionality reduction technique that transforms high-dimensional data into a lower-dimensional space while preserving the most important information. PCA identifies the directions (principal components) in which the data varies the most, allowing us to understand the underlying structure of complex datasets.</p>
+    
+    <h3>Eigenvalues and Eigenvectors</h3>
+    <p><strong>Eigenvalues:</strong> Represent the amount of variance explained by each principal component. Larger eigenvalues indicate that the corresponding principal component captures more variation in the data. The sum of all eigenvalues equals the total variance in the original dataset.</p>
+    
+    <p><strong>Eigenvectors:</strong> Define the directions of the principal components in the original feature space. Each eigenvector is orthogonal to others and represents a linear combination of the original features that maximizes variance along that direction.</p>
+    
+    <h3>Dimensionality Reduction</h3>
+    <p>Dimensionality reduction is crucial for simplifying analysis and visualization of high-dimensional data. In our CS2 player analysis, we have 17 different features describing player behavior, making it challenging to visualize and understand player relationships directly.</p>
+    
+    <h3>Challenges of High-Dimensional Data</h3>
+    <ul>
+      <li><strong>Curse of Dimensionality:</strong> As dimensions increase, data becomes sparse and distances between points become less meaningful</li>
+      <li><strong>Visualization Limitations:</strong> Humans can only directly visualize up to 3 dimensions</li>
+      <li><strong>Computational Complexity:</strong> Many algorithms become computationally expensive with high dimensions</li>
+      <li><strong>Noise Amplification:</strong> Irrelevant features can obscure meaningful patterns</li>
+      <li><strong>Overfitting Risk:</strong> Models may memorize noise rather than learn generalizable patterns</li>
+    </ul>
+    
+    <h3>How PCA Addresses These Challenges</h3>
+    <p>PCA helps by:</p>
+    <ul>
+      <li>Reducing noise by focusing on directions of maximum variance</li>
+      <li>Enabling 2D/3D visualization of high-dimensional data</li>
+      <li>Speeding up computations by working with fewer dimensions</li>
+      <li>Identifying the most important features for player role analysis</li>
+      <li>Providing a foundation for further analysis like clustering</li>
+    </ul>
+    
+    <div class="image-container">
+      <img src="img/pca.jpeg" alt="PCA Concept Diagram" class="section-image">
+      <p class="image-caption">Figure 1: Overview of PCA transformation from high-dimensional to low-dimensional space</p>
+    </div>
+    
+    <div class="image-container">
+      <img src="img/dimensionality_reduction.png" alt="Dimensionality Reduction Visualization" class="section-image">
+      <p class="image-caption">Figure 2: How dimensionality reduction simplifies complex player behavior data</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>(b) Data Preparation</h2>
+    <p>PCA requires specific data formats to function effectively. Unlike clustering which works with unlabeled data, PCA can work with any numeric dataset but performs best with properly preprocessed data.</p>
+    
+    <h3>Data Requirements for PCA</h3>
+    <ul>
+      <li><strong>Numeric Features Only:</strong> All variables must be continuous numeric values</li>
+      <li><strong>Standardized Scale:</strong> Features should be normalized to prevent bias from different scales</li>
+      <li><strong>No Missing Values:</strong> Complete datasets required for covariance matrix calculation</li>
+      <li><strong>Sufficient Sample Size:</strong> Need more observations than features for reliable results</li>
+    </ul>
+    
+    <h3>Feature Engineering</h3>
+    <p>Our player role dataset includes 17 key features extracted from CS2 demo files, representing different aspects of player performance:</p>
+    <ul>
+      <li><strong>Combat Metrics:</strong> Kills, deaths, K/D ratio, headshot percentage</li>
+      <li><strong>Timing Features:</strong> Average time to kill, opening kills, time alive</li>
+      <li><strong>Tactical Indicators:</strong> Kills before/after bomb planting, bomb interactions</li>
+      <li><strong>Performance Metrics:</strong> Multi-kills (2K-5K), damage per round</li>
+    </ul>
+    
+    <div class="image-container">
+      <img src="img/data_sample.png" alt="Sample of Player Role Data for PCA" class="section-image">
+      <p class="image-caption">Figure 3: Sample of processed player role features ready for PCA analysis</p>
+    </div>
+    
+    <p><strong>Dataset Link:</strong> <a href="machine_learning/clustering/player_role_features_combined.csv" target="_blank">player_role_features_combined.csv</a></p>
+    
+    <h3>Data Preprocessing Steps</h3>
+    <ol>
+      <li>Feature selection and removal of identifier columns</li>
+      <li>Missing value imputation (filled with 0 for numerical features)</li>
+      <li>StandardScaler normalization to ensure equal feature weights</li>
+      <li>Validation of data quality and distribution</li>
+    </ol>
+  </div>
+
+  <div class="section">
+    <h2>(c) Code Implementation</h2>
+    <p>We implement PCA using Python with scikit-learn. The code demonstrates proper data preprocessing, PCA fitting, and component analysis techniques.</p>
+    
+    <h3>PCA Implementation</h3>
+    <pre><code># PCA implementation for player role analysis
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Data preprocessing
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Perform PCA
+pca = PCA(random_state=42)
+X_pca = pca.fit_transform(X_scaled)
+
+# Analyze explained variance
+explained_variance_ratio = pca.explained_variance_ratio_
+cumulative_variance = np.cumsum(explained_variance_ratio)
+
+print("Explained Variance by Component:")
+for i, (var, cum_var) in enumerate(zip(explained_variance_ratio, cumulative_variance)):
+    print(f"PC{i+1}: {var:.3f} ({var*100:.1f}%) - Cumulative: {cum_var:.3f}")
+
+# Create scree plot
+plt.figure(figsize=(10, 6))
+plt.plot(range(1, len(explained_variance_ratio) + 1), 
+         explained_variance_ratio, 'bo-', linewidth=2, markersize=8)
+plt.xlabel('Principal Component')
+plt.ylabel('Explained Variance Ratio')
+plt.title('PCA Scree Plot - Player Role Features')
+plt.grid(True, alpha=0.3)
+plt.show()
+
+# Analyze component loadings
+feature_names = ['kills', 'deaths', 'kd_ratio', 'headshot_percentage',
+                'avg_time_to_kill_ticks', 'opening_kills', 
+                'kills_before_bomb', 'kills_after_bomb', 'avg_time_alive_ticks',
+                'multi_kill_2k', 'multi_kill_3k', 'multi_kill_4k', 'multi_kill_5k',
+                'total_damage', 'damage_per_round', 'bombs_planted', 'bombs_defused']
+
+# Create loading plot for first two components
+loadings = pca.components_[:2].T
+plt.figure(figsize=(12, 8))
+plt.scatter(loadings[:, 0], loadings[:, 1], alpha=0.7, s=100)
+
+# Add feature labels
+for i, feature in enumerate(feature_names):
+    plt.annotate(feature, (loadings[i, 0], loadings[i, 1]), 
+                xytext=(5, 5), textcoords='offset points', fontsize=9)
+
+plt.xlabel(f'PC1 ({explained_variance_ratio[0]:.1%} variance)')
+plt.ylabel(f'PC2 ({explained_variance_ratio[1]:.1%} variance)')
+plt.title('PCA Loading Plot - Feature Relationships')
+plt.grid(True, alpha=0.3)
+plt.axhline(y=0, color='k', linestyle='-', alpha=0.3)
+plt.axvline(x=0, color='k', linestyle='-', alpha=0.3)
+plt.show()</code></pre>
+    
+    <p><strong>Code Link:</strong> <a href="machine_learning/clustering/player_role_clustering.ipynb" target="_blank">player_role_clustering.ipynb</a></p>
+  </div>
+
+  <div class="section">
+    <h2>(d) Results</h2>
+    <p>Our PCA analysis reveals the underlying structure of CS2 player behavior data and identifies the most important dimensions of player performance variation.</p>
+    
+    <h3>Explained Variance Analysis</h3>
+    <p>The first two principal components capture 70.3% of the total variance in the dataset, with PC1 explaining 58.0% and PC2 explaining 12.3%. This suggests that most of the variation in player behavior can be captured in just two dimensions.</p>
+    
+    <div class="image-container">
+      <img src="img/pca_scree_plot.png" alt="PCA Scree Plot" class="section-image">
+      <p class="image-caption">Figure 4: Scree plot showing explained variance by each principal component</p>
+    </div>
+    
+    <h3>Component Interpretation</h3>
+    <p><strong>Principal Component 1 (58.0% variance):</strong> Represents overall player performance and engagement level. High positive loadings on kills, deaths, damage, and multi-kills suggest this component captures the "activity level" of players.</p>
+    
+    <p><strong>Principal Component 2 (12.3% variance):</strong> Represents tactical positioning and timing. Positive loadings on time alive and kills after bomb planting, with negative loadings on opening kills, suggest this component distinguishes between supportive and aggressive playstyles.</p>
+    
+    <div class="image-container">
+      <img src="img/pca_loading_plot.png" alt="PCA Loading Plot" class="section-image">
+      <p class="image-caption">Figure 5: Loading plot showing relationships between features and principal components</p>
+    </div>
+    
+    <h3>Feature Relationships</h3>
+    <p>The loading plot reveals interesting relationships between features:</p>
+    <ul>
+      <li><strong>Performance Cluster:</strong> Kills, deaths, damage, and multi-kills are closely grouped, indicating these metrics measure similar aspects of player performance</li>
+      <li><strong>Timing Features:</strong> Opening kills and time to kill are positioned opposite to time alive, suggesting a trade-off between aggressive and conservative play</li>
+      <li><strong>Tactical Features:</strong> Bomb-related actions (kills before/after bomb, bomb plants/defuses) form a distinct cluster, representing tactical awareness</li>
+    </ul>
+    
+    <h3>Dimensionality Reduction Benefits</h3>
+    <p>By reducing 17 features to 2 principal components, we achieve:</p>
+    <ul>
+      <li>70.3% variance retention with 88% dimension reduction</li>
+      <li>Clear visualization of player relationships in 2D space</li>
+      <li>Identification of the most important performance dimensions</li>
+      <li>Foundation for effective clustering analysis</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>(e) Conclusions</h2>
+    <p><strong>What did you learn that pertains to your topic?</strong></p>
+    
+    <p>PCA revealed that CS2 player behavior can be effectively summarized using just two principal components that capture 70.3% of the total variance. The first component represents overall player activity and performance level, while the second component distinguishes between aggressive and supportive playstyles. This dimensionality reduction enables clear visualization of player relationships and provides a solid foundation for identifying distinct player roles through clustering analysis.</p>
+  </div>
+
+  <style>
+    .section {
+      margin-bottom: 3rem;
+      padding: 1.5rem;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #28a745;
+    }
+    
+    .section h2 {
+      color: #28a745;
+      border-bottom: 2px solid #28a745;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .section h3 {
+      color: #495057;
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .section h4 {
+      color: #6c757d;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .image-container {
+      text-align: center;
+      margin: 2rem 0;
+      padding: 1rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .section-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    
+    .image-caption {
+      font-style: italic;
+      color: #6c757d;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+    }
+    
+    pre {
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      border-left: 3px solid #28a745;
+    }
+    
+    code {
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+    }
+    
+    ul, ol {
+      padding-left: 2rem;
+    }
+    
+    li {
+      margin-bottom: 0.5rem;
+    }
+    
+    a {
+      color: #28a745;
+      text-decoration: none;
+    }
+    
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
 {{/main}}
