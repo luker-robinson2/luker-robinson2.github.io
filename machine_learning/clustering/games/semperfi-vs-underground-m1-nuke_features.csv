@@ -1,0 +1,11 @@
+player_name,demo_file,map_name,kills,deaths,kd_ratio,headshot_percentage,avg_time_to_kill_ticks,opening_kills,kills_before_bomb,kills_after_bomb,avg_time_alive_ticks,multi_kill_2k,multi_kill_3k,multi_kill_4k,multi_kill_5k,total_damage,damage_per_round,bombs_planted,bombs_defused
+SaVage,semperfi-vs-underground-m1-nuke,de_nuke,12,8,1.5,75.0,62694.75,16,23,25,21510.75,3,0,0,0,1596,93.88235294117646,1,0
+jayketh,semperfi-vs-underground-m1-nuke,de_nuke,7,12,0.5833333333333334,42.857142857142854,39999.28571428572,14,17,11,8530.125,1,0,0,0,1025,60.294117647058826,1,1
+ADDICT,semperfi-vs-underground-m1-nuke,de_nuke,19,9,2.111111111111111,68.42105263157895,45148.84210526316,16,47,29,12127.5625,3,2,1,1,2267,133.35294117647058,1,0
+beau,semperfi-vs-underground-m1-nuke,de_nuke,4,13,0.3076923076923077,75.0,32332.0,12,12,4,7987.5,0,0,0,0,662,38.94117647058823,0,0
+Nightraid,semperfi-vs-underground-m1-nuke,de_nuke,7,14,0.5,85.71428571428571,63758.42857142857,14,14,14,5631.5,2,0,0,0,1031,60.64705882352941,1,0
+Myst,semperfi-vs-underground-m1-nuke,de_nuke,9,16,0.5625,33.33333333333333,59223.555555555555,12,19,17,4703.8125,2,2,0,0,1262,74.23529411764706,0,0
+hazr,semperfi-vs-underground-m1-nuke,de_nuke,9,6,1.5,33.33333333333333,63871.22222222222,16,18,18,16826.875,2,1,0,0,1095,64.41176470588235,0,0
+shadiy,semperfi-vs-underground-m1-nuke,de_nuke,18,8,2.25,72.22222222222221,45467.666666666664,16,41,31,12212.625,6,2,0,0,2405,141.47058823529412,0,0
+keen,semperfi-vs-underground-m1-nuke,de_nuke,15,9,1.6666666666666667,53.333333333333336,52978.333333333336,16,32,28,9166.9375,5,0,0,0,2198,129.2941176470588,0,1
+Mechanical,semperfi-vs-underground-m1-nuke,de_nuke,10,15,0.6666666666666666,80.0,61952.5,16,21,19,5595.9375,3,0,0,0,1524,89.6470588235294,0,0

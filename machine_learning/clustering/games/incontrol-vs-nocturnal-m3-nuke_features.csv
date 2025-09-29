@@ -1,0 +1,11 @@
+player_name,demo_file,map_name,kills,deaths,kd_ratio,headshot_percentage,avg_time_to_kill_ticks,opening_kills,kills_before_bomb,kills_after_bomb,avg_time_alive_ticks,multi_kill_2k,multi_kill_3k,multi_kill_4k,multi_kill_5k,total_damage,damage_per_round,bombs_planted,bombs_defused
+1TyRa,incontrol-vs-nocturnal-m3-nuke,de_nuke,19,15,1.2666666666666666,47.368421052631575,94929.78947368421,25,67,161,7237.04,6,1,0,0,2681,116.56521739130434,1,0
+---Beast,incontrol-vs-nocturnal-m3-nuke,de_nuke,21,16,1.3125,57.14285714285714,84191.85714285714,25,92,160,6858.12,5,2,0,0,2622,114.0,1,0
+madss,incontrol-vs-nocturnal-m3-nuke,de_nuke,11,18,0.6111111111111112,45.45454545454545,74755.72727272728,25,54,78,6082.24,2,0,0,0,1667,72.47826086956522,1,0
+violet_,incontrol-vs-nocturnal-m3-nuke,de_nuke,15,15,1.0,33.33333333333333,61194.8,23,88,92,7223.52,4,2,0,0,2722,118.34782608695652,1,0
+calamity,incontrol-vs-nocturnal-m3-nuke,de_nuke,15,13,1.1538461538461537,66.66666666666666,54769.066666666666,20,97,83,7261.92,4,2,0,0,2168,94.26086956521739,3,0
+lunari,incontrol-vs-nocturnal-m3-nuke,de_nuke,16,14,1.1428571428571428,62.5,83557.3125,25,71,121,8171.92,6,0,0,0,2219,96.47826086956522,2,0
+gadflyy,incontrol-vs-nocturnal-m3-nuke,de_nuke,14,15,0.9333333333333333,50.0,54072.71428571428,23,92,76,7314.56,3,0,0,0,2039,88.65217391304348,1,0
+torii,incontrol-vs-nocturnal-m3-nuke,de_nuke,16,17,0.9411764705882353,68.75,47513.875,23,121,71,6570.04,3,2,0,0,2425,105.43478260869566,0,1
+Scorchyy,incontrol-vs-nocturnal-m3-nuke,de_nuke,15,15,1.0,40.0,85289.0,25,64,116,7502.6,4,0,0,0,2617,113.78260869565217,2,0
+jsfeltner,incontrol-vs-nocturnal-m3-nuke,de_nuke,10,15,0.6666666666666666,30.0,50119.4,25,70,50,6980.72,1,0,0,0,1394,60.608695652173914,0,0
