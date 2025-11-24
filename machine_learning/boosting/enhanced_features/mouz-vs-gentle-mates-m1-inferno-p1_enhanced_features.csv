@@ -1,0 +1,14 @@
+round_num,time_elapsed,tick,map_name,round_time_elapsed,round_time_remaining,time_phase,t_players_alive,ct_players_alive,player_count_advantage,t_total_hp,ct_total_hp,t_avg_hp,ct_avg_hp,t_total_armor,ct_total_armor,t_equipment_value,ct_equipment_value,t_avg_equipment_value,ct_avg_equipment_value,equipment_advantage,equipment_advantage_per_player,bomb_planted,time_since_plant,time_until_explosion,bomb_being_defused,t_awp_count,ct_awp_count,awp_advantage,t_rifle_count,ct_rifle_count,rifle_advantage,winning_team,round_duration,match_id
+2,15,961,de_inferno,15,100,0,5,5,0,500.0,500.0,100.0,100.0,300.0,400.0,4650.0,4600.0,930.0,920.0,50.0,10.0,0,0,0,0,0,0,0,0,0,0,Unknown,57.875,mouz-vs-gentle-mates-m1-inferno-p1
+2,30,1921,de_inferno,30,85,1,5,5,0,500.0,500.0,100.0,100.0,300.0,400.0,4650.0,4700.0,930.0,940.0,-50.0,-10.0,0,0,0,0,0,0,0,0,0,0,Unknown,57.875,mouz-vs-gentle-mates-m1-inferno-p1
+2,45,2881,de_inferno,45,70,1,5,5,0,459.0,488.0,91.8,97.6,292.0,394.0,4650.0,4400.0,930.0,880.0,250.0,50.0,0,0,0,0,0,0,0,0,0,0,Unknown,57.875,mouz-vs-gentle-mates-m1-inferno-p1
+3,15,4665,de_inferno,15,100,0,5,5,0,500.0,500.0,100.0,100.0,100.0,295.0,3300.0,11650.0,660.0,2330.0,-8350.0,-1670.0,0,0,0,0,0,0,0,0,0,0,Unknown,113.625,mouz-vs-gentle-mates-m1-inferno-p1
+3,30,5625,de_inferno,30,85,1,5,5,0,500.0,500.0,100.0,100.0,400.0,500.0,10300.0,20850.0,2060.0,4170.0,-10550.0,-2110.0,0,0,0,0,0,0,0,0,0,0,Unknown,113.625,mouz-vs-gentle-mates-m1-inferno-p1
+3,45,6585,de_inferno,45,70,1,5,5,0,464.0,500.0,92.8,100.0,391.0,500.0,10300.0,20850.0,2060.0,4170.0,-10550.0,-2110.0,0,0,0,0,0,0,0,0,2,-2,Unknown,113.625,mouz-vs-gentle-mates-m1-inferno-p1
+3,60,7545,de_inferno,60,55,1,5,5,0,397.0,500.0,79.4,100.0,378.0,500.0,10300.0,20850.0,2060.0,4170.0,-10550.0,-2110.0,0,0,0,0,0,0,0,0,1,-1,Unknown,113.625,mouz-vs-gentle-mates-m1-inferno-p1
+3,75,8505,de_inferno,75,40,2,4,5,-1,228.0,421.0,57.0,84.2,263.0,489.0,8300.0,20850.0,2075.0,4170.0,-12550.0,-2095.0,0,0,0,0,0,0,0,0,2,-2,Unknown,113.625,mouz-vs-gentle-mates-m1-inferno-p1
+4,15,11937,de_inferno,15,100,0,5,5,0,500.0,500.0,100.0,100.0,0.0,489.0,1000.0,24150.0,200.0,4830.0,-23150.0,-4630.0,0,0,0,0,0,0,0,0,1,-1,Unknown,82.0,mouz-vs-gentle-mates-m1-inferno-p1
+4,30,12897,de_inferno,30,85,1,5,5,0,500.0,500.0,100.0,100.0,0.0,489.0,3100.0,24450.0,620.0,4890.0,-21350.0,-4270.0,0,0,0,0,0,0,0,0,0,0,Unknown,82.0,mouz-vs-gentle-mates-m1-inferno-p1
+4,45,13857,de_inferno,45,70,1,5,5,0,498.0,500.0,99.6,100.0,0.0,489.0,3100.0,24450.0,620.0,4890.0,-21350.0,-4270.0,0,0,0,0,0,0,0,0,2,-2,Unknown,82.0,mouz-vs-gentle-mates-m1-inferno-p1
+4,60,14817,de_inferno,60,55,1,5,5,0,483.0,500.0,96.6,100.0,0.0,489.0,3100.0,24450.0,620.0,4890.0,-21350.0,-4270.0,0,0,0,0,0,0,0,0,3,-3,Unknown,82.0,mouz-vs-gentle-mates-m1-inferno-p1
+4,75,15777,de_inferno,75,40,2,5,4,1,452.0,400.0,90.4,100.0,0.0,389.0,5700.0,18950.0,1140.0,4737.5,-13250.0,-3597.5,0,0,0,0,0,0,0,1,1,0,Unknown,82.0,mouz-vs-gentle-mates-m1-inferno-p1
