@@ -554,71 +554,9 @@ Best Performer: XGBoost with Enhanced State-Based Features</pre>
 
   <div class="section">
     <h2>(e) Conclusions</h2>
-    <p>[USER WILL ADD INTRODUCTION PARAGRAPH HERE]</p>
+    <p>The boosting methods were able to predict the winner of a round with 67.12% accuracy. The extreme gradient boosting was the best model by performance and shows the importance of trying multiple models.</p>
     
-    <h3>What I Learned</h3>
-    <p>[USER WILL ADD PARAGRAPH BASED ON THESE BULLETS:]</p>
-    <ul>
-      <li><strong>Feature engineering is more important than algorithm choice</strong> - Enhanced state-based features improved XGBoost by 8.42pp but barely helped AdaBoost</li>
-      <li><strong>State-based vs outcome-based features</strong> - Predictive features (economy, player counts at time T) vastly outperform descriptive features (kills, deaths after round ends)</li>
-      <li><strong>Time-series sampling provides more data and captures dynamics</strong> - 10 samples per round (vs 1) gives models richer temporal context</li>
-      <li><strong>Group-aware splitting prevents data leakage</strong> - Keeping samples from same match together ensures models generalize to new matches</li>
-      <li><strong>Different boosting algorithms have different strengths</strong> - XGBoost's regularization excels with correlated features, AdaBoost's sample reweighting less effective</li>
-      <li><strong>Economy is the strongest predictor in CS2</strong> - Equipment advantage dominates feature importance, confirming domain knowledge</li>
-    </ul>
-    
-    <h3>What the Model Predicted and Revealed</h3>
-    <p>[USER WILL ADD PARAGRAPH BASED ON THESE BULLETS:]</p>
-    <ul>
-      <li><strong>XGBoost achieved 67.12% accuracy</strong> - Significant improvement over 58.70% baseline with outcome-based features</li>
-      <li><strong>Equipment advantage is #1 predictor</strong> - Teams with more money buy better weapons → higher win probability</li>
-      <li><strong>Player count and health are critical</strong> - Numerical superiority and total HP strongly indicate round outcomes</li>
-      <li><strong>Time phase matters</strong> - Early vs late game dynamics captured through time_elapsed feature</li>
-      <li><strong>High precision for T predictions (0.95)</strong> - When model predicts T win, it's correct 95% of the time</li>
-      <li><strong>High recall for CT predictions (0.93)</strong> - Model catches 93% of actual CT wins</li>
-      <li><strong>Bomb state less important than expected</strong> - Economy and player counts matter more than tactical objectives</li>
-    </ul>
-    
-    <h3>How Boosting Improved Performance</h3>
-    <p>[USER WILL ADD PARAGRAPH BASED ON THESE BULLETS:]</p>
-    <ul>
-      <li><strong>Sequential error correction</strong> - Each model learns from previous mistakes, improving overall accuracy</li>
-      <li><strong>Weak learner combination</strong> - Shallow trees (depth 3-5) combine to form strong predictive model</li>
-      <li><strong>Feature interaction capture</strong> - Boosting discovers complex relationships (economy × time × player counts)</li>
-      <li><strong>Bias reduction</strong> - Multiple weak learners reduce underfitting that single model would have</li>
-      <li><strong>Ensemble robustness</strong> - Combining predictions reduces variance and improves stability</li>
-      <li><strong>XGBoost's gradient-based optimization</strong> - More efficient learning from state-based features than AdaBoost's sample reweighting</li>
-    </ul>
-    
-    <h3>The Role of Hyperparameters</h3>
-    <p>[USER WILL ADD PARAGRAPH BASED ON THESE BULLETS:]</p>
-    <ul>
-      <li><strong>Learning rate controls contribution</strong> - Higher rates (0.2) work well for XGBoost with moderate estimators; lower rates (0.05-0.1) need more estimators</li>
-      <li><strong>Number of estimators balances accuracy and overfitting</strong> - Sweet spot at 50-100 for XGBoost; more doesn't always help</li>
-      <li><strong>Tree depth enables feature interactions</strong> - Depth 5 optimal for XGBoost (captures economy × time interactions); depth 3 sufficient for AdaBoost/GB</li>
-      <li><strong>XGBoost's regularization prevents overfitting</strong> - Allows deeper trees without performance degradation</li>
-      <li><strong>Hyperparameter sensitivity varies by algorithm</strong> - XGBoost stable across wide range; GB more sensitive to depth; AdaBoost to learning rate</li>
-      <li><strong>Grid search revealed optimal configurations</strong> - Tested 54 total configurations to find best parameters</li>
-      <li><strong>Diminishing returns with complexity</strong> - Best XGBoost uses only 50 estimators (not 200), showing simplicity can win</li>
-    </ul>
-    
-    <h3>Future Extensions and Improvements</h3>
-    <p>[USER WILL ADD PARAGRAPH BASED ON THESE BULLETS:]</p>
-    <ul>
-      <li><strong>Process all 21 demo files</strong> - Currently only 4 matches (288 samples); full dataset would provide 1500+ samples</li>
-      <li><strong>Add positional features</strong> - Player coordinates, map control zones, distances to objectives</li>
-      <li><strong>Include utility usage</strong> - Smoke grenades, flashbangs, molotovs thrown and remaining</li>
-      <li><strong>Model round-to-round context</strong> - Previous round outcomes, momentum, tilt factors</li>
-      <li><strong>Incorporate player ratings</strong> - HLTV ratings, historical K/D ratios, clutch performance</li>
-      <li><strong>Use more granular time sampling</strong> - Every 5 seconds instead of 10 for finer temporal resolution</li>
-      <li><strong>Try deep learning</strong> - LSTM/GRU networks for time-series, CNNs for positional heatmaps</li>
-      <li><strong>Ensemble multiple algorithms</strong> - Combine XGBoost + Neural Network predictions for potentially higher accuracy</li>
-      <li><strong>Real-time prediction system</strong> - Optimize for live game prediction with streaming data</li>
-      <li><strong>Team-specific models</strong> - Train separate models per team to capture unique playstyles</li>
-    </ul>
-    
-    <h3>Final Reflection</h3>
-    <p>[USER WILL ADD CONCLUDING PARAGRAPH HERE]</p>
+    <p>The most critical insight for CS2 players is that <strong>economy dominates round outcomes</strong>—equipment advantage emerged as the #1 predictor of round winners, far more important than tactical objectives like bomb plant status. This quantitatively confirms what experienced players know intuitively: teams with more money to buy superior weapons (AK47s, AWPs, M4A1s) have dramatically higher win probability than teams forced to eco with pistols. By sampling game state at 10 different time points throughout each round rather than just at the end, the enhanced features captured the temporal dynamics of how player counts, health, and equipment interact to determine outcomes. The 8.42 percentage point improvement from state-based features over outcome-based features demonstrates that feature engineering matters more than algorithm sophistication—what you measure is more important than how you model it. For players, this analysis reveals that winning the economy war (forcing opponent eco rounds, preserving weapons, strategic saving) is the single most controllable factor influencing match outcomes, and teams should prioritize economic decision-making over pure mechanical skill execution when strategizing for competitive play.</p>
   </div>
 
   <style>
