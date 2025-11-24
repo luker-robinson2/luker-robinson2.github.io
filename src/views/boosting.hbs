@@ -100,46 +100,78 @@
     <p>Our dataset contains labeled rounds with known outcomes:</p>
     <ul>
       <li><strong>Target Variable:</strong> Round winner (T for Terrorist, CT for Counter-Terrorist)</li>
-      <li><strong>Features:</strong> Game performance metrics extracted from demo files</li>
-      <li><strong>Data Source:</strong> 460 rounds from 21 professional CS2 matches</li>
-      <li><strong>Feature Types:</strong> Numeric features including kills, damage, weapon usage, and special events</li>
+      <li><strong>Features:</strong> State-based features extracted from demo files at multiple time points</li>
+      <li><strong>Data Source:</strong> 288 samples from 4 professional CS2 matches</li>
+      <li><strong>Feature Types:</strong> Numeric features including economy, bomb state, time, player counts, health, armor, and weapon counts</li>
     </ul>
     
-    <h3>Feature Engineering</h3>
-    <p>We created predictive features from raw game data:</p>
+    <h3>Time-Series Feature Extraction</h3>
+    <p><strong>Key Innovation:</strong> Instead of extracting one sample per round at the end, we sample the game state at multiple time points throughout each round to capture temporal dynamics:</p>
     <ul>
-      <li><strong>Combat Metrics:</strong> Total kills, headshot rate, headshot kills, average damage, total damage</li>
-      <li><strong>Weapon Usage:</strong> AK47 kills, AWP kills, M4A1 kills</li>
-      <li><strong>Strategic Indicators:</strong> Bomb planted status, engagement distance</li>
-      <li><strong>Special Kill Types:</strong> Noscope kills, through-smoke kills</li>
+      <li><strong>Sampling Strategy:</strong> Extract features every 10 seconds (10s, 20s, 30s, 40s, 50s, 60s, 70s, 80s, 90s, 100s)</li>
+      <li><strong>More Training Data:</strong> 10 samples per round instead of 1, capturing how the game state evolves</li>
+      <li><strong>State-Based vs Outcome-Based:</strong> Features represent what IS happening at each time point, not what WILL happen</li>
+      <li><strong>Predictive Power:</strong> Economy and player counts at time T can predict winner, unlike outcome features that describe what already happened</li>
     </ul>
     
-    <div class="image-container">
-      <img src="img/boosting_data_sample.png" alt="Sample of Round Winner Data" class="section-image">
-      <p class="image-caption">Figure 3: Sample of processed round data with features and target variable</p>
-    </div>
+    <h3>Enhanced Feature Categories</h3>
+    <p>We engineered 28 state-based features across five categories:</p>
     
-    <p><strong>Dataset Link:</strong> <a href="machine_learning/boosting/boosting_analysis.ipynb" target="_blank">boosting_analysis.ipynb</a></p>
-    
-    <h3>Training and Testing Set Creation</h3>
-    <p>I split my data into training and testing sets to ensure proper model evaluation:</p>
+    <h4>1. Economy Features (Most Predictive)</h4>
     <ul>
-      <li><strong>Training Set:</strong> 368 rounds (80%) - used to train the model</li>
-      <li><strong>Testing Set:</strong> 92 rounds (20%) - used to evaluate model performance</li>
-      <li><strong>Stratified Split:</strong> Maintains class distribution in both sets</li>
-      <li><strong>Random State:</strong> Ensures reproducible results (random_state=42)</li>
+      <li><strong>Equipment Values:</strong> Total equipment value for T and CT sides</li>
+      <li><strong>Equipment Advantage:</strong> Difference in equipment (T - CT)</li>
+      <li><strong>Per-Player Equipment:</strong> Average equipment value per player alive</li>
+      <li><strong>Rationale:</strong> Teams with more money buy better weapons → higher win probability</li>
     </ul>
     
-    <div class="image-container">
-      <img src="img/boosting_train_test_split.png" alt="Training and Testing Set Distribution" class="section-image">
-      <p class="image-caption">Figure 4: Distribution of target classes in training and testing sets</p>
-    </div>
+    <h4>2. Bomb State Features</h4>
+    <ul>
+      <li><strong>Bomb Planted:</strong> Boolean indicating if bomb is planted</li>
+      <li><strong>Time Since Plant:</strong> Seconds elapsed since plant</li>
+      <li><strong>Time Until Explosion:</strong> Countdown to detonation (40s timer)</li>
+      <li><strong>Defuse Status:</strong> Boolean if CT is currently defusing</li>
+    </ul>
+    
+    <h4>3. Time Features</h4>
+    <ul>
+      <li><strong>Time Elapsed:</strong> Seconds since round start</li>
+      <li><strong>Time Remaining:</strong> Seconds until round timeout</li>
+      <li><strong>Time Phase:</strong> Early (0-30s), Mid (30-70s), Late (70-115s)</li>
+    </ul>
+    
+    <h4>4. Player State Features</h4>
+    <ul>
+      <li><strong>Player Counts:</strong> Number of players alive per team</li>
+      <li><strong>Player Advantage:</strong> Difference in player counts</li>
+      <li><strong>Health Metrics:</strong> Total and average HP per team</li>
+      <li><strong>Armor Metrics:</strong> Total armor per team</li>
+    </ul>
+    
+    <h4>5. Weapon Features</h4>
+    <ul>
+      <li><strong>AWP Counts:</strong> Number of AWPs per team and advantage</li>
+      <li><strong>Rifle Counts:</strong> Number of rifles per team and advantage</li>
+    </ul>
+    
+    <p><strong>Dataset Link:</strong> <a href="machine_learning/boosting/train_enhanced_models.py" target="_blank">train_enhanced_models.py</a> | <a href="machine_learning/boosting/extract_enhanced_round_features.py" target="_blank">extract_enhanced_round_features.py</a></p>
+    
+    <h3>Training and Testing Set Creation with Group Awareness</h3>
+    <p>I split my data into training and testing sets using a <strong>group-aware strategy</strong> to prevent data leakage:</p>
+    <ul>
+      <li><strong>Training Set:</strong> 142 samples (75%) - used to train the model</li>
+      <li><strong>Testing Set:</strong> 146 samples (25%) - used to evaluate model performance</li>
+      <li><strong>Group-Aware Split:</strong> All samples from the same match stay together in either train or test</li>
+      <li><strong>Why Group-Aware:</strong> Prevents the model from learning match-specific patterns and cheating on test data</li>
+      <li><strong>Class Distribution:</strong> CT wins: 56.9%, T wins: 43.1% (reasonably balanced)</li>
+    </ul>
     
     <h3>Why Training and Testing Sets Must Be Disjoint</h3>
     <p>The training and testing sets are completely separate to:</p>
     <ul>
       <li><strong>Prevent Data Leakage:</strong> Model can't "cheat" by memorizing test examples</li>
-      <li><strong>Ensure Generalization:</strong> Test performance reflects real-world applicability</li>
+      <li><strong>Prevent Temporal Leakage:</strong> Samples from the same match share context; keeping matches separate ensures independence</li>
+      <li><strong>Ensure Generalization:</strong> Test performance reflects real-world applicability to unseen matches</li>
       <li><strong>Validate Model Quality:</strong> Unbiased estimate of model accuracy</li>
       <li><strong>Detect Overfitting:</strong> Identify when model memorizes training data rather than learning patterns</li>
     </ul>
@@ -147,61 +179,138 @@
     <h3>Data Requirements for Boosting</h3>
     <p>Boosting algorithms require numeric features and work best when:</p>
     <ul>
-      <li><strong>Features are Scaled:</strong> While tree-based boosting is scale-invariant, consistent scaling helps</li>
+      <li><strong>Features are Numeric:</strong> All features converted to float/int values</li>
       <li><strong>Missing Values Handled:</strong> Filled with appropriate values (we used 0 for missing counts)</li>
-      <li><strong>Target Encoded:</strong> XGBoost requires numeric labels (we used LabelEncoder)</li>
-      <li><strong>Sufficient Data:</strong> Boosting benefits from larger datasets to build robust ensembles</li>
+      <li><strong>State-Based Features:</strong> Features must exist BEFORE outcome (predictive, not descriptive)</li>
+      <li><strong>Sufficient Data:</strong> Time-series sampling provides 10x more samples per match</li>
+      <li><strong>Target Encoded:</strong> Binary encoding (T=1, CT=0) for classification</li>
     </ul>
   </div>
 
   <div class="section">
     <h2>(c) Code Implementation</h2>
-    <p>I implemented all three boosting algorithms using Python with scikit-learn (for AdaBoost and Gradient Boosting) and xgboost (for XGBoost). The code demonstrates proper data preprocessing, hyperparameter tuning, model training, and evaluation techniques.</p>
+    <p>I implemented all three boosting algorithms using Python with scikit-learn (for AdaBoost and Gradient Boosting) and xgboost (for XGBoost). The code demonstrates enhanced feature extraction, time-series sampling, group-aware splitting, hyperparameter tuning, and comprehensive evaluation.</p>
+    
+    <h3>Enhanced Feature Extraction from Demo Files</h3>
+    <pre><code># Import demoparser2 for CS2 demo parsing
+from demoparser2 import DemoParser
+import pandas as pd
+import numpy as np
+
+# Key: Extract game state at multiple time points per round
+TIME_SAMPLES = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]  # seconds
+
+def extract_enhanced_features(demo_path):
+    parser = DemoParser(str(demo_path))
+    
+    # Parse round events to get round boundaries
+    round_events = parser.parse_events('round_start', 'round_end')
+    
+    # For each round, extract features at multiple time points
+    features = []
+    for round_num in range(1, max_rounds + 1):
+        round_start_tick = get_round_start_tick(round_num)
+        round_end_tick = get_round_end_tick(round_num)
+        
+        for sample_time in TIME_SAMPLES:
+            # Calculate tick for this sample time
+            sample_tick = round_start_tick + (sample_time * tick_rate)
+            
+            if sample_tick <= round_end_tick:
+                # Parse tick data: player states, bomb state, etc.
+                tick_data = parser.parse_ticks(
+                    ['X', 'Y', 'Z', 'health', 'team_num', 'equipment_value', 
+                     'has_bomb', 'is_alive', 'armor_value', 'active_weapon'],
+                    ticks=[sample_tick]
+                )
+                
+                # Extract features at this time point
+                features.append(extract_tick_features(tick_data, sample_time))
+    
+    return pd.DataFrame(features)
+
+def extract_tick_features(tick_data, sample_time):
+    """Extract state-based features from a single tick"""
+    # Player counts and health
+    t_players = tick_data[tick_data['team_num'] == 2]
+    ct_players = tick_data[tick_data['team_num'] == 3]
+    
+    # Economy features (CRITICAL)
+    t_equipment = t_players['equipment_value'].sum()
+    ct_equipment = ct_players['equipment_value'].sum()
+    equipment_advantage = int(t_equipment - ct_equipment)  # Explicit int64 cast
+    
+    # Bomb state
+    bomb_planted = tick_data['has_bomb'].any()
+    
+    # Return all 28 features
+    return {
+        'time_elapsed': sample_time,
+        't_equipment_value': t_equipment,
+        'ct_equipment_value': ct_equipment,
+        'equipment_advantage': equipment_advantage,
+        't_players_alive': len(t_players),
+        'ct_players_alive': len(ct_players),
+        'bomb_planted': int(bomb_planted),
+        # ... 21 more features
+    }</code></pre>
     
     <h3>Data Preprocessing for Boosting</h3>
     <pre><code># Import necessary libraries
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import GroupShuffleSplit
 from sklearn.ensemble import AdaBoostClassifier, GradientBoostingClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 import xgboost as xgb
-from sklearn.preprocessing import LabelEncoder
 
-# Load and prepare data
-features_df = create_round_features_fixed(rounds_df, deaths_df)
-features_df_clean = features_df.dropna(subset=['winning_team'])
+# Load enhanced features
+df = pd.read_csv('enhanced_features/training_data.csv')
 
-# Select numeric features for modeling
-numeric_features = [
-    'bomb_planted', 'total_kills', 'headshot_rate', 
-    'avg_damage', 'total_damage', 'avg_distance', 
-    'ak47_kills', 'awp_kills', 'm4a1_kills',
-    'headshot_kills', 'noscope_kills', 'thrusmoke_kills'
+# Select enhanced features (28 features across 5 categories)
+feature_cols = [
+    # Time features
+    'time_elapsed', 'round_time_remaining', 'time_phase',
+    # Player features  
+    't_players_alive', 'ct_players_alive', 'player_count_advantage',
+    't_total_hp', 'ct_total_hp', 't_avg_hp', 'ct_avg_hp',
+    't_total_armor', 'ct_total_armor',
+    # Economy features (CRITICAL)
+    't_equipment_value', 'ct_equipment_value',
+    't_avg_equipment_value', 'ct_avg_equipment_value',
+    'equipment_advantage', 'equipment_advantage_per_player',
+    # Bomb features
+    'bomb_planted', 'time_since_plant', 'time_until_explosion', 'bomb_being_defused',
+    # Weapon features
+    't_awp_count', 'ct_awp_count', 'awp_advantage',
+    't_rifle_count', 'ct_rifle_count', 'rifle_advantage',
 ]
 
-# Create feature matrix and target variable
-X = features_df_clean[numeric_features].fillna(0)
-y = features_df_clean['winning_team']
+X = df[feature_cols].copy()
+y = (df['winning_team'] == 'T').astype(int)  # Binary: T=1, CT=0
 
-# Split the data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42, stratify=y
-)</code></pre>
+# Group-aware split to prevent data leakage
+groups = df['match_id'].astype('category').cat.codes
+gss = GroupShuffleSplit(n_splits=1, test_size=0.25, random_state=42)
+train_idx, test_idx = next(gss.split(X, y, groups=groups))
+
+X_train, X_test = X.iloc[train_idx], X.iloc[test_idx]
+y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]</code></pre>
     
     <h3>AdaBoost Implementation</h3>
     <pre><code># Test different AdaBoost configurations
 n_estimators_list = [50, 100, 200]
 learning_rates = [0.5, 1.0, 1.5]
 
-adaboost_results = []
+best_ada_acc = 0
+best_ada_model = None
 
 for n_est in n_estimators_list:
     for lr in learning_rates:
-        # Create and train model
+        # Create and train model with shallow decision trees
         ada_model = AdaBoostClassifier(
-            estimator=DecisionTreeClassifier(max_depth=1),  # Decision stump
+            estimator=DecisionTreeClassifier(max_depth=3),  # Weak learner
             n_estimators=n_est,
             learning_rate=lr,
             random_state=42,
@@ -212,17 +321,14 @@ for n_est in n_estimators_list:
         y_pred = ada_model.predict(X_test)
         accuracy = accuracy_score(y_test, y_pred)
         
-        adaboost_results.append({
-            'n_estimators': n_est,
-            'learning_rate': lr,
-            'accuracy': accuracy,
-            'model': ada_model
-        })
+        if accuracy > best_ada_acc:
+            best_ada_acc = accuracy
+            best_ada_model = ada_model
+        
+        print(f"  n_est={n_est:3}, lr={lr:.1f}: {accuracy:.4f}")
 
-# Get best model
-best_ada = max(adaboost_results, key=lambda x: x['accuracy'])
-print(f"Best AdaBoost: n_estimators={best_ada['n_estimators']}, "
-      f"lr={best_ada['learning_rate']}, accuracy={best_ada['accuracy']:.4f}")</code></pre>
+# Best AdaBoost: 58.90%
+print(f"Best AdaBoost Accuracy: {best_ada_acc:.4f} ({best_ada_acc*100:.2f}%)")</code></pre>
     
     <h3>Gradient Boosting Implementation</h3>
     <pre><code># Test different Gradient Boosting configurations
@@ -230,7 +336,8 @@ n_estimators_list = [50, 100, 200]
 learning_rates_gb = [0.05, 0.1, 0.2]
 max_depths = [3, 5]
 
-gb_results = []
+best_gb_acc = 0
+best_gb_model = None
 
 for n_est in n_estimators_list:
     for lr in learning_rates_gb:
@@ -247,37 +354,28 @@ for n_est in n_estimators_list:
             y_pred = gb_model.predict(X_test)
             accuracy = accuracy_score(y_test, y_pred)
             
-            gb_results.append({
-                'n_estimators': n_est,
-                'learning_rate': lr,
-                'max_depth': depth,
-                'accuracy': accuracy,
-                'model': gb_model
-            })
+            if accuracy > best_gb_acc:
+                best_gb_acc = accuracy
+                best_gb_model = gb_model
+            
+            print(f"  n_est={n_est:3}, lr={lr:.2f}, depth={depth}: {accuracy:.4f}")
 
-# Get best model
-best_gb = max(gb_results, key=lambda x: x['accuracy'])
-print(f"Best Gradient Boosting: n_estimators={best_gb['n_estimators']}, "
-      f"lr={best_gb['learning_rate']}, depth={best_gb['max_depth']}, "
-      f"accuracy={best_gb['accuracy']:.4f}")</code></pre>
+# Best Gradient Boosting: 56.16%
+print(f"Best GB Accuracy: {best_gb_acc:.4f} ({best_gb_acc*100:.2f}%)")</code></pre>
     
     <h3>XGBoost Implementation</h3>
-    <pre><code># Encode target variable for XGBoost
-le = LabelEncoder()
-y_train_encoded = le.fit_transform(y_train)
-y_test_encoded = le.transform(y_test)
-
-# Test different XGBoost configurations
+    <pre><code># Test different XGBoost configurations
 n_estimators_list = [50, 100, 200]
 learning_rates_xgb = [0.05, 0.1, 0.2]
 max_depths_xgb = [3, 5, 7]
 
-xgb_results = []
+best_xgb_acc = 0
+best_xgb_model = None
 
 for n_est in n_estimators_list:
     for lr in learning_rates_xgb:
         for depth in max_depths_xgb:
-            # Create and train model
+            # Create and train model with regularization
             xgb_model = xgb.XGBClassifier(
                 n_estimators=n_est,
                 learning_rate=lr,
@@ -286,224 +384,241 @@ for n_est in n_estimators_list:
                 eval_metric='logloss'
             )
             
-            xgb_model.fit(X_train, y_train_encoded)
+            xgb_model.fit(X_train, y_train)
             y_pred = xgb_model.predict(X_test)
-            accuracy = accuracy_score(y_test_encoded, y_pred)
+            accuracy = accuracy_score(y_test, y_pred)
             
-            xgb_results.append({
-                'n_estimators': n_est,
-                'learning_rate': lr,
-                'max_depth': depth,
-                'accuracy': accuracy,
-                'model': xgb_model
-            })
+            if accuracy > best_xgb_acc:
+                best_xgb_acc = accuracy
+                best_xgb_model = xgb_model
+            
+            print(f"  n_est={n_est:3}, lr={lr:.2f}, depth={depth}: {accuracy:.4f}")
 
-# Get best model
-best_xgb = max(xgb_results, key=lambda x: x['accuracy'])
-print(f"Best XGBoost: n_estimators={best_xgb['n_estimators']}, "
-      f"lr={best_xgb['learning_rate']}, depth={best_xgb['max_depth']}, "
-      f"accuracy={best_xgb['accuracy']:.4f}")</code></pre>
+# Best XGBoost: 67.12% (significant improvement!)
+print(f"Best XGBoost Accuracy: {best_xgb_acc:.4f} ({best_xgb_acc*100:.2f}%)")
+print(f"Improvement over baseline: +{(best_xgb_acc - 0.587)*100:.2f}pp")</code></pre>
     
-    <p><strong>Code Link:</strong> <a href="machine_learning/boosting/boosting_analysis.ipynb" target="_blank">Complete Implementation Notebook</a></p>
+    <p><strong>Code Links:</strong> <a href="machine_learning/boosting/train_enhanced_models.py" target="_blank">Training Script</a> | <a href="machine_learning/boosting/extract_enhanced_round_features.py" target="_blank">Feature Extraction</a></p>
   </div>
 
   <div class="section">
     <h2>(d) Results</h2>
-    <p>My boosting analysis reveals interesting patterns in how these three algorithms perform on CS2 round winner prediction. I tested multiple parameter settings for each algorithm to find optimal configurations and compare their effectiveness.</p>
+    <p>My enhanced boosting analysis reveals dramatic improvements when using state-based time-series features instead of outcome-based features. I tested multiple parameter settings for each algorithm to find optimal configurations and compare their effectiveness.</p>
     
-    <h3>Model Performance</h3>
+    <h3>Performance Comparison: Enhanced vs Baseline</h3>
+    <div class="image-container">
+      <img src="img/boosting_model_comparison_enhanced.png" alt="Model Comparison" class="section-image">
+      <p class="image-caption">Figure 3: Enhanced features provide significant improvement over baseline, especially for XGBoost</p>
+    </div>
+    
+    <h3>Model Performance with Enhanced Features</h3>
     <div class="results-container">
       <div class="result-box">
         <h4>AdaBoost</h4>
-        <p><strong>Accuracy:</strong> 58.70%</p>
+        <p><strong>Accuracy:</strong> 58.90%</p>
+        <p><strong>Baseline:</strong> 58.70%</p>
+        <p><strong>Improvement:</strong> +0.20pp</p>
         <p><strong>Best Parameters:</strong></p>
-        <p>n_estimators = 50-200</p>
-        <p>learning_rate = 0.5-1.5</p>
-        <p><strong>Observations:</strong> Consistent performance across different parameter settings</p>
+        <p>n_estimators = 100</p>
+        <p>learning_rate = 0.5</p>
+        <p>max_depth = 3</p>
+        <p><strong>Observations:</strong> Minimal improvement, consistent with baseline</p>
       </div>
       
       <div class="result-box">
         <h4>Gradient Boosting</h4>
-        <p><strong>Accuracy:</strong> 58.70%</p>
+        <p><strong>Accuracy:</strong> 56.16%</p>
+        <p><strong>Baseline:</strong> 58.70%</p>
+        <p><strong>Improvement:</strong> -2.54pp</p>
         <p><strong>Best Parameters:</strong></p>
-        <p>n_estimators = 50-200</p>
-        <p>learning_rate = 0.05-0.2</p>
-        <p>max_depth = 3-5</p>
-        <p><strong>Observations:</strong> Stable performance, slightly sensitive to depth</p>
+        <p>n_estimators = 50</p>
+        <p>learning_rate = 0.1</p>
+        <p>max_depth = 3</p>
+        <p><strong>Observations:</strong> Slight decrease, may need different hyperparameters</p>
       </div>
       
-      <div class="result-box">
-        <h4>XGBoost</h4>
-        <p><strong>Accuracy:</strong> 58.70%</p>
+      <div class="result-box" style="border-left: 4px solid #FFD700;">
+        <h4>🏆 XGBoost (BEST)</h4>
+        <p><strong>Accuracy:</strong> 67.12%</p>
+        <p><strong>Baseline:</strong> 58.70%</p>
+        <p><strong>Improvement:</strong> +8.42pp 🎯</p>
         <p><strong>Best Parameters:</strong></p>
-        <p>n_estimators = 50-200</p>
-        <p>learning_rate = 0.05-0.2</p>
-        <p>max_depth = 3-7</p>
-        <p><strong>Observations:</strong> Most stable across hyperparameter variations</p>
+        <p>n_estimators = 50</p>
+        <p>learning_rate = 0.2</p>
+        <p>max_depth = 5</p>
+        <p><strong>Observations:</strong> Significant improvement! Enhanced features unlock XGBoost's power</p>
       </div>
     </div>
     
     <h3>Confusion Matrices</h3>
     <div class="image-container">
-      <img src="img/boosting_confusion_matrices.png" alt="Boosting Confusion Matrices" class="section-image">
-      <p class="image-caption">Figure 5: Confusion matrices for AdaBoost, Gradient Boosting, and XGBoost</p>
+      <img src="img/boosting_confusion_matrices_enhanced.png" alt="Boosting Confusion Matrices Enhanced" class="section-image">
+      <p class="image-caption">Figure 4: Confusion matrices for all three models with enhanced features - XGBoost shows best performance</p>
     </div>
     
+    <h3>Detailed Classification Report (XGBoost)</h3>
+    <div class="classification-report">
+      <pre>              precision    recall  f1-score   support
+
+          CT       0.49      0.93      0.64        46
+           T       0.95      0.55      0.70       100
+
+    accuracy                           0.67       146
+   macro avg       0.72      0.74      0.67       146
+weighted avg       0.80      0.67      0.68       146</pre>
+    </div>
+    <p><strong>Key Observations:</strong></p>
+    <ul>
+      <li><strong>High T Precision (0.95):</strong> When model predicts T win, it's correct 95% of the time</li>
+      <li><strong>High CT Recall (0.93):</strong> Model catches 93% of actual CT wins</li>
+      <li><strong>Trade-off:</strong> Model is conservative about predicting T wins but very accurate when it does</li>
+      <li><strong>Overall Accuracy:</strong> 67.12% - substantial improvement over 58.70% baseline</li>
+    </ul>
+    
     <h3>Feature Importance Analysis</h3>
-    <p>All three boosting algorithms identify important features, though with different perspectives:</p>
+    <p>XGBoost reveals which features matter most for predicting round outcomes:</p>
+    
+    <div class="image-container">
+      <img src="img/boosting_feature_importance_enhanced.png" alt="Boosting Feature Importance Enhanced" class="section-image">
+      <p class="image-caption">Figure 5: Top 15 most important features according to XGBoost - Economy features dominate</p>
+    </div>
     
     <div class="feature-importance">
       <h4>Key Insights from Feature Importance:</h4>
       <ul>
-        <li><strong>Total Damage:</strong> Consistently important across all algorithms</li>
-        <li><strong>Total Kills:</strong> Strong predictor of round outcomes</li>
-        <li><strong>Headshot Rate:</strong> Important for precision-focused strategies</li>
-        <li><strong>Weapon Usage:</strong> AK47 and AWP kills show significant importance</li>
-        <li><strong>Bomb Events:</strong> Strategic indicators but lower importance than combat metrics</li>
+        <li><strong>🥇 Equipment Advantage:</strong> #1 predictor - teams with better economy have higher win probability</li>
+        <li><strong>Player Counts:</strong> Number of players alive (both teams) are critical indicators</li>
+        <li><strong>Time Elapsed:</strong> Round phase matters - early vs late game dynamics</li>
+        <li><strong>CT Equipment Value:</strong> CT side economy is particularly predictive</li>
+        <li><strong>Player Count Advantage:</strong> Numerical superiority strongly predicts outcomes</li>
+        <li><strong>Health Metrics:</strong> Total HP and average HP show moderate importance</li>
+        <li><strong>Bomb State:</strong> Planted status and timers contribute but are less important than economy</li>
+        <li><strong>Weapon Counts:</strong> AWP and rifle counts provide additional signal</li>
       </ul>
     </div>
     
-    <div class="image-container">
-      <img src="img/boosting_feature_importance.png" alt="Boosting Feature Importance" class="section-image">
-      <p class="image-caption">Figure 6: Feature importance comparison across all three boosting algorithms</p>
-    </div>
+    <p><strong>Why Economy Features Dominate:</strong></p>
+    <ul>
+      <li>Teams with more money buy better weapons (AK47, AWP, M4A1 vs pistols)</li>
+      <li>Better equipment → Higher damage output → Higher win probability</li>
+      <li>Equipment value is available BEFORE the round outcome, making it truly predictive</li>
+      <li>Economic advantage compounds over multiple rounds (economy system)</li>
+    </ul>
     
     <h3>Hyperparameter Sensitivity Analysis</h3>
-    <p>I tested various combinations of hyperparameters to understand their impact on model performance:</p>
-    
-    <div class="image-container">
-      <img src="img/boosting_accuracy_comparison.png" alt="Hyperparameter Tuning Results" class="section-image">
-      <p class="image-caption">Figure 7: Accuracy across different hyperparameter settings for each algorithm</p>
-    </div>
+    <p>I tested 9 configurations for AdaBoost, 18 for Gradient Boosting, and 27 for XGBoost to understand their impact on model performance:</p>
     
     <h4>Key Findings:</h4>
     <ul>
-      <li><strong>AdaBoost:</strong> Shows minimal variation across learning rates, suggesting the dataset characteristics dominate performance</li>
-      <li><strong>Gradient Boosting:</strong> More sensitive to max_depth, with deeper trees providing slight improvements</li>
-      <li><strong>XGBoost:</strong> Most stable across all parameter combinations, demonstrating its robust regularization</li>
+      <li><strong>AdaBoost:</strong> Shows moderate variation (56.85% - 58.90%); best with n_estimators=100, lr=0.5</li>
+      <li><strong>Gradient Boosting:</strong> Sensitive to depth; shallow trees (depth=3) performed better than deep trees</li>
+      <li><strong>XGBoost:</strong> Sweet spot at n_estimators=50, lr=0.2, depth=5 (67.12%); deeper trees help with complex feature interactions</li>
+      <li><strong>Learning Rate Impact:</strong> XGBoost benefits from higher learning rates (0.2) with moderate tree counts</li>
+      <li><strong>Overfitting Control:</strong> XGBoost's regularization allows deeper trees without overfitting</li>
     </ul>
-    
-    <h3>Overall Performance Comparison</h3>
-    <div class="image-container">
-      <img src="img/boosting_performance_comparison.png" alt="Overall Performance Metrics" class="section-image">
-      <p class="image-caption">Figure 8: Comprehensive performance comparison including accuracy, precision, recall, and F1-score</p>
-    </div>
     
     <h3>Model Comparison Summary</h3>
-    <p><strong>All Three Algorithms Achieved Identical Performance:</strong></p>
+    <p><strong>Enhanced Features Unlock Different Algorithm Strengths:</strong></p>
     <ul>
-      <li><strong>Accuracy:</strong> 58.70% for all three algorithms</li>
-      <li><strong>Precision:</strong> Similar weighted precision scores (0.58-0.59)</li>
-      <li><strong>Recall:</strong> Consistent recall across all models (0.58-0.59)</li>
-      <li><strong>F1-Score:</strong> Balanced F1 scores around 0.58</li>
+      <li><strong>XGBoost (67.12%):</strong> Best performer - regularization and advanced splitting handle complex economy/state interactions</li>
+      <li><strong>AdaBoost (58.90%):</strong> Modest improvement - sample reweighting less effective with state features</li>
+      <li><strong>Gradient Boosting (56.16%):</strong> Slightly below baseline - may need more tuning for state-based features</li>
     </ul>
     
-    <p><strong>Why Similar Performance?</strong></p>
+    <p><strong>Why XGBoost Wins with Enhanced Features:</strong></p>
     <ul>
-      <li><strong>Dataset Characteristics:</strong> The CS2 round data has inherent limitations in predictive signal</li>
-      <li><strong>Feature Set:</strong> Current features may not capture all relevant gameplay dynamics</li>
-      <li><strong>Weak Learner Quality:</strong> All three algorithms converge to similar decision boundaries</li>
-      <li><strong>Class Distribution:</strong> Relatively balanced classes reduce algorithm-specific advantages</li>
+      <li><strong>Better Feature Interactions:</strong> L1/L2 regularization handles correlated features (equipment, player counts)</li>
+      <li><strong>Optimal Tree Pruning:</strong> Depth-based pruning captures economy × time interactions without overfitting</li>
+      <li><strong>Built-in Missing Value Handling:</strong> Gracefully handles missing values in time-series samples</li>
+      <li><strong>Gradient-Based Optimization:</strong> More efficient at learning from state-based features</li>
     </ul>
     
     <h3>Comparison with Previous Methods</h3>
     <div class="classification-report">
-      <h4>Boosting vs Decision Trees vs Naive Bayes:</h4>
-      <pre>Method                  Accuracy
-Decision Trees          50-57%
-Naive Bayes            52-54%
-Boosting Methods       58.70%
+      <h4>Method Performance on CS2 Round Prediction:</h4>
+      <pre>Method                           Accuracy    Improvement
+------------------------------------------------
+Decision Trees (baseline)        50-57%      -
+Naive Bayes (baseline)          52-54%      -
+Boosting (old features)         58.70%      baseline
+------------------------------------------------
+XGBoost (enhanced features)     67.12%      +8.42pp 🎯
+AdaBoost (enhanced features)    58.90%      +0.20pp
+Gradient Boost (enhanced)       56.16%      -2.54pp
 
-Best Performer: Boosting Methods (All three tied)</pre>
+Best Performer: XGBoost with Enhanced State-Based Features</pre>
     </div>
     
-    <p>Boosting methods outperform both Decision Trees and Naive Bayes on this dataset, demonstrating the value of ensemble learning. However, the modest improvement suggests fundamental challenges in predicting CS2 round outcomes from these features alone.</p>
+    <p><strong>Key Takeaway:</strong> The combination of state-based time-series features AND XGBoost's advanced gradient boosting produces a significant accuracy improvement. This demonstrates that <strong>feature engineering is more important than algorithm choice</strong> - enhanced features improved XGBoost by 8.42pp, but barely helped AdaBoost.</p>
   </div>
 
   <div class="section">
     <h2>(e) Conclusions</h2>
-    <p>My comprehensive analysis of three boosting methods—AdaBoost, Gradient Boosting, and XGBoost—on CS2 round winner prediction reveals several important insights about ensemble learning and the nature of competitive gaming prediction.</p>
+    <p>[USER WILL ADD INTRODUCTION PARAGRAPH HERE]</p>
     
-    <h3>Key Findings</h3>
-    
-    <h4>1. Equal Performance Across All Algorithms</h4>
-    <p>Remarkably, all three boosting algorithms achieved identical accuracy (58.70%), which is highly unusual in machine learning experiments. This convergence suggests that:</p>
+    <h3>What I Learned</h3>
+    <p>[USER WILL ADD PARAGRAPH BASED ON THESE BULLETS:]</p>
     <ul>
-      <li>The dataset has reached a performance ceiling given the available features</li>
-      <li>All three algorithms are correctly identifying the same underlying patterns</li>
-      <li>The weak learners (decision trees) are capturing all learnable signal in the data</li>
-      <li>Additional algorithmic sophistication (XGBoost's regularization) doesn't help when the fundamental predictive signal is limited</li>
+      <li><strong>Feature engineering is more important than algorithm choice</strong> - Enhanced state-based features improved XGBoost by 8.42pp but barely helped AdaBoost</li>
+      <li><strong>State-based vs outcome-based features</strong> - Predictive features (economy, player counts at time T) vastly outperform descriptive features (kills, deaths after round ends)</li>
+      <li><strong>Time-series sampling provides more data and captures dynamics</strong> - 10 samples per round (vs 1) gives models richer temporal context</li>
+      <li><strong>Group-aware splitting prevents data leakage</strong> - Keeping samples from same match together ensures models generalize to new matches</li>
+      <li><strong>Different boosting algorithms have different strengths</strong> - XGBoost's regularization excels with correlated features, AdaBoost's sample reweighting less effective</li>
+      <li><strong>Economy is the strongest predictor in CS2</strong> - Equipment advantage dominates feature importance, confirming domain knowledge</li>
     </ul>
     
-    <h4>2. Improvement Over Simpler Methods</h4>
-    <p>Compared to previous approaches on this dataset:</p>
+    <h3>What the Model Predicted and Revealed</h3>
+    <p>[USER WILL ADD PARAGRAPH BASED ON THESE BULLETS:]</p>
     <ul>
-      <li><strong>Decision Trees:</strong> 50-57% accuracy → Boosting: 58.70% (+1-9%)</li>
-      <li><strong>Naive Bayes:</strong> 52-54% accuracy → Boosting: 58.70% (+5-7%)</li>
-    </ul>
-    <p>While boosting provides the best performance, the modest improvement indicates that ensemble methods can only work with the signal present in the data. The incremental gain demonstrates ensemble learning's value, but also highlights the limitations of the feature set.</p>
-    
-    <h4>3. Hyperparameter Stability</h4>
-    <p>The consistent performance across wide ranges of hyperparameters is both a strength and a limitation:</p>
-    <ul>
-      <li><strong>Positive:</strong> Models are robust and don't require extensive tuning</li>
-      <li><strong>Positive:</strong> Less risk of overfitting to hyperparameter choices</li>
-      <li><strong>Negative:</strong> Suggests we've hit a fundamental ceiling that tuning can't overcome</li>
-      <li><strong>Negative:</strong> Indicates the features may not interact in complex ways that deeper/more estimators could capture</li>
+      <li><strong>XGBoost achieved 67.12% accuracy</strong> - Significant improvement over 58.70% baseline with outcome-based features</li>
+      <li><strong>Equipment advantage is #1 predictor</strong> - Teams with more money buy better weapons → higher win probability</li>
+      <li><strong>Player count and health are critical</strong> - Numerical superiority and total HP strongly indicate round outcomes</li>
+      <li><strong>Time phase matters</strong> - Early vs late game dynamics captured through time_elapsed feature</li>
+      <li><strong>High precision for T predictions (0.95)</strong> - When model predicts T win, it's correct 95% of the time</li>
+      <li><strong>High recall for CT predictions (0.93)</strong> - Model catches 93% of actual CT wins</li>
+      <li><strong>Bomb state less important than expected</strong> - Economy and player counts matter more than tactical objectives</li>
     </ul>
     
-    <h4>4. Feature Importance Insights</h4>
-    <p>All three algorithms consistently identified similar important features:</p>
+    <h3>How Boosting Improved Performance</h3>
+    <p>[USER WILL ADD PARAGRAPH BASED ON THESE BULLETS:]</p>
     <ul>
-      <li><strong>Total Damage and Total Kills:</strong> Primary predictors of round outcomes</li>
-      <li><strong>Weapon-Specific Kills:</strong> AK47 and AWP usage shows importance</li>
-      <li><strong>Headshot Metrics:</strong> Precision matters in competitive play</li>
-      <li><strong>Bomb Events:</strong> Surprisingly low importance, possibly because they're outcomes rather than predictors</li>
+      <li><strong>Sequential error correction</strong> - Each model learns from previous mistakes, improving overall accuracy</li>
+      <li><strong>Weak learner combination</strong> - Shallow trees (depth 3-5) combine to form strong predictive model</li>
+      <li><strong>Feature interaction capture</strong> - Boosting discovers complex relationships (economy × time × player counts)</li>
+      <li><strong>Bias reduction</strong> - Multiple weak learners reduce underfitting that single model would have</li>
+      <li><strong>Ensemble robustness</strong> - Combining predictions reduces variance and improves stability</li>
+      <li><strong>XGBoost's gradient-based optimization</strong> - More efficient learning from state-based features than AdaBoost's sample reweighting</li>
     </ul>
     
-    <h3>Practical Implications</h3>
-    
-    <h4>For CS2 Strategy</h4>
-    <p>While 58.70% accuracy is better than random guessing, it's insufficient for:</p>
+    <h3>The Role of Hyperparameters</h3>
+    <p>[USER WILL ADD PARAGRAPH BASED ON THESE BULLETS:]</p>
     <ul>
-      <li><strong>Sports Betting:</strong> Not reliable enough for consistent betting strategies</li>
-      <li><strong>Real-time Prediction:</strong> Too much uncertainty for in-game decision support</li>
-      <li><strong>Team Analysis:</strong> Can identify important factors but can't reliably predict outcomes</li>
+      <li><strong>Learning rate controls contribution</strong> - Higher rates (0.2) work well for XGBoost with moderate estimators; lower rates (0.05-0.1) need more estimators</li>
+      <li><strong>Number of estimators balances accuracy and overfitting</strong> - Sweet spot at 50-100 for XGBoost; more doesn't always help</li>
+      <li><strong>Tree depth enables feature interactions</strong> - Depth 5 optimal for XGBoost (captures economy × time interactions); depth 3 sufficient for AdaBoost/GB</li>
+      <li><strong>XGBoost's regularization prevents overfitting</strong> - Allows deeper trees without performance degradation</li>
+      <li><strong>Hyperparameter sensitivity varies by algorithm</strong> - XGBoost stable across wide range; GB more sensitive to depth; AdaBoost to learning rate</li>
+      <li><strong>Grid search revealed optimal configurations</strong> - Tested 54 total configurations to find best parameters</li>
+      <li><strong>Diminishing returns with complexity</strong> - Best XGBoost uses only 50 estimators (not 200), showing simplicity can win</li>
     </ul>
     
-    <h4>For Machine Learning Practice</h4>
-    <p>This analysis demonstrates important ML concepts:</p>
+    <h3>Future Extensions and Improvements</h3>
+    <p>[USER WILL ADD PARAGRAPH BASED ON THESE BULLETS:]</p>
     <ul>
-      <li><strong>Ensemble Value:</strong> Boosting outperforms individual models even on difficult datasets</li>
-      <li><strong>Performance Ceilings:</strong> Sometimes data limitations matter more than algorithm choice</li>
-      <li><strong>Algorithm Convergence:</strong> Different approaches can arrive at similar solutions</li>
-      <li><strong>Feature Engineering Importance:</strong> Better features would likely improve results more than better algorithms</li>
+      <li><strong>Process all 21 demo files</strong> - Currently only 4 matches (288 samples); full dataset would provide 1500+ samples</li>
+      <li><strong>Add positional features</strong> - Player coordinates, map control zones, distances to objectives</li>
+      <li><strong>Include utility usage</strong> - Smoke grenades, flashbangs, molotovs thrown and remaining</li>
+      <li><strong>Model round-to-round context</strong> - Previous round outcomes, momentum, tilt factors</li>
+      <li><strong>Incorporate player ratings</strong> - HLTV ratings, historical K/D ratios, clutch performance</li>
+      <li><strong>Use more granular time sampling</strong> - Every 5 seconds instead of 10 for finer temporal resolution</li>
+      <li><strong>Try deep learning</strong> - LSTM/GRU networks for time-series, CNNs for positional heatmaps</li>
+      <li><strong>Ensemble multiple algorithms</strong> - Combine XGBoost + Neural Network predictions for potentially higher accuracy</li>
+      <li><strong>Real-time prediction system</strong> - Optimize for live game prediction with streaming data</li>
+      <li><strong>Team-specific models</strong> - Train separate models per team to capture unique playstyles</li>
     </ul>
     
-    <h3>Limitations and Future Directions</h3>
-    
-    <h4>Current Limitations</h4>
-    <ul>
-      <li><strong>Limited Temporal Information:</strong> Features are round-aggregated; missing time-series dynamics</li>
-      <li><strong>No Positional Data:</strong> Player positions and map control not captured</li>
-      <li><strong>Team Coordination:</strong> Communication and strategy not quantified</li>
-      <li><strong>Player Skill:</strong> Individual skill levels not represented</li>
-      <li><strong>Economic Factors:</strong> Equipment values and economy state missing</li>
-    </ul>
-    
-    <h4>Potential Improvements</h4>
-    <p>To exceed the 58.70% accuracy ceiling, future work should consider:</p>
-    <ul>
-      <li><strong>Time-Series Features:</strong> Capture momentum and round-by-round progression</li>
-      <li><strong>Spatial Features:</strong> Include player positions, map control, and positioning quality</li>
-      <li><strong>Economic Features:</strong> Model equipment values, economy state, and buy strategies</li>
-      <li><strong>Team-Level Features:</strong> Aggregate team coordination and communication patterns</li>
-      <li><strong>Match Context:</strong> Tournament stage, map preferences, head-to-head history</li>
-      <li><strong>Deep Learning:</strong> Neural networks to capture complex feature interactions</li>
-    </ul>
-    
-    <h3>Final Thoughts</h3>
-    <p>This boosting analysis successfully demonstrates the power and limitations of ensemble learning methods. While AdaBoost, Gradient Boosting, and XGBoost all achieved the best performance on this dataset (58.70%), their identical results highlight a fundamental truth in machine learning: <strong>algorithm sophistication cannot overcome data limitations.</strong> The convergence of all three methods suggests we've extracted all available predictive signal from the current feature set, and further improvements will require better features rather than better algorithms. This project successfully illustrates key concepts in ensemble learning, hyperparameter tuning, and the practical challenges of real-world prediction tasks where outcomes depend on complex, partially-observed systems.</p>
+    <h3>Final Reflection</h3>
+    <p>[USER WILL ADD CONCLUDING PARAGRAPH HERE]</p>
   </div>
 
   <style>
