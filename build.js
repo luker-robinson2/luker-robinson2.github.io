@@ -79,13 +79,16 @@ if (fs.existsSync(imgSrcDir)) {
 }
 
 // Copy specific machine learning files needed for downloads
-const mlDistDir = path.join(distDir, "machine_learning", "clustering");
+const mlClusteringDir = path.join(distDir, "machine_learning", "clustering");
+const mlBoostingDir = path.join(distDir, "machine_learning", "boosting");
+
 if (fs.existsSync("machine_learning")) {
-  // Create the target directory
-  fs.ensureDirSync(mlDistDir);
+  // Create the target directories
+  fs.ensureDirSync(mlClusteringDir);
+  fs.ensureDirSync(mlBoostingDir);
   
-  // Copy only the files that are referenced in download links
-  const filesToCopy = [
+  // Copy clustering files
+  const clusteringFiles = [
     "machine_learning/clustering/player_role_features_combined.csv",
     "machine_learning/clustering/cluster_centroids.csv", 
     "machine_learning/clustering/feature_summary.csv",
@@ -93,12 +96,27 @@ if (fs.existsSync("machine_learning")) {
     "machine_learning/clustering/player_role_clustering.ipynb"
   ];
   
-  filesToCopy.forEach(filePath => {
+  clusteringFiles.forEach(filePath => {
     if (fs.existsSync(filePath)) {
       const fileName = path.basename(filePath);
-      fs.copySync(filePath, path.join(mlDistDir, fileName));
+      fs.copySync(filePath, path.join(mlClusteringDir, fileName));
     }
   });
   
   console.log("Copied essential machine learning files to docs/machine_learning/clustering");
+  
+  // Copy boosting files
+  const boostingFiles = [
+    "machine_learning/boosting/boosting_analysis.ipynb",
+    "machine_learning/boosting/run_boosting_analysis.py"
+  ];
+  
+  boostingFiles.forEach(filePath => {
+    if (fs.existsSync(filePath)) {
+      const fileName = path.basename(filePath);
+      fs.copySync(filePath, path.join(mlBoostingDir, fileName));
+    }
+  });
+  
+  console.log("Copied boosting files to docs/machine_learning/boosting");
 }

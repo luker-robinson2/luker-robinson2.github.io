@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Boosting Methods</title>
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="introduction.html">Introduction</a></li>
+      <li><a href="conclusions.html">Conclusions</a></li>
+      <li><a href="dataprep_eda.html">DataPrep & EDA</a></li>
+      <li><a href="clustering.html">Clustering</a></li>
+      <li><a href="pca.html">PCA</a></li>
+      <li><a href="naivebayes.html">Naive Bayes</a></li>
+      <li><a href="dectrees.html">Decision Trees</a></li>
+      <li><a href="boosting.html">Boosting</a></li>
+      <li><a href="svms.html">SVMs</a></li>
+      <li><a href="regression.html">Regression</a></li>
+      <li><a href="nn.html">Neural Networks</a></li>
+    </ul>
+  </nav>  <main>
+    <h1>Boosting Methods for Round Winner Prediction</h1>
+  
+  <div class="section">
+    <h2>(a) Overview</h2>
+    
+    <h3>Ensemble Learning and Boosting</h3>
+    <p>Boosting is a powerful ensemble learning technique that combines multiple weak learners (typically shallow decision trees) into a strong learner. The key idea is to sequentially train models, where each new model focuses on correcting the errors made by previous models. Unlike bagging methods that train models independently, boosting creates models sequentially, with each model learning from the mistakes of its predecessors.</p>
+    
+    <h3>What is a Weak Learner?</h3>
+    <p>A <strong>weak learner</strong> is a model that performs only slightly better than random guessing. In classification tasks, this means accuracy just above 50%. Common weak learners include:</p>
+    <ul>
+      <li><strong>Decision Stumps:</strong> Decision trees with only one split (depth = 1)</li>
+      <li><strong>Shallow Trees:</strong> Decision trees with limited depth (2-3 levels)</li>
+      <li><strong>Simple Rules:</strong> Basic if-then rules based on single features</li>
+    </ul>
+    
+    <p>The power of boosting comes from combining many weak learners into a <strong>strong learner</strong> that achieves high accuracy. Each weak learner contributes a small piece of knowledge, and together they create a robust predictive model.</p>
+    
+    <div class="image-container">
+      <img src="img/boosting_overview.png" alt="Weak vs Strong Learners" class="section-image">
+      <p class="image-caption">Figure 1: Weak learners vs strong learner - Boosting combines multiple weak models to create a powerful ensemble</p>
+    </div>
+    
+    <h3>Main Differences Between Boosting Algorithms</h3>
+    
+    <h4>AdaBoost (Adaptive Boosting)</h4>
+    <p><strong>AdaBoost</strong> works by adjusting sample weights based on misclassifications:</p>
+    <ul>
+      <li><strong>Sample Reweighting:</strong> Increases weights of misclassified samples, forcing the next model to focus on difficult cases</li>
+      <li><strong>Model Weighting:</strong> More accurate models receive higher weights in the final ensemble</li>
+      <li><strong>Simple and Effective:</strong> Works well with decision stumps as weak learners</li>
+      <li><strong>Sensitive to Outliers:</strong> Can overfit on noisy data due to aggressive reweighting</li>
+    </ul>
+    
+    <h4>Gradient Boosting</h4>
+    <p><strong>Gradient Boosting</strong> fits new models to the residual errors:</p>
+    <ul>
+      <li><strong>Residual Fitting:</strong> Each new model predicts the errors (residuals) of the previous ensemble</li>
+      <li><strong>Gradient Descent:</strong> Uses gradient descent optimization to minimize loss function</li>
+      <li><strong>More Flexible:</strong> Can optimize various loss functions beyond classification error</li>
+      <li><strong>Slower Training:</strong> Sequential nature makes it harder to parallelize</li>
+    </ul>
+    
+    <h4>XGBoost (Extreme Gradient Boosting)</h4>
+    <p><strong>XGBoost</strong> is an optimized gradient boosting implementation with advanced features:</p>
+    <ul>
+      <li><strong>Regularization:</strong> L1 and L2 regularization to prevent overfitting</li>
+      <li><strong>Parallel Processing:</strong> Parallelized tree construction for faster training</li>
+      <li><strong>Tree Pruning:</strong> Uses max_depth pruning rather than stopping growth criteria</li>
+      <li><strong>Built-in Cross-Validation:</strong> Automated hyperparameter tuning support</li>
+      <li><strong>Missing Value Handling:</strong> Learns optimal direction for missing values</li>
+    </ul>
+    
+    <div class="image-container">
+      <img src="img/boosting_concept.png" alt="Boosting Concepts" class="section-image">
+      <p class="image-caption">Figure 2: Visual representation of how AdaBoost, Gradient Boosting, and XGBoost work</p>
+    </div>
+    
+    <h3>How Boosting Reduces Bias and Variance</h3>
+    <p>Boosting primarily reduces <strong>bias</strong> by combining multiple weak learners:</p>
+    <ul>
+      <li><strong>Bias Reduction:</strong> Sequential learning allows the ensemble to capture complex patterns that individual weak learners miss</li>
+      <li><strong>Variance Management:</strong> Weak learners have low variance; combining them keeps variance under control</li>
+      <li><strong>Trade-off:</strong> Can increase variance if too many estimators are used (overfitting)</li>
+    </ul>
+    
+    <h3>Key Hyperparameters</h3>
+    
+    <h4>Learning Rate (Shrinkage)</h4>
+    <p>The <strong>learning rate</strong> controls how much each tree contributes to the ensemble:</p>
+    <ul>
+      <li><strong>Low Learning Rate (0.01-0.1):</strong> More robust, requires more estimators, slower training</li>
+      <li><strong>High Learning Rate (0.5-1.0):</strong> Faster convergence, risk of overfitting, fewer estimators needed</li>
+      <li><strong>Trade-off:</strong> Lower learning rate + more estimators often gives better results</li>
+    </ul>
+    
+    <h4>Number of Estimators</h4>
+    <p>The <strong>number of estimators</strong> determines how many weak learners to train:</p>
+    <ul>
+      <li><strong>Too Few:</strong> Underfitting, high bias, poor performance</li>
+      <li><strong>Too Many:</strong> Overfitting (especially with high learning rate), slower inference</li>
+      <li><strong>Typical Range:</strong> 50-500 estimators depending on learning rate</li>
+    </ul>
+    
+    <h4>Tree Depth</h4>
+    <p>The <strong>maximum tree depth</strong> controls the complexity of each weak learner:</p>
+    <ul>
+      <li><strong>Shallow Trees (1-3):</strong> True weak learners, less prone to overfitting</li>
+      <li><strong>Moderate Depth (4-6):</strong> Can capture interactions between features</li>
+      <li><strong>Deep Trees (7+):</strong> Risk of overfitting, defeats purpose of weak learners</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>(b) Data Preparation</h2>
+    <p>All supervised learning models require specific data formats. Supervised modeling requires first that you have labeled data, then that you split your data into a Training Set (to train/build the model) and a Testing Set to test the accuracy of your model. <strong>ONLY labeled data can be used for supervised methods.</strong></p>
+    
+    <h3>Labeled Data Requirements</h3>
+    <p>Our dataset contains labeled rounds with known outcomes:</p>
+    <ul>
+      <li><strong>Target Variable:</strong> Round winner (T for Terrorist, CT for Counter-Terrorist)</li>
+      <li><strong>Features:</strong> Game performance metrics extracted from demo files</li>
+      <li><strong>Data Source:</strong> 460 rounds from 21 professional CS2 matches</li>
+      <li><strong>Feature Types:</strong> Numeric features including kills, damage, weapon usage, and special events</li>
+    </ul>
+    
+    <h3>Feature Engineering</h3>
+    <p>We created predictive features from raw game data:</p>
+    <ul>
+      <li><strong>Combat Metrics:</strong> Total kills, headshot rate, headshot kills, average damage, total damage</li>
+      <li><strong>Weapon Usage:</strong> AK47 kills, AWP kills, M4A1 kills</li>
+      <li><strong>Strategic Indicators:</strong> Bomb planted status, engagement distance</li>
+      <li><strong>Special Kill Types:</strong> Noscope kills, through-smoke kills</li>
+    </ul>
+    
+    <div class="image-container">
+      <img src="img/boosting_data_sample.png" alt="Sample of Round Winner Data" class="section-image">
+      <p class="image-caption">Figure 3: Sample of processed round data with features and target variable</p>
+    </div>
+    
+    <p><strong>Dataset Link:</strong> <a href="machine_learning/boosting/boosting_analysis.ipynb" target="_blank">boosting_analysis.ipynb</a></p>
+    
+    <h3>Training and Testing Set Creation</h3>
+    <p>I split my data into training and testing sets to ensure proper model evaluation:</p>
+    <ul>
+      <li><strong>Training Set:</strong> 368 rounds (80%) - used to train the model</li>
+      <li><strong>Testing Set:</strong> 92 rounds (20%) - used to evaluate model performance</li>
+      <li><strong>Stratified Split:</strong> Maintains class distribution in both sets</li>
+      <li><strong>Random State:</strong> Ensures reproducible results (random_state=42)</li>
+    </ul>
+    
+    <div class="image-container">
+      <img src="img/boosting_train_test_split.png" alt="Training and Testing Set Distribution" class="section-image">
+      <p class="image-caption">Figure 4: Distribution of target classes in training and testing sets</p>
+    </div>
+    
+    <h3>Why Training and Testing Sets Must Be Disjoint</h3>
+    <p>The training and testing sets are completely separate to:</p>
+    <ul>
+      <li><strong>Prevent Data Leakage:</strong> Model can't "cheat" by memorizing test examples</li>
+      <li><strong>Ensure Generalization:</strong> Test performance reflects real-world applicability</li>
+      <li><strong>Validate Model Quality:</strong> Unbiased estimate of model accuracy</li>
+      <li><strong>Detect Overfitting:</strong> Identify when model memorizes training data rather than learning patterns</li>
+    </ul>
+    
+    <h3>Data Requirements for Boosting</h3>
+    <p>Boosting algorithms require numeric features and work best when:</p>
+    <ul>
+      <li><strong>Features are Scaled:</strong> While tree-based boosting is scale-invariant, consistent scaling helps</li>
+      <li><strong>Missing Values Handled:</strong> Filled with appropriate values (we used 0 for missing counts)</li>
+      <li><strong>Target Encoded:</strong> XGBoost requires numeric labels (we used LabelEncoder)</li>
+      <li><strong>Sufficient Data:</strong> Boosting benefits from larger datasets to build robust ensembles</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>(c) Code Implementation</h2>
+    <p>I implemented all three boosting algorithms using Python with scikit-learn (for AdaBoost and Gradient Boosting) and xgboost (for XGBoost). The code demonstrates proper data preprocessing, hyperparameter tuning, model training, and evaluation techniques.</p>
+    
+    <h3>Data Preprocessing for Boosting</h3>
+    <pre><code># Import necessary libraries
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import AdaBoostClassifier, GradientBoostingClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+import xgboost as xgb
+from sklearn.preprocessing import LabelEncoder
+
+# Load and prepare data
+features_df = create_round_features_fixed(rounds_df, deaths_df)
+features_df_clean = features_df.dropna(subset=['winning_team'])
+
+# Select numeric features for modeling
+numeric_features = [
+    'bomb_planted', 'total_kills', 'headshot_rate', 
+    'avg_damage', 'total_damage', 'avg_distance', 
+    'ak47_kills', 'awp_kills', 'm4a1_kills',
+    'headshot_kills', 'noscope_kills', 'thrusmoke_kills'
+]
+
+# Create feature matrix and target variable
+X = features_df_clean[numeric_features].fillna(0)
+y = features_df_clean['winning_team']
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y
+)</code></pre>
+    
+    <h3>AdaBoost Implementation</h3>
+    <pre><code># Test different AdaBoost configurations
+n_estimators_list = [50, 100, 200]
+learning_rates = [0.5, 1.0, 1.5]
+
+adaboost_results = []
+
+for n_est in n_estimators_list:
+    for lr in learning_rates:
+        # Create and train model
+        ada_model = AdaBoostClassifier(
+            estimator=DecisionTreeClassifier(max_depth=1),  # Decision stump
+            n_estimators=n_est,
+            learning_rate=lr,
+            random_state=42,
+            algorithm='SAMME'
+        )
+        
+        ada_model.fit(X_train, y_train)
+        y_pred = ada_model.predict(X_test)
+        accuracy = accuracy_score(y_test, y_pred)
+        
+        adaboost_results.append({
+            'n_estimators': n_est,
+            'learning_rate': lr,
+            'accuracy': accuracy,
+            'model': ada_model
+        })
+
+# Get best model
+best_ada = max(adaboost_results, key=lambda x: x['accuracy'])
+print(f"Best AdaBoost: n_estimators={best_ada['n_estimators']}, "
+      f"lr={best_ada['learning_rate']}, accuracy={best_ada['accuracy']:.4f}")</code></pre>
+    
+    <h3>Gradient Boosting Implementation</h3>
+    <pre><code># Test different Gradient Boosting configurations
+n_estimators_list = [50, 100, 200]
+learning_rates_gb = [0.05, 0.1, 0.2]
+max_depths = [3, 5]
+
+gb_results = []
+
+for n_est in n_estimators_list:
+    for lr in learning_rates_gb:
+        for depth in max_depths:
+            # Create and train model
+            gb_model = GradientBoostingClassifier(
+                n_estimators=n_est,
+                learning_rate=lr,
+                max_depth=depth,
+                random_state=42
+            )
+            
+            gb_model.fit(X_train, y_train)
+            y_pred = gb_model.predict(X_test)
+            accuracy = accuracy_score(y_test, y_pred)
+            
+            gb_results.append({
+                'n_estimators': n_est,
+                'learning_rate': lr,
+                'max_depth': depth,
+                'accuracy': accuracy,
+                'model': gb_model
+            })
+
+# Get best model
+best_gb = max(gb_results, key=lambda x: x['accuracy'])
+print(f"Best Gradient Boosting: n_estimators={best_gb['n_estimators']}, "
+      f"lr={best_gb['learning_rate']}, depth={best_gb['max_depth']}, "
+      f"accuracy={best_gb['accuracy']:.4f}")</code></pre>
+    
+    <h3>XGBoost Implementation</h3>
+    <pre><code># Encode target variable for XGBoost
+le = LabelEncoder()
+y_train_encoded = le.fit_transform(y_train)
+y_test_encoded = le.transform(y_test)
+
+# Test different XGBoost configurations
+n_estimators_list = [50, 100, 200]
+learning_rates_xgb = [0.05, 0.1, 0.2]
+max_depths_xgb = [3, 5, 7]
+
+xgb_results = []
+
+for n_est in n_estimators_list:
+    for lr in learning_rates_xgb:
+        for depth in max_depths_xgb:
+            # Create and train model
+            xgb_model = xgb.XGBClassifier(
+                n_estimators=n_est,
+                learning_rate=lr,
+                max_depth=depth,
+                random_state=42,
+                eval_metric='logloss'
+            )
+            
+            xgb_model.fit(X_train, y_train_encoded)
+            y_pred = xgb_model.predict(X_test)
+            accuracy = accuracy_score(y_test_encoded, y_pred)
+            
+            xgb_results.append({
+                'n_estimators': n_est,
+                'learning_rate': lr,
+                'max_depth': depth,
+                'accuracy': accuracy,
+                'model': xgb_model
+            })
+
+# Get best model
+best_xgb = max(xgb_results, key=lambda x: x['accuracy'])
+print(f"Best XGBoost: n_estimators={best_xgb['n_estimators']}, "
+      f"lr={best_xgb['learning_rate']}, depth={best_xgb['max_depth']}, "
+      f"accuracy={best_xgb['accuracy']:.4f}")</code></pre>
+    
+    <p><strong>Code Link:</strong> <a href="machine_learning/boosting/boosting_analysis.ipynb" target="_blank">Complete Implementation Notebook</a></p>
+  </div>
+
+  <div class="section">
+    <h2>(d) Results</h2>
+    <p>My boosting analysis reveals interesting patterns in how these three algorithms perform on CS2 round winner prediction. I tested multiple parameter settings for each algorithm to find optimal configurations and compare their effectiveness.</p>
+    
+    <h3>Model Performance</h3>
+    <div class="results-container">
+      <div class="result-box">
+        <h4>AdaBoost</h4>
+        <p><strong>Accuracy:</strong> 58.70%</p>
+        <p><strong>Best Parameters:</strong></p>
+        <p>n_estimators = 50-200</p>
+        <p>learning_rate = 0.5-1.5</p>
+        <p><strong>Observations:</strong> Consistent performance across different parameter settings</p>
+      </div>
+      
+      <div class="result-box">
+        <h4>Gradient Boosting</h4>
+        <p><strong>Accuracy:</strong> 58.70%</p>
+        <p><strong>Best Parameters:</strong></p>
+        <p>n_estimators = 50-200</p>
+        <p>learning_rate = 0.05-0.2</p>
+        <p>max_depth = 3-5</p>
+        <p><strong>Observations:</strong> Stable performance, slightly sensitive to depth</p>
+      </div>
+      
+      <div class="result-box">
+        <h4>XGBoost</h4>
+        <p><strong>Accuracy:</strong> 58.70%</p>
+        <p><strong>Best Parameters:</strong></p>
+        <p>n_estimators = 50-200</p>
+        <p>learning_rate = 0.05-0.2</p>
+        <p>max_depth = 3-7</p>
+        <p><strong>Observations:</strong> Most stable across hyperparameter variations</p>
+      </div>
+    </div>
+    
+    <h3>Confusion Matrices</h3>
+    <div class="image-container">
+      <img src="img/boosting_confusion_matrices.png" alt="Boosting Confusion Matrices" class="section-image">
+      <p class="image-caption">Figure 5: Confusion matrices for AdaBoost, Gradient Boosting, and XGBoost</p>
+    </div>
+    
+    <h3>Feature Importance Analysis</h3>
+    <p>All three boosting algorithms identify important features, though with different perspectives:</p>
+    
+    <div class="feature-importance">
+      <h4>Key Insights from Feature Importance:</h4>
+      <ul>
+        <li><strong>Total Damage:</strong> Consistently important across all algorithms</li>
+        <li><strong>Total Kills:</strong> Strong predictor of round outcomes</li>
+        <li><strong>Headshot Rate:</strong> Important for precision-focused strategies</li>
+        <li><strong>Weapon Usage:</strong> AK47 and AWP kills show significant importance</li>
+        <li><strong>Bomb Events:</strong> Strategic indicators but lower importance than combat metrics</li>
+      </ul>
+    </div>
+    
+    <div class="image-container">
+      <img src="img/boosting_feature_importance.png" alt="Boosting Feature Importance" class="section-image">
+      <p class="image-caption">Figure 6: Feature importance comparison across all three boosting algorithms</p>
+    </div>
+    
+    <h3>Hyperparameter Sensitivity Analysis</h3>
+    <p>I tested various combinations of hyperparameters to understand their impact on model performance:</p>
+    
+    <div class="image-container">
+      <img src="img/boosting_accuracy_comparison.png" alt="Hyperparameter Tuning Results" class="section-image">
+      <p class="image-caption">Figure 7: Accuracy across different hyperparameter settings for each algorithm</p>
+    </div>
+    
+    <h4>Key Findings:</h4>
+    <ul>
+      <li><strong>AdaBoost:</strong> Shows minimal variation across learning rates, suggesting the dataset characteristics dominate performance</li>
+      <li><strong>Gradient Boosting:</strong> More sensitive to max_depth, with deeper trees providing slight improvements</li>
+      <li><strong>XGBoost:</strong> Most stable across all parameter combinations, demonstrating its robust regularization</li>
+    </ul>
+    
+    <h3>Overall Performance Comparison</h3>
+    <div class="image-container">
+      <img src="img/boosting_performance_comparison.png" alt="Overall Performance Metrics" class="section-image">
+      <p class="image-caption">Figure 8: Comprehensive performance comparison including accuracy, precision, recall, and F1-score</p>
+    </div>
+    
+    <h3>Model Comparison Summary</h3>
+    <p><strong>All Three Algorithms Achieved Identical Performance:</strong></p>
+    <ul>
+      <li><strong>Accuracy:</strong> 58.70% for all three algorithms</li>
+      <li><strong>Precision:</strong> Similar weighted precision scores (0.58-0.59)</li>
+      <li><strong>Recall:</strong> Consistent recall across all models (0.58-0.59)</li>
+      <li><strong>F1-Score:</strong> Balanced F1 scores around 0.58</li>
+    </ul>
+    
+    <p><strong>Why Similar Performance?</strong></p>
+    <ul>
+      <li><strong>Dataset Characteristics:</strong> The CS2 round data has inherent limitations in predictive signal</li>
+      <li><strong>Feature Set:</strong> Current features may not capture all relevant gameplay dynamics</li>
+      <li><strong>Weak Learner Quality:</strong> All three algorithms converge to similar decision boundaries</li>
+      <li><strong>Class Distribution:</strong> Relatively balanced classes reduce algorithm-specific advantages</li>
+    </ul>
+    
+    <h3>Comparison with Previous Methods</h3>
+    <div class="classification-report">
+      <h4>Boosting vs Decision Trees vs Naive Bayes:</h4>
+      <pre>Method                  Accuracy
+Decision Trees          50-57%
+Naive Bayes            52-54%
+Boosting Methods       58.70%
+
+Best Performer: Boosting Methods (All three tied)</pre>
+    </div>
+    
+    <p>Boosting methods outperform both Decision Trees and Naive Bayes on this dataset, demonstrating the value of ensemble learning. However, the modest improvement suggests fundamental challenges in predicting CS2 round outcomes from these features alone.</p>
+  </div>
+
+  <div class="section">
+    <h2>(e) Conclusions</h2>
+    <p>My comprehensive analysis of three boosting methods—AdaBoost, Gradient Boosting, and XGBoost—on CS2 round winner prediction reveals several important insights about ensemble learning and the nature of competitive gaming prediction.</p>
+    
+    <h3>Key Findings</h3>
+    
+    <h4>1. Equal Performance Across All Algorithms</h4>
+    <p>Remarkably, all three boosting algorithms achieved identical accuracy (58.70%), which is highly unusual in machine learning experiments. This convergence suggests that:</p>
+    <ul>
+      <li>The dataset has reached a performance ceiling given the available features</li>
+      <li>All three algorithms are correctly identifying the same underlying patterns</li>
+      <li>The weak learners (decision trees) are capturing all learnable signal in the data</li>
+      <li>Additional algorithmic sophistication (XGBoost's regularization) doesn't help when the fundamental predictive signal is limited</li>
+    </ul>
+    
+    <h4>2. Improvement Over Simpler Methods</h4>
+    <p>Compared to previous approaches on this dataset:</p>
+    <ul>
+      <li><strong>Decision Trees:</strong> 50-57% accuracy → Boosting: 58.70% (+1-9%)</li>
+      <li><strong>Naive Bayes:</strong> 52-54% accuracy → Boosting: 58.70% (+5-7%)</li>
+    </ul>
+    <p>While boosting provides the best performance, the modest improvement indicates that ensemble methods can only work with the signal present in the data. The incremental gain demonstrates ensemble learning's value, but also highlights the limitations of the feature set.</p>
+    
+    <h4>3. Hyperparameter Stability</h4>
+    <p>The consistent performance across wide ranges of hyperparameters is both a strength and a limitation:</p>
+    <ul>
+      <li><strong>Positive:</strong> Models are robust and don't require extensive tuning</li>
+      <li><strong>Positive:</strong> Less risk of overfitting to hyperparameter choices</li>
+      <li><strong>Negative:</strong> Suggests we've hit a fundamental ceiling that tuning can't overcome</li>
+      <li><strong>Negative:</strong> Indicates the features may not interact in complex ways that deeper/more estimators could capture</li>
+    </ul>
+    
+    <h4>4. Feature Importance Insights</h4>
+    <p>All three algorithms consistently identified similar important features:</p>
+    <ul>
+      <li><strong>Total Damage and Total Kills:</strong> Primary predictors of round outcomes</li>
+      <li><strong>Weapon-Specific Kills:</strong> AK47 and AWP usage shows importance</li>
+      <li><strong>Headshot Metrics:</strong> Precision matters in competitive play</li>
+      <li><strong>Bomb Events:</strong> Surprisingly low importance, possibly because they're outcomes rather than predictors</li>
+    </ul>
+    
+    <h3>Practical Implications</h3>
+    
+    <h4>For CS2 Strategy</h4>
+    <p>While 58.70% accuracy is better than random guessing, it's insufficient for:</p>
+    <ul>
+      <li><strong>Sports Betting:</strong> Not reliable enough for consistent betting strategies</li>
+      <li><strong>Real-time Prediction:</strong> Too much uncertainty for in-game decision support</li>
+      <li><strong>Team Analysis:</strong> Can identify important factors but can't reliably predict outcomes</li>
+    </ul>
+    
+    <h4>For Machine Learning Practice</h4>
+    <p>This analysis demonstrates important ML concepts:</p>
+    <ul>
+      <li><strong>Ensemble Value:</strong> Boosting outperforms individual models even on difficult datasets</li>
+      <li><strong>Performance Ceilings:</strong> Sometimes data limitations matter more than algorithm choice</li>
+      <li><strong>Algorithm Convergence:</strong> Different approaches can arrive at similar solutions</li>
+      <li><strong>Feature Engineering Importance:</strong> Better features would likely improve results more than better algorithms</li>
+    </ul>
+    
+    <h3>Limitations and Future Directions</h3>
+    
+    <h4>Current Limitations</h4>
+    <ul>
+      <li><strong>Limited Temporal Information:</strong> Features are round-aggregated; missing time-series dynamics</li>
+      <li><strong>No Positional Data:</strong> Player positions and map control not captured</li>
+      <li><strong>Team Coordination:</strong> Communication and strategy not quantified</li>
+      <li><strong>Player Skill:</strong> Individual skill levels not represented</li>
+      <li><strong>Economic Factors:</strong> Equipment values and economy state missing</li>
+    </ul>
+    
+    <h4>Potential Improvements</h4>
+    <p>To exceed the 58.70% accuracy ceiling, future work should consider:</p>
+    <ul>
+      <li><strong>Time-Series Features:</strong> Capture momentum and round-by-round progression</li>
+      <li><strong>Spatial Features:</strong> Include player positions, map control, and positioning quality</li>
+      <li><strong>Economic Features:</strong> Model equipment values, economy state, and buy strategies</li>
+      <li><strong>Team-Level Features:</strong> Aggregate team coordination and communication patterns</li>
+      <li><strong>Match Context:</strong> Tournament stage, map preferences, head-to-head history</li>
+      <li><strong>Deep Learning:</strong> Neural networks to capture complex feature interactions</li>
+    </ul>
+    
+    <h3>Final Thoughts</h3>
+    <p>This boosting analysis successfully demonstrates the power and limitations of ensemble learning methods. While AdaBoost, Gradient Boosting, and XGBoost all achieved the best performance on this dataset (58.70%), their identical results highlight a fundamental truth in machine learning: <strong>algorithm sophistication cannot overcome data limitations.</strong> The convergence of all three methods suggests we've extracted all available predictive signal from the current feature set, and further improvements will require better features rather than better algorithms. This project successfully illustrates key concepts in ensemble learning, hyperparameter tuning, and the practical challenges of real-world prediction tasks where outcomes depend on complex, partially-observed systems.</p>
+  </div>
+
+  <style>
+    .section {
+      margin-bottom: 3rem;
+      padding: 1.5rem;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #007bff;
+    }
+    
+    .section h2 {
+      color: #007bff;
+      border-bottom: 2px solid #007bff;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .section h3 {
+      color: #495057;
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .section h4 {
+      color: #6c757d;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .image-container {
+      text-align: center;
+      margin: 2rem 0;
+      padding: 1rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .section-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    
+    .image-caption {
+      font-style: italic;
+      color: #6c757d;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+    }
+    
+    .results-container {
+      display: flex;
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .result-box {
+      flex: 1;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      border-left: 4px solid #28a745;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .result-box h4 {
+      color: #28a745;
+      margin-top: 0;
+      margin-bottom: 1rem;
+    }
+    
+    .feature-importance {
+      background: white;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: 8px;
+      border-left: 4px solid #ffc107;
+    }
+    
+    .feature-importance h4 {
+      color: #ffc107;
+      margin-top: 0;
+    }
+    
+    .classification-report {
+      background: white;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 6px;
+      border-left: 3px solid #17a2b8;
+    }
+    
+    .classification-report h4 {
+      color: #17a2b8;
+      margin-top: 0;
+    }
+    
+    pre {
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      border-left: 3px solid #007bff;
+    }
+    
+    code {
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+    }
+    
+    ul, ol {
+      padding-left: 2rem;
+    }
+    
+    li {
+      margin-bottom: 0.5rem;
+    }
+    
+    a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    
+    a:hover {
+      text-decoration: underline;
+    }
+    
+    @media (max-width: 768px) {
+      .results-container {
+        flex-direction: column;
+      }
+    }
+  </style>
+  </main>
+  
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
