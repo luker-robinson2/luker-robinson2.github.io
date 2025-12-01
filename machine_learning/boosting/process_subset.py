@@ -14,7 +14,7 @@ OUTPUT_DIR = Path(__file__).parent / "enhanced_features"
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 print("="*80)
-print("PROCESSING SUBSET OF DEMOS (10 total)")
+print("PROCESSING ALL AVAILABLE DEMOS")
 print("="*80)
 
 # Find all demo files
@@ -25,17 +25,17 @@ if DEMOS_DIR_2.exists():
     demo_files.extend(sorted(list(DEMOS_DIR_2.glob("*.dem"))))
 
 print(f"\nFound {len(demo_files)} total demos")
-print(f"Will process 5 demos with 10 time samples per round (every 10 seconds)")
+print(f"Will process all demos with 10 time samples per round (every 10 seconds)")
 
 # Check which ones are already done
 existing_files = set([f.stem.replace('_enhanced_features', '') for f in OUTPUT_DIR.glob("*_enhanced_features.csv")])
 print(f"Already processed: {len(existing_files)} demos")
 
-# Filter to demos that need processing
-demos_to_process = [d for d in demo_files if d.stem not in existing_files][:5]
+# Filter to demos that need processing - PROCESS ALL, NOT JUST 5
+demos_to_process = [d for d in demo_files if d.stem not in existing_files]
 
 if not demos_to_process:
-    print("\nAll 5 demos already processed! Combining results...")
+    print("\nAll demos already processed! Combining results...")
 else:
     print(f"\nNeed to process: {len(demos_to_process)} more demos")
     print("="*80)

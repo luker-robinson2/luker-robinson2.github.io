@@ -26,7 +26,7 @@ print("ENHANCED BOOSTING MODELS TRAINING")
 print("="*80)
 
 # Load data
-df = pd.read_csv('enhanced_features/training_data.csv')
+df = pd.read_csv('enhanced_features/combined_enhanced_features.csv')
 print(f"\nDataset: {len(df)} samples from {df['match_id'].nunique()} matches")
 print(f"Features: {len(df.columns)} columns")
 print(f"\nClass distribution:")
@@ -91,7 +91,8 @@ best_ada_acc = 0
 best_ada_model = None
 best_ada_params = {}
 
-for n_est in [50, 100, 200]:
+# Reduced grid for faster runtime on larger dataset
+for n_est in [50, 100]:
     for lr in [0.5, 1.0, 1.5]:
         ada_model = AdaBoostClassifier(
             estimator=DecisionTreeClassifier(max_depth=3),
@@ -130,7 +131,8 @@ best_gb_acc = 0
 best_gb_model = None
 best_gb_params = {}
 
-for n_est in [50, 100, 200]:
+# Reduced grid for faster runtime on larger dataset
+for n_est in [50, 100]:
     for lr in [0.05, 0.1, 0.2]:
         for depth in [3, 5]:
             gb_model = GradientBoostingClassifier(
@@ -169,9 +171,10 @@ best_xgb_acc = 0
 best_xgb_model = None
 best_xgb_params = {}
 
-for n_est in [50, 100, 200]:
+# Reduced grid for faster runtime on larger dataset
+for n_est in [50, 100]:
     for lr in [0.05, 0.1, 0.2]:
-        for depth in [3, 5, 7]:
+        for depth in [3, 5]:
             xgb_model = xgb.XGBClassifier(
                 n_estimators=n_est,
                 learning_rate=lr,
