@@ -19,16 +19,15 @@
     <ul>
       <li><a href="index.html">Home</a></li>
       <li><a href="introduction.html">Introduction</a></li>
-      <li><a href="conclusions.html">Conclusions</a></li>
       <li><a href="dataprep_eda.html">DataPrep & EDA</a></li>
       <li><a href="clustering.html">Clustering</a></li>
       <li><a href="pca.html">PCA</a></li>
       <li><a href="naivebayes.html">Naive Bayes</a></li>
       <li><a href="dectrees.html">Decision Trees</a></li>
       <li><a href="boosting.html">Boosting</a></li>
-      <li><a href="svms.html">SVMs</a></li>
-      <li><a href="regression.html">Regression</a></li>
-      <li><a href="nn.html">Neural Networks</a></li>
+      <li><a href="results.html">Results</a></li>
+      <li><a href="challenges.html">Project Challenges</a></li>
+      <li><a href="conclusions.html">Conclusions</a></li>
     </ul>
   </nav>  <main>
     <h1>Decision Trees for Round Winner Prediction</h1>
@@ -139,7 +138,7 @@
     <p><strong>Dataset Link:</strong> <a href="machine_learning/bayes_dt/round_winner_prediction.ipynb" target="_blank">round_winner_prediction.ipynb</a></p>
     
     <h3>Training and Testing Set Creation</h3>
-    <p>I split my data into training and testing sets to ensure proper model evaluation:</p>
+    <p>The data was split into training and testing sets to ensure proper model evaluation:</p>
     <ul>
       <li><strong>Training Set:</strong> 368 rounds (80%) - used to train the model</li>
       <li><strong>Testing Set:</strong> 92 rounds (20%) - used to evaluate model performance</li>
@@ -164,7 +163,7 @@
 
   <div class="section">
     <h2>(c) Code Implementation</h2>
-    <p>I implemented Decision Trees using Python with scikit-learn, testing different splitting criteria and depth limits. The code demonstrates proper data preprocessing, model training, and evaluation techniques.</p>
+    <p>Decision Trees were implemented using Python with scikit-learn, testing different splitting criteria and depth limits. The code demonstrates proper data preprocessing, model training, and evaluation techniques.</p>
     
     <h3>Data Preprocessing for Decision Trees</h3>
     <pre><code># Import necessary libraries
@@ -269,7 +268,7 @@ plt.show()</code></pre>
 
   <div class="section">
     <h2>(d) Results</h2>
-    <p>My Decision Tree analysis reveals the decision rules and feature importance for predicting round winners. I tested different splitting criteria and depth limits to understand their impact on model performance.</p>
+    <p>The Decision Tree analysis reveals the decision rules and feature importance for predicting round winners. Different splitting criteria and depth limits were tested to understand their impact on model performance.</p>
     
     <h3>Model Performance</h3>
     <div class="results-container">
@@ -405,7 +404,7 @@ weighted avg       0.56      0.57      0.56        92</pre>
 
   <div class="section">
     <h2>(e) Conclusions</h2>
-    <p>My Decision Tree analysis reveals significant limitations in predicting CS2 round winners using traditional machine learning approaches. While decision trees provide interpretable decision rules and clear feature importance rankings, their performance on this dataset is disappointing, with all variants achieving accuracy rates barely above random guessing (50-57%). The Gini criterion performed marginally better than entropy (51.09% vs 50.00%), suggesting that the Gini impurity measure is slightly more effective for this particular problem. However, the deep tree's higher accuracy (56.52%) comes at the cost of severe overfitting, as evidenced by its poor recall for T wins (37%) and strong bias toward CT predictions due to class imbalance in the test set (57 CT vs 35 T). The models consistently show bias toward CT prediction, indicating that the class distribution significantly impacts performance and that the features available may not contain sufficient predictive signal for reliable round winner prediction. The decision rules, while interpretable, reveal that the models are essentially learning from noise rather than meaningful patterns, with bomb-related features showing minimal importance and performance metrics like headshot rate and total kills providing only weak predictive power. These results suggest that CS2 round outcomes are highly stochastic and influenced by factors not captured in the available data, such as team coordination, map-specific strategies, player skill variations, and real-time tactical decisions that cannot be quantified through static performance metrics.</p>
+    <p>The Decision Tree analysis reveals significant limitations in predicting CS2 round winners using traditional machine learning approaches. While decision trees provide interpretable decision rules and clear feature importance rankings, their performance on this dataset is disappointing, with all variants achieving accuracy rates barely above random guessing (50-57%). The Gini criterion performed marginally better than entropy (51.09% vs 50.00%), suggesting that the Gini impurity measure is slightly more effective for this particular problem. However, the deep tree's higher accuracy (56.52%) comes at the cost of severe overfitting, as evidenced by its poor recall for T wins (37%) and strong bias toward CT predictions due to class imbalance in the test set (57 CT vs 35 T). The models consistently show bias toward CT prediction, indicating that the class distribution significantly impacts performance and that the features available may not contain sufficient predictive signal for reliable round winner prediction. The decision rules, while interpretable, reveal that the models are essentially learning from noise rather than meaningful patterns, with bomb-related features showing minimal importance and performance metrics like headshot rate and total kills providing only weak predictive power. These results suggest that CS2 round outcomes are highly stochastic and influenced by factors not captured in the available data, such as team coordination, map-specific strategies, player skill variations, and real-time tactical decisions that cannot be quantified through static performance metrics.</p>
   </div>
 
   <style>

@@ -19,20 +19,194 @@
     <ul>
       <li><a href="index.html">Home</a></li>
       <li><a href="introduction.html">Introduction</a></li>
-      <li><a href="conclusions.html">Conclusions</a></li>
       <li><a href="dataprep_eda.html">DataPrep & EDA</a></li>
       <li><a href="clustering.html">Clustering</a></li>
       <li><a href="pca.html">PCA</a></li>
       <li><a href="naivebayes.html">Naive Bayes</a></li>
       <li><a href="dectrees.html">Decision Trees</a></li>
       <li><a href="boosting.html">Boosting</a></li>
-      <li><a href="svms.html">SVMs</a></li>
-      <li><a href="regression.html">Regression</a></li>
-      <li><a href="nn.html">Neural Networks</a></li>
+      <li><a href="results.html">Results</a></li>
+      <li><a href="challenges.html">Project Challenges</a></li>
+      <li><a href="conclusions.html">Conclusions</a></li>
     </ul>
   </nav>  <main>
-    <h1>Welcome to My Project Website</h1>
-  <p>This site will grow as I complete each module.</p>
+    <h1>Machine Learning Analysis of Counter-Strike 2 Professional Matches</h1>
+  
+  <div class="hero-section">
+    <p class="lead">A comprehensive exploration of machine learning techniques applied to competitive esports data, achieving <strong>86.65% accuracy</strong> in predicting round outcomes.</p>
+  </div>
+
+  <div class="section">
+    <h2>Project Overview</h2>
+    <p>This project applies supervised and unsupervised machine learning methods to professional Counter-Strike 2 match data. By parsing game demos and engineering state-based features, multiple algorithms were trained to predict round winners and discover patterns in player behavior.</p>
+    
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>86.65%</h3>
+        <p>Best Model Accuracy</p>
+        <span>(Gradient Boosting)</span>
+      </div>
+      <div class="stat-card">
+        <h3>0.942</h3>
+        <p>ROC AUC Score</p>
+        <span>(Excellent Discrimination)</span>
+      </div>
+      <div class="stat-card">
+        <h3>2,507</h3>
+        <p>Training Samples</p>
+        <span>(13 Professional Matches)</span>
+      </div>
+      <div class="stat-card">
+        <h3>22</h3>
+        <p>Engineered Features</p>
+        <span>(State-Based)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Key Finding: Economy Dominates</h2>
+    <p>The most significant discovery is that <strong>equipment advantage</strong> is the #1 predictor of round outcomes, accounting for 28.2% of feature importance. Teams with superior weapon loadouts have dramatically higher win probabilities, quantitatively confirming what experienced players understand intuitively.</p>
+  </div>
+
+  <div class="section">
+    <h2>Methods Explored</h2>
+    <div class="methods-grid">
+      <div class="method-card supervised">
+        <h4>Supervised Learning</h4>
+        <ul>
+          <li>Gradient Boosting (86.65%)</li>
+          <li>AdaBoost (83.33%)</li>
+          <li>XGBoost (83.33%)</li>
+          <li>Decision Trees</li>
+          <li>Naive Bayes</li>
+        </ul>
+      </div>
+      <div class="method-card unsupervised">
+        <h4>Unsupervised Learning</h4>
+        <ul>
+          <li>K-Means Clustering</li>
+          <li>Hierarchical Clustering</li>
+          <li>PCA Dimensionality Reduction</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Navigation</h2>
+    <p>Use the navigation menu above to explore each section of this analysis:</p>
+    <ul>
+      <li><strong>Introduction:</strong> Project background and research questions</li>
+      <li><strong>DataPrep & EDA:</strong> Data collection, cleaning, and exploratory analysis</li>
+      <li><strong>Clustering:</strong> K-Means and Hierarchical clustering for player role discovery</li>
+      <li><strong>PCA:</strong> Principal Component Analysis for dimensionality reduction</li>
+      <li><strong>Naive Bayes:</strong> Multinomial and Bernoulli Naive Bayes classification</li>
+      <li><strong>Decision Trees:</strong> Tree-based classification with Gini and Entropy criteria</li>
+      <li><strong>Boosting:</strong> AdaBoost, Gradient Boosting, and XGBoost ensemble methods</li>
+      <li><strong>Results:</strong> Comprehensive comparison of all methods</li>
+      <li><strong>Project Challenges:</strong> Technical obstacles and lessons learned</li>
+      <li><strong>Conclusions:</strong> Key findings and future directions</li>
+    </ul>
+  </div>
+
+  <style>
+    .hero-section {
+      background: linear-gradient(135deg, #007bff, #6610f2);
+      color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    
+    .lead {
+      font-size: 1.3rem;
+      margin: 0;
+    }
+    
+    .section {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #007bff;
+    }
+    
+    .section h2 {
+      color: #007bff;
+      margin-top: 0;
+      margin-bottom: 1rem;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    .stat-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .stat-card h3 {
+      color: #28a745;
+      font-size: 2rem;
+      margin: 0 0 0.5rem 0;
+    }
+    
+    .stat-card p {
+      margin: 0;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .stat-card span {
+      font-size: 0.85rem;
+      color: #6c757d;
+    }
+    
+    .methods-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    
+    .method-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .method-card.supervised {
+      border-top: 4px solid #28a745;
+    }
+    
+    .method-card.unsupervised {
+      border-top: 4px solid #6f42c1;
+    }
+    
+    .method-card h4 {
+      margin-top: 0;
+      color: #333;
+    }
+    
+    .method-card ul {
+      margin: 0;
+      padding-left: 1.5rem;
+    }
+    
+    .method-card li {
+      margin-bottom: 0.5rem;
+    }
+  </style>
   </main>
   
   <!-- Bootstrap JS -->

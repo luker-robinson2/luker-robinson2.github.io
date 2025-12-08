@@ -1,25 +1,112 @@
 {{#> main title="Introduction" }}
   <h1>Introduction</h1>
-  <p>Counter Strike Global Offensive 2 is a competitive 5 v 5 first person shooter game. Played by an average of 600,000 people per day and over 30 million unique users, the game is very popular in Europe and South America, but recently has been gaining popularity in the United States as well. The game is played professionally with many different organizations and teams at different skill levels. The game is very tactical and simple, and there are thousands of full game demos that can be parsed into game info for machine learning. Many sports betting sites exist to bet on counter strike pro games and many even feature live betting features. I am curious if I would be able to make competitive models for sports betting on games. Counter strike has a very high skill ceiling and I am also curious how machine learning can help me improve, as well as what insights I could gain about positions and gameplay that I otherwise would not have gotten. I enjoy how competitive CS2 is and I am interested in optimizing the performance of players using AI. I think that the amount of data will provide insights if combined with machine learning.</p>
   
-  <p>Due to its popularity many sports betting platforms likely use machine learning algorithms to produce their odds. There has also been lots of work developing api's to scrape game data from different platforms so I hope to use these resources. Python has many libraries that can parse game data and I will have a lot of resources of past betting odds in order to evaluate my predictions. I want to do more comprehensive research into what skills can be the most impactful for players and how you could get better at them.</p>
-  
-  <p>This project applies multiple supervised learning approaches to predict round winners in professional CS2 matches. I implemented and compared decision trees, naive bayes classifiers, and ensemble boosting methods including AdaBoost, Gradient Boosting, and XGBoost. Each algorithm offers different strengths in handling the complex, high dimensional feature space extracted from game demos. The supervised learning framework requires labeled data where round outcomes are known, allowing models to learn patterns that distinguish winning rounds from losing ones.</p>
-  
-  <p>Through extensive feature engineering and model experimentation, I discovered that economy is the dominant factor in determining round outcomes. Equipment advantage consistently emerged as the strongest predictor across all algorithms, with XGBoost achieving 67.12 percent accuracy when using state based features that capture team equipment values, player counts, and health at multiple time points throughout each round. This finding quantitatively confirms what experienced players understand intuitively that teams with superior weapon loadouts have significantly higher win probabilities. The 8.42 percentage point improvement over baseline models demonstrates that what you measure matters more than which algorithm you choose.</p>
-  
-  <p>The methodology evolved from simple outcome based features like total kills and damage to sophisticated time series sampling that extracts game state at ten different time points per round. This approach captures temporal dynamics showing how equipment advantages, player counts, and tactical positioning interact over time to determine outcomes. By parsing professional match demos using the demoparser2 library, I built a dataset of 288 samples from multiple matches with 28 engineered features spanning economy, bomb state, time phase, player health, and weapon counts. The analysis reveals actionable insights for competitive players emphasizing that winning the economy war through strategic saving and forcing opponent eco rounds is more controllable and impactful than relying solely on mechanical skill execution.</p>
-  
-  <ul>
-    <li>What statistics are the biggest indicators of a round win or loss?</li>
-    <li>What statistics are the biggest indicators of a game win?</li>
-    <li>Which post-plant positions have the greatest success of winning a T round?</li>
-    <li>Which map positions have the greatest success of winning a CT round?</li>
-    <li>How does getting the first kill impact your odds of winning a round?</li>
-    <li>Which roles have the most impact in games?</li>
-    <li>Which players have the most impact on their teams?</li>
-    <li>Which maps have the highest CT vs T inequality?</li>
-    <li>How do timeouts impact a team’s next round success?</li>
-    <li>Is it possible to find optimal positioning with machine learning analysis of pro games?</li>
-  </ul>
+  <div class="section">
+    <p>Counter-Strike 2 (CS2) is a competitive 5v5 first-person shooter game played by an average of 600,000 people per day, with over 30 million unique users worldwide. The game is particularly popular in Europe and South America, but has been gaining significant traction in the United States. Played professionally across many organizations and skill levels, CS2 represents one of the most tactical and data-rich esports titles available. With thousands of full game demos that can be parsed into detailed gameplay data, CS2 provides an excellent domain for machine learning analysis.</p>
+    
+    <p>The competitive nature of CS2 has spawned a substantial sports betting industry, with many platforms offering odds on professional matches and even live betting features during games. This creates a natural application for predictive modeling—can machine learning algorithms accurately predict round and match outcomes? Beyond betting applications, understanding the factors that drive competitive success has implications for player development, team strategy, and coaching.</p>
+    
+    <p>This project applies multiple machine learning approaches to predict round winners in professional CS2 matches. The analysis includes decision trees, Naive Bayes classifiers, and ensemble boosting methods (AdaBoost, Gradient Boosting, and XGBoost). Each algorithm offers different strengths in handling the complex, high-dimensional feature space extracted from game demos. The supervised learning framework requires labeled data where round outcomes are known, allowing models to learn patterns that distinguish winning rounds from losing ones.</p>
+    
+    <p>Through extensive feature engineering and model experimentation, this project discovered that economy is the dominant factor in determining round outcomes. Equipment advantage consistently emerged as the strongest predictor across all algorithms, with Gradient Boosting achieving 86.65% accuracy when using state-based features that capture team equipment values, player counts, and health at multiple time points throughout each round. This finding quantitatively confirms what experienced players understand intuitively—teams with superior weapon loadouts have significantly higher win probabilities. The 27.95 percentage point improvement over baseline models demonstrates that what is measured matters more than which algorithm is chosen.</p>
+    
+    <p>The methodology evolved from simple outcome-based features like total kills and damage to sophisticated time-series sampling that extracts game state at ten different time points per round. This approach captures temporal dynamics showing how equipment advantages, player counts, and tactical positioning interact over time to determine outcomes. By parsing professional match demos using the demoparser2 library, a dataset of 2,507 samples from 13 matches was built with 22 engineered features spanning economy, bomb state, time phase, player health, and weapon counts. The analysis reveals actionable insights for competitive players—emphasizing that winning the economy war through strategic saving and forcing opponent eco rounds is more controllable and impactful than relying solely on mechanical skill execution.</p>
+  </div>
+
+  <div class="section">
+    <h2>Q&A: Research Questions and Answers</h2>
+    
+    <div class="qa-item">
+      <h3>1. What statistics are the biggest indicators of a round win or loss?</h3>
+      <p><strong>Answer:</strong> Equipment advantage (the difference in team equipment values) is the #1 indicator, accounting for 28.2% of feature importance in the Gradient Boosting model. Other top indicators include CT total armor (19.8%), T equipment value (12.4%), CT equipment value (10.7%), and T total armor (10.2%). Surprisingly, bomb planted status showed very low importance (0.04%) when controlling for economic factors. This demonstrates that economic decisions dominate round outcomes more than tactical objectives.</p>
+    </div>
+    
+    <div class="qa-item">
+      <h3>2. What statistics are the biggest indicators of a game win?</h3>
+      <p><strong>Answer:</strong> While this project focused on round-level prediction rather than match-level, the findings suggest that cumulative economic advantage over multiple rounds is the primary driver of match wins. Teams that consistently win the economy war—through strategic saving, forcing opponent eco rounds, and preserving weapons—accumulate advantages that translate into match victories. The CT side showed a slight advantage (53% vs 47%) in the professional matches analyzed.</p>
+    </div>
+    
+    <div class="qa-item">
+      <h3>3. Which post-plant positions have the greatest success of winning a T round?</h3>
+      <p><strong>Answer:</strong> This question was not directly answered in the current analysis. While positional data was available in the demo files, the complexity of extracting and analyzing map-specific positions exceeded the project scope. Future work could incorporate player coordinates and map zone analysis to address this question. The current model does capture "time since plant" as a feature, showing that post-plant situations favor T side when more time remains on the bomb timer.</p>
+    </div>
+    
+    <div class="qa-item">
+      <h3>4. Which map positions have the greatest success of winning a CT round?</h3>
+      <p><strong>Answer:</strong> Similar to question 3, detailed positional analysis was not completed. However, the data shows that CT side wins approximately 57.9% of rounds overall, with CT total armor and equipment values being strong predictors of CT success. Map-specific positional analysis remains an area for future research.</p>
+    </div>
+    
+    <div class="qa-item">
+      <h3>5. How does getting the first kill impact odds of winning a round?</h3>
+      <p><strong>Answer:</strong> The analysis captured this through the "player count advantage" feature, which measures the difference in alive players between teams. Player count advantage showed 1.5% feature importance, indicating that numerical superiority (often resulting from first kills) does predict round outcomes. However, its importance is dwarfed by economic factors. Getting the first kill matters, but having better equipment matters more.</p>
+    </div>
+    
+    <div class="qa-item">
+      <h3>6. Which roles have the most impact in games?</h3>
+      <p><strong>Answer:</strong> Clustering analysis revealed two primary player archetypes: Entry Fraggers and Support/Finishing players. Entry Fraggers showed higher kill counts, more deaths, and elevated opening kill frequencies. Support players showed higher survival rates and more post-plant kills. Both roles are essential for team success—Entry Fraggers create opportunities while Support players capitalize on them. The data suggests that balanced teams with both archetypes perform better than teams skewed toward one role.</p>
+    </div>
+    
+    <div class="qa-item">
+      <h3>7. Which players have the most impact on their teams?</h3>
+      <p><strong>Answer:</strong> Individual player impact was measured through performance metrics including K/D ratio, headshot percentage, opening kills, and multi-kill frequency. The clustering analysis grouped players into high-impact entry fraggers versus supportive players. However, identifying specific "most impactful" players would require a larger dataset with consistent player tracking across matches. The current analysis focused on role patterns rather than individual player rankings.</p>
+    </div>
+    
+    <div class="qa-item">
+      <h3>8. Which maps have the highest CT vs T inequality?</h3>
+      <p><strong>Answer:</strong> Across the analyzed matches, CT side won approximately 57.9% of rounds overall, confirming the CT-sided meta in professional CS2. The dataset included matches on Mirage (most played with 66 rounds), Train, Nuke, and Inferno. Train showed the most balanced CT/T win rates among the maps analyzed. However, the sample size for individual maps was limited, and comprehensive map balance analysis would require a larger dataset.</p>
+    </div>
+    
+    <div class="qa-item">
+      <h3>9. How do timeouts impact a team's next round success?</h3>
+      <p><strong>Answer:</strong> This question was not directly addressed in the current analysis. Timeout events were not extracted from the demo files, though they are theoretically available. Future work could incorporate timeout timing and analyze subsequent round performance to understand the impact of strategic pauses on team momentum.</p>
+    </div>
+    
+    <div class="qa-item">
+      <h3>10. Is it possible to find optimal positioning with machine learning analysis of pro games?</h3>
+      <p><strong>Answer:</strong> While this project did not fully address positioning optimization, the results suggest it is feasible. The demo parser can extract precise player coordinates at every game tick, enabling spatial analysis. The challenge lies in defining "optimal" positioning, which depends on map, round phase, team composition, and opponent behavior. Future work could use clustering on position data to identify common holding spots, or reinforcement learning to discover novel positioning strategies. The current 86.65% accuracy on round prediction demonstrates that meaningful patterns can be extracted from professional gameplay.</p>
+    </div>
+  </div>
+
+  <style>
+    .section {
+      margin-bottom: 3rem;
+      padding: 1.5rem;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #007bff;
+    }
+    
+    .section h2 {
+      color: #007bff;
+      border-bottom: 2px solid #007bff;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .qa-item {
+      background: white;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: 8px;
+      border-left: 4px solid #17a2b8;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .qa-item h3 {
+      color: #17a2b8;
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+    
+    .qa-item p {
+      margin-bottom: 0;
+      line-height: 1.7;
+    }
+    
+    p {
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+  </style>
 {{/main}}

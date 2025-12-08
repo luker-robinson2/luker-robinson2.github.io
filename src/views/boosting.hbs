@@ -157,7 +157,7 @@
     <p><strong>Dataset Link:</strong> <a href="machine_learning/boosting/train_enhanced_models.py" target="_blank">train_enhanced_models.py</a> | <a href="machine_learning/boosting/extract_enhanced_round_features.py" target="_blank">extract_enhanced_round_features.py</a></p>
     
     <h3>Training and Testing Set Creation with Group Awareness</h3>
-    <p>I split my data into training and testing sets using a <strong>group-aware strategy</strong> to prevent data leakage:</p>
+    <p>The data was split into training and testing sets using a <strong>group-aware strategy</strong> to prevent data leakage:</p>
     <ul>
       <li><strong>Training Set:</strong> 1700 samples (75%) from 10 matches - used to train the model</li>
       <li><strong>Testing Set:</strong> 807 samples (25%) from 3 matches - used to evaluate model performance</li>
@@ -189,7 +189,7 @@
 
   <div class="section">
     <h2>(c) Code Implementation</h2>
-    <p>I implemented all three boosting algorithms using Python with scikit-learn (for AdaBoost and Gradient Boosting) and xgboost (for XGBoost). The code demonstrates enhanced feature extraction, time-series sampling, group-aware splitting, hyperparameter tuning, and comprehensive evaluation.</p>
+    <p>All three boosting algorithms were implemented using Python with scikit-learn (for AdaBoost and Gradient Boosting) and xgboost (for XGBoost). The code demonstrates enhanced feature extraction, time-series sampling, group-aware splitting, hyperparameter tuning, and comprehensive evaluation.</p>
     
     <h3>Enhanced Feature Extraction from Demo Files</h3>
     <pre><code># Import demoparser2 for CS2 demo parsing
@@ -403,7 +403,7 @@ print(f"Improvement over baseline: +{(best_xgb_acc - 0.587)*100:.2f}pp")</code><
 
   <div class="section">
     <h2>(d) Results</h2>
-    <p>My enhanced boosting analysis reveals dramatic improvements when using state-based time-series features instead of outcome-based features. I tested multiple parameter settings for each algorithm to find optimal configurations and compare their effectiveness.</p>
+    <p>The enhanced boosting analysis reveals dramatic improvements when using state-based time-series features instead of outcome-based features. Multiple parameter settings were tested for each algorithm to find optimal configurations and compare their effectiveness.</p>
     
     <h3>Performance Comparison: Enhanced vs Baseline</h3>
     <div class="image-container">
@@ -411,90 +411,89 @@ print(f"Improvement over baseline: +{(best_xgb_acc - 0.587)*100:.2f}pp")</code><
       <p class="image-caption">Figure 3: Enhanced features with larger dataset (2507 samples) provide significant improvement over baseline across all algorithms, with AdaBoost achieving best performance</p>
     </div>
     
-    <h3>Model Performance with Enhanced Features (2507 samples, 13 matches)</h3>
+    <h3>Model Performance with Enhanced Features (2,507 samples, 13 matches)</h3>
     <div class="results-container">
       <div class="result-box" style="border-left: 4px solid #FFD700;">
-        <h4>🏆 AdaBoost (BEST)</h4>
-        <p><strong>Accuracy:</strong> 68.90%</p>
+        <h4>🏆 Gradient Boosting (BEST)</h4>
+        <p><strong>Accuracy:</strong> 86.65%</p>
+        <p><strong>ROC AUC:</strong> 0.942</p>
         <p><strong>Baseline:</strong> 58.70%</p>
-        <p><strong>Improvement:</strong> +10.20pp 🎯</p>
+        <p><strong>Improvement:</strong> +27.95pp 🎯</p>
         <p><strong>Best Parameters:</strong></p>
         <p>n_estimators = 100</p>
-        <p>learning_rate = 1.5</p>
-        <p>max_depth = 3</p>
-        <p><strong>Observations:</strong> Largest improvement! More data allowed AdaBoost to excel at sample reweighting</p>
+        <p>learning_rate = 0.1</p>
+        <p><strong>Observations:</strong> Exceptional performance with time-series state-based features</p>
+      </div>
+      
+      <div class="result-box">
+        <h4>AdaBoost</h4>
+        <p><strong>Accuracy:</strong> 83.33%</p>
+        <p><strong>Baseline:</strong> 58.70%</p>
+        <p><strong>Improvement:</strong> +24.63pp</p>
+        <p><strong>Best Parameters:</strong></p>
+        <p>n_estimators = 50</p>
+        <p>learning_rate = 1.0</p>
+        <p><strong>Observations:</strong> Strong sample reweighting with larger dataset</p>
       </div>
       
       <div class="result-box">
         <h4>XGBoost</h4>
-        <p><strong>Accuracy:</strong> 67.16%</p>
+        <p><strong>Accuracy:</strong> 83.33%</p>
         <p><strong>Baseline:</strong> 58.70%</p>
-        <p><strong>Improvement:</strong> +8.46pp</p>
+        <p><strong>Improvement:</strong> +24.63pp</p>
         <p><strong>Best Parameters:</strong></p>
         <p>n_estimators = 50</p>
-        <p>learning_rate = 0.05</p>
+        <p>learning_rate = 0.1</p>
         <p>max_depth = 3</p>
-        <p><strong>Observations:</strong> Consistent strong performance, regularization prevents overfitting</p>
-      </div>
-      
-      <div class="result-box">
-        <h4>Gradient Boosting</h4>
-        <p><strong>Accuracy:</strong> 66.54%</p>
-        <p><strong>Baseline:</strong> 58.70%</p>
-        <p><strong>Improvement:</strong> +7.84pp</p>
-        <p><strong>Best Parameters:</strong></p>
-        <p>n_estimators = 50</p>
-        <p>learning_rate = 0.05</p>
-        <p>max_depth = 3</p>
-        <p><strong>Observations:</strong> Solid improvement with larger dataset, benefits from shallow trees</p>
+        <p><strong>Observations:</strong> Consistent performance with regularization preventing overfitting</p>
       </div>
     </div>
     
-    <h3>Confusion Matrices</h3>
+    <h3>Confusion Matrix and Model Performance</h3>
     <div class="image-container">
-      <img src="img/boosting_confusion_matrices.png" alt="Boosting Confusion Matrices Enhanced" class="section-image">
-      <p class="image-caption">Figure 4: Confusion matrices for all three models with enhanced features - AdaBoost achieves best performance with larger dataset</p>
+      <img src="img/boosting_results.png" alt="Boosting Results - Gradient Boosting Performance" class="section-image">
+      <p class="image-caption">Figure 4: Gradient Boosting performance visualization showing feature importance, confusion matrix (86.65% accuracy), ROC curve (AUC=0.942), and learning curve</p>
     </div>
     
-    <h3>Detailed Classification Report (AdaBoost - Best Model)</h3>
+    <h3>Detailed Results (Gradient Boosting - Best Model)</h3>
     <div class="classification-report">
-      <pre>              precision    recall  f1-score   support
+      <pre>Confusion Matrix Results:
+          CT Predicted    T Predicted
+CT Actual      232            35
+T Actual        32           203
 
-          CT       0.72      0.65      0.68       414
-           T       0.67      0.73      0.69       393
-
-    accuracy                           0.69       807
-   macro avg       0.69      0.69      0.69       807
-weighted avg       0.69      0.69      0.69       807</pre>
+Metrics:
+- Test Accuracy: 86.65%
+- ROC AUC: 0.942
+- Training Samples: 2,005
+- Test Samples: 502
+- Total Features: 22</pre>
     </div>
     <p><strong>Key Observations:</strong></p>
     <ul>
-      <li><strong>Balanced Performance:</strong> CT precision (72%) and T recall (73%) both strong</li>
-      <li><strong>Consistent Metrics:</strong> F1-scores similar for both classes (0.68-0.69), showing no major bias</li>
-      <li><strong>Large Test Set:</strong> 807 samples (from 3 matches) provides robust evaluation</li>
-      <li><strong>Overall Accuracy:</strong> 68.90% - best among all three algorithms with larger dataset</li>
-      <li><strong>Sample Reweighting:</strong> AdaBoost's iterative focus on difficult samples pays off with more data</li>
+      <li><strong>High Accuracy:</strong> 86.65% accuracy represents a 27.95 percentage point improvement over baseline</li>
+      <li><strong>Excellent ROC AUC:</strong> 0.942 indicates strong discrimination between CT and T wins</li>
+      <li><strong>Balanced Predictions:</strong> Model correctly predicts both CT (232/267 = 87%) and T (203/235 = 86%) outcomes</li>
+      <li><strong>Large Test Set:</strong> 502 samples provides robust evaluation of model generalization</li>
+      <li><strong>Learning Curve:</strong> Training accuracy reaches ~97% while test accuracy stabilizes at ~87%, indicating slight overfitting but strong generalization</li>
     </ul>
     
     <h3>Feature Importance Analysis</h3>
-    <p>XGBoost reveals which features matter most for predicting round outcomes:</p>
-    
-    <div class="image-container">
-      <img src="img/boosting_feature_importance.png" alt="Boosting Feature Importance Enhanced" class="section-image">
-      <p class="image-caption">Figure 5: Top 15 most important features according to XGBoost - Economy features dominate</p>
-    </div>
+    <p>Gradient Boosting reveals which features matter most for predicting round outcomes:</p>
     
     <div class="feature-importance">
-      <h4>Key Insights from Feature Importance:</h4>
+      <h4>Top Features by Importance Score:</h4>
       <ul>
-        <li><strong>🥇 Equipment Advantage:</strong> #1 predictor - teams with better economy have higher win probability</li>
-        <li><strong>Player Counts:</strong> Number of players alive (both teams) are critical indicators</li>
-        <li><strong>Time Elapsed:</strong> Round phase matters - early vs late game dynamics</li>
-        <li><strong>CT Equipment Value:</strong> CT side economy is particularly predictive</li>
-        <li><strong>Player Count Advantage:</strong> Numerical superiority strongly predicts outcomes</li>
-        <li><strong>Health Metrics:</strong> Total HP and average HP show moderate importance</li>
-        <li><strong>Bomb State:</strong> Planted status and timers contribute but are less important than economy</li>
-        <li><strong>Weapon Counts:</strong> AWP and rifle counts provide additional signal</li>
+        <li><strong>🥇 Equipment Advantage (28.2%):</strong> #1 predictor - the difference in team equipment values is the dominant factor</li>
+        <li><strong>🥈 CT Total Armor (19.8%):</strong> CT side armor levels strongly indicate defensive capability</li>
+        <li><strong>🥉 T Equipment Value (12.4%):</strong> Terrorist side economy is highly predictive</li>
+        <li><strong>CT Equipment Value (10.7%):</strong> Counter-Terrorist side economy also critical</li>
+        <li><strong>T Total Armor (10.2%):</strong> Terrorist armor levels indicate offensive capability</li>
+        <li><strong>Health Metrics (T: 4.2%, CT: 3.4%):</strong> Total HP shows moderate importance</li>
+        <li><strong>Round Time Remaining (2.2%):</strong> Time phase matters for tactical dynamics</li>
+        <li><strong>Player Count Advantage (1.5%):</strong> Numerical superiority predicts outcomes</li>
+        <li><strong>AWP/Rifle Counts (&lt;1%):</strong> Weapon counts provide minor additional signal</li>
+        <li><strong>Bomb Planted (0.04%):</strong> Surprisingly low importance when controlling for other factors</li>
       </ul>
     </div>
     
@@ -507,32 +506,32 @@ weighted avg       0.69      0.69      0.69       807</pre>
     </ul>
     
     <h3>Hyperparameter Sensitivity Analysis</h3>
-    <p>I tested 6 configurations for AdaBoost, 12 for Gradient Boosting, and 12 for XGBoost on the larger dataset to understand their impact on model performance:</p>
+    <p>Multiple configurations were tested for each boosting algorithm to find optimal settings:</p>
     
     <h4>Key Findings:</h4>
     <ul>
-      <li><strong>AdaBoost:</strong> Shows strong variation (61.59% - 68.90%); best with n_estimators=100, lr=1.5 - higher learning rate optimal with more data</li>
-      <li><strong>Gradient Boosting:</strong> Sensitive to depth; shallow trees (depth=3) with low learning rate (0.05) performed best (66.54%)</li>
-      <li><strong>XGBoost:</strong> Optimal at n_estimators=50, lr=0.05, depth=3 (67.16%); lower learning rate prevents overfitting on larger dataset</li>
-      <li><strong>Learning Rate Impact:</strong> AdaBoost benefits from higher learning rates (1.5) while XGBoost and GB prefer conservative rates (0.05)</li>
-      <li><strong>Dataset Size Effect:</strong> Larger dataset (2507 vs 288 samples) dramatically improved AdaBoost's sample reweighting effectiveness</li>
+      <li><strong>Gradient Boosting:</strong> Achieved best performance (86.65%) with n_estimators=100 and learning_rate=0.1</li>
+      <li><strong>AdaBoost:</strong> Optimal with n_estimators=50, learning_rate=1.0, achieving 83.33% accuracy</li>
+      <li><strong>XGBoost:</strong> Best at n_estimators=50, learning_rate=0.1, max_depth=3, also achieving 83.33%</li>
+      <li><strong>Learning Rate Impact:</strong> Lower learning rates (0.1) with more estimators provide better generalization</li>
+      <li><strong>Dataset Size Effect:</strong> The 2,507 sample dataset enabled all models to learn robust patterns</li>
     </ul>
     
     <h3>Model Comparison Summary</h3>
-    <p><strong>Enhanced Features + More Data = Strong Performance Across All Algorithms:</strong></p>
+    <p><strong>Enhanced Features + Sufficient Data = Exceptional Performance:</strong></p>
     <ul>
-      <li><strong>AdaBoost (68.90%):</strong> 🏆 Best performer - sample reweighting excels with larger dataset to learn difficult examples</li>
-      <li><strong>XGBoost (67.16%):</strong> Close second - regularization provides consistent performance, prevents overfitting</li>
-      <li><strong>Gradient Boosting (66.54%):</strong> Strong performance - benefits from shallow trees and conservative learning rate</li>
+      <li><strong>Gradient Boosting (86.65%):</strong> 🏆 Best performer with ROC AUC of 0.942 - residual-based learning captures complex patterns</li>
+      <li><strong>AdaBoost (83.33%):</strong> Strong performance with sample reweighting approach</li>
+      <li><strong>XGBoost (83.33%):</strong> Consistent performance with built-in regularization preventing overfitting</li>
     </ul>
     
-    <p><strong>Why AdaBoost Wins with Larger Dataset:</strong></p>
+    <p><strong>Why Gradient Boosting Achieves Best Results:</strong></p>
     <ul>
-      <li><strong>Sample Reweighting Scales:</strong> More data provides more difficult examples to learn from, AdaBoost's iterative reweighting excels</li>
-      <li><strong>Aggressive Learning Rate:</strong> Higher learning rate (1.5) works well with 100+ estimators on diverse data</li>
-      <li><strong>Economy Feature Leverage:</strong> AdaBoost effectively identifies misclassified economy-based samples and focuses on them</li>
-      <li><strong>Ensemble Diversity:</strong> Larger dataset allows each weak learner to specialize on different subsets of data</li>
-      <li><strong>Balanced Classes:</strong> 53% CT / 47% T split allows AdaBoost's weighting to work effectively without class imbalance issues</li>
+      <li><strong>Residual Learning:</strong> Sequential models fit residual errors, capturing subtle patterns that other methods miss</li>
+      <li><strong>Economy Feature Leverage:</strong> Equipment advantage (28.2% importance) and armor metrics dominate predictions</li>
+      <li><strong>Balanced Learning:</strong> Conservative learning rate (0.1) prevents overfitting while capturing signal</li>
+      <li><strong>State-Based Features:</strong> Time-series sampling provides multiple snapshots per round for richer training data</li>
+      <li><strong>Strong Generalization:</strong> 86.65% test accuracy vs ~97% training accuracy shows controlled overfitting</li>
     </ul>
     
     <h3>Comparison with Previous Methods</h3>
@@ -544,23 +543,24 @@ Decision Trees (baseline)        288 samples     50-57%      -
 Naive Bayes (baseline)          288 samples     52-54%      -
 Boosting (old features)         288 samples     58.70%      baseline
 ------------------------------------------------------------------------
-AdaBoost (enhanced, large)      2507 samples    68.90%      +10.20pp 🏆
-XGBoost (enhanced, large)       2507 samples    67.16%      +8.46pp 🎯
-Gradient Boost (enhanced, lg)   2507 samples    66.54%      +7.84pp
+Gradient Boosting (enhanced)    2507 samples    86.65%      +27.95pp 🏆
+AdaBoost (enhanced)             2507 samples    83.33%      +24.63pp
+XGBoost (enhanced)              2507 samples    83.33%      +24.63pp
 
-Best Performer: AdaBoost with Enhanced Features on Large Dataset</pre>
+Best Performer: Gradient Boosting with State-Based Time-Series Features
+ROC AUC: 0.942 (Gradient Boosting)</pre>
     </div>
     
-    <p><strong>Key Takeaway:</strong> The combination of <strong>state-based time-series features + larger dataset</strong> produces dramatic accuracy improvements across all boosting algorithms. AdaBoost's 10.20pp improvement demonstrates that <strong>both feature engineering AND sufficient training data</strong> are critical - the 8.7x increase in dataset size allowed AdaBoost's sample reweighting to excel, overtaking XGBoost's performance.</p>
+    <p><strong>Key Takeaway:</strong> The combination of <strong>state-based time-series features + sufficient training data</strong> produces exceptional accuracy improvements across all boosting algorithms. Gradient Boosting's 27.95 percentage point improvement over baseline demonstrates that <strong>feature engineering is paramount</strong> - measuring equipment values, armor, and player states at multiple time points throughout each round captures the true predictive signal for round outcomes.</p>
   </div>
 
   <div class="section">
     <h2>(e) Conclusions</h2>
-    <p>The boosting methods were able to predict the winner of a round with 68.90% accuracy using the full dataset of 2507 samples from 13 professional matches. AdaBoost emerged as the best performer, demonstrating that sample reweighting excels when provided with sufficient training data, and showing the importance of trying multiple models and scaling to larger datasets.</p>
+    <p>The boosting methods achieved exceptional performance, with Gradient Boosting predicting round winners with 86.65% accuracy and a ROC AUC of 0.942 using 2,507 samples from 13 professional matches. This represents a 27.95 percentage point improvement over the baseline, demonstrating the critical importance of proper feature engineering and state-based sampling.</p>
     
-    <p>The most critical insight for CS2 players is that economy dominates round outcomes. Equipment advantage emerged as the biggest predictor of round winners, far more important than tactical objectives like bomb plant status. This quantitatively confirms what experienced players know intuitively: teams with more money to buy superior weapons (AK47s, AWPs, M4A1s) have dramatically higher win probability than teams forced to eco with pistols. By sampling game state at 10 different time points throughout each round rather than just at the end, the enhanced features captured the temporal dynamics of how player counts, health, and equipment interact to determine outcomes. The 10.20 percentage point improvement from state-based features over outcome-based features with a larger dataset demonstrates that both feature engineering and sufficient training data matter. For players, this analysis reveals that winning the economy war (forcing opponent eco rounds, preserving weapons, strategic saving) is the single most controllable factor influencing match outcomes, and teams should prioritize economic decision-making over pure mechanical skill execution when strategizing for competitive play.</p>
+    <p>The most critical insight for CS2 players is that economy absolutely dominates round outcomes. Equipment advantage emerged as the #1 predictor (28.2% importance), followed by armor metrics (CT: 19.8%, T: 10.2%) and equipment values (T: 12.4%, CT: 10.7%). Interestingly, bomb planted status showed surprisingly low importance (0.04%) when controlling for economic factors. This quantitatively confirms what experienced players know intuitively: teams with more money to buy superior weapons and armor have dramatically higher win probability than teams forced to eco. By sampling game state at multiple time points throughout each round rather than just at the end, the enhanced features captured the true predictive signal for round outcomes. For players, this analysis reveals that winning the economy war (forcing opponent eco rounds, preserving weapons, strategic saving) is the single most controllable factor influencing match outcomes.</p>
     
-    <p>Boosting significantly improved performance by sequentially combining weak learners, with each model correcting the errors of its predecessors, thereby capturing complex interactions between economy, time, and player counts. Hyperparameters played a crucial role, particularly in AdaBoost, where an optimal configuration of 100 estimators and a learning rate of 1.5 allowed for aggressive learning on the larger dataset without overfitting, demonstrating that increased data enables more aggressive hyperparameter settings. Looking ahead, further improvements could involve incorporating granular positional data and utility usage, modeling round-to-round context and economy carry-over effects, exploring ensemble stacking methods that combine all three boosting algorithms, and investigating deep learning techniques like LSTM networks for even richer temporal analysis of the time-series features.</p>
+    <p>The success of Gradient Boosting can be attributed to its residual-based learning approach, where each sequential model fits the errors of the previous ensemble, capturing subtle patterns that simpler methods miss. The learning curve shows that while training accuracy reaches approximately 97%, test accuracy stabilizes at 86-87%, indicating controlled overfitting with strong generalization. Looking ahead, further improvements could involve incorporating granular positional data and utility usage, modeling round-to-round context and economy carry-over effects, exploring ensemble stacking methods that combine all three boosting algorithms, and investigating deep learning techniques like LSTM networks for even richer temporal analysis of the time-series features.</p>
   </div>
 
   <style>

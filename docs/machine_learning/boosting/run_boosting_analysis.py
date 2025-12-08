@@ -31,104 +31,74 @@ print("BOOSTING ANALYSIS FOR CS2 ROUND WINNER PREDICTION")
 print("="*80)
 
 # Load all match data
-data_dir = '../hltv_data'
+data_dir = 'enhanced_features'
 
-# Get all rounds and deaths files
-rounds_files = glob.glob(os.path.join(data_dir, '*_rounds.csv'))
-deaths_files = glob.glob(os.path.join(data_dir, '*_deaths.csv'))
+# Check for combined file first, otherwise load individual files
+combined_file = os.path.join(data_dir, 'combined_enhanced_features.csv')
+if os.path.exists(combined_file):
+    print(f"\nLoading combined features file: {combined_file}")
+    features_df = pd.read_csv(combined_file)
+    print(f"Total rows loaded: {len(features_df)}")
+else:
+    # Get all enhanced features files
+    feature_files = glob.glob(os.path.join(data_dir, '*_enhanced_features.csv'))
 
-print(f"\nFound {len(rounds_files)} match files")
+    print(f"\nFound {len(feature_files)} enhanced feature files")
 
-# Load and combine all rounds data
-rounds_dfs = []
-for file in rounds_files:
-    df = pd.read_csv(file)
-    match_name = os.path.basename(file).replace('_rounds.csv', '')
-    df['match_id'] = match_name
-    rounds_dfs.append(df)
+    # Check if files were found
+    if len(feature_files) == 0:
+        print(f"ERROR: No enhanced feature files found in {data_dir}")
+        print(f"Looking for files matching pattern: {os.path.join(data_dir, '*_enhanced_features.csv')}")
+        print(f"Current working directory: {os.getcwd()}")
+        print(f"Data directory (relative): {data_dir}")
+        print(f"Data directory (absolute): {os.path.abspath(data_dir)}")
+        exit(1)
 
-rounds_df = pd.concat(rounds_dfs, ignore_index=True)
-print(f"Total rounds loaded: {len(rounds_df)}")
+    # Load and combine all enhanced features data
+    features_dfs = []
+    for file in feature_files:
+        df = pd.read_csv(file)
+        # match_id should already be in the file, but ensure it's there
+        if 'match_id' not in df.columns:
+            match_name = os.path.basename(file).replace('_enhanced_features.csv', '')
+        df['match_id'] = match_name
+        features_dfs.append(df)
 
-# Load and combine all deaths data
-deaths_dfs = []
-for file in deaths_files:
-    df = pd.read_csv(file)
-    match_name = os.path.basename(file).replace('_deaths.csv', '')
-    df['match_id'] = match_name
-    deaths_dfs.append(df)
+    features_df = pd.concat(features_dfs, ignore_index=True)
+    print(f"Total rows loaded: {len(features_df)}")
 
-deaths_df = pd.concat(deaths_dfs, ignore_index=True)
-print(f"Total deaths loaded: {len(deaths_df)}")
-
-# Feature engineering function
-def create_round_features_fixed(rounds_df, deaths_df):
-    """
-    Create features for round winner prediction from rounds and deaths data.
-    """
-    features_list = []
-    
-    for idx, round_row in rounds_df.iterrows():
-        match_id = round_row['match_id']
-        round_num = round_row['round_num']
-        
-        # Get deaths for this round
-        round_deaths = deaths_df[
-            (deaths_df['match_id'] == match_id)
-        ].copy()
-        
-        if len(round_deaths) == 0:
-            continue
-            
-        # Calculate features
-        features = {
-            'match_id': match_id,
-            'round_num': round_num,
-            'winning_team': round_row['winning_team'],
-            
-            # Bomb features
-            'bomb_planted': int(round_row['bomb_planted']),
-            
-            # Kill features
-            'total_kills': len(round_deaths),
-            'headshot_rate': round_deaths['headshot'].mean() if len(round_deaths) > 0 else 0,
-            
-            # Damage features
-            'avg_damage': round_deaths['dmg_health'].mean(),
-            'total_damage': round_deaths['dmg_health'].sum(),
-            
-            # Distance features
-            'avg_distance': round_deaths['distance'].mean(),
-            
-            # Weapon-specific kills
-            'ak47_kills': (round_deaths['weapon'] == 'ak47').sum(),
-            'awp_kills': (round_deaths['weapon'] == 'awp').sum(),
-            'm4a1_kills': (round_deaths['weapon'].isin(['m4a1', 'm4a1_silencer'])).sum(),
-            
-            # Special kill types
-            'headshot_kills': round_deaths['headshot'].sum(),
-            'noscope_kills': round_deaths['noscope'].sum(),
-            'thrusmoke_kills': round_deaths['thrusmoke'].sum(),
-        }
-        
-        features_list.append(features)
-    
-    return pd.DataFrame(features_list)
-
-# Create features
-print("\nCreating features...")
-features_df = create_round_features_fixed(rounds_df, deaths_df)
+# Clean features - keep only rows with winning_team
 features_df_clean = features_df.dropna(subset=['winning_team'])
 
-print(f"Features created for {len(features_df_clean)} rounds")
+# For modeling, we need to get one row per round (the final state or aggregate)
+# The enhanced features have multiple rows per round (one per tick/time_elapsed)
+# We'll use the last row for each round (highest time_elapsed)
+print("\nAggregating features per round...")
+features_df_clean = features_df_clean.sort_values(['match_id', 'round_num', 'time_elapsed'])
+features_df_clean = features_df_clean.groupby(['match_id', 'round_num']).last().reset_index()
+
+print(f"Features prepared for {len(features_df_clean)} rounds")
 
 # Prepare data for modeling
+# Select features available in enhanced_features files
 numeric_features = [
-    'bomb_planted', 'total_kills', 'headshot_rate', 
-    'avg_damage', 'total_damage', 'avg_distance', 
-    'ak47_kills', 'awp_kills', 'm4a1_kills',
-    'headshot_kills', 'noscope_kills', 'thrusmoke_kills'
+    'bomb_planted', 'player_count_advantage',
+    't_total_hp', 'ct_total_hp', 't_avg_hp', 'ct_avg_hp',
+    't_total_armor', 'ct_total_armor',
+    't_equipment_value', 'ct_equipment_value', 'equipment_advantage',
+    't_awp_count', 'ct_awp_count', 'awp_advantage',
+    't_rifle_count', 'ct_rifle_count', 'rifle_advantage',
+    'time_since_plant', 'time_until_explosion',
+    'round_time_elapsed', 'round_time_remaining'
 ]
+
+# Filter to only include features that exist in the dataframe
+available_features = [f for f in numeric_features if f in features_df_clean.columns]
+if len(available_features) < len(numeric_features):
+    missing = set(numeric_features) - set(available_features)
+    print(f"Warning: Some features not found in data: {missing}")
+    print(f"Using {len(available_features)} available features")
+numeric_features = available_features
 
 X = features_df_clean[numeric_features].fillna(0)
 y = features_df_clean['winning_team']
@@ -360,8 +330,11 @@ print("✓ Saved boosting_concept.png")
 # 3. Data Sample
 fig, ax = plt.subplots(figsize=(14, 6))
 
-sample_data = features_df_clean[['winning_team', 'bomb_planted', 'total_kills', 'headshot_rate', 
-                                   'avg_damage', 'ak47_kills', 'awp_kills']].head(10)
+# Select sample columns that exist in the dataframe
+sample_cols = ['winning_team', 'bomb_planted', 'player_count_advantage', 
+               't_total_hp', 'ct_total_hp', 'equipment_advantage', 'awp_advantage']
+sample_cols = [col for col in sample_cols if col in features_df_clean.columns]
+sample_data = features_df_clean[sample_cols].head(10)
 
 table = ax.table(cellText=sample_data.values,
                 colLabels=sample_data.columns,
