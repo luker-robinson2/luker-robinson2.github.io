@@ -2,113 +2,15 @@
   <h1>Conclusions</h1>
   
   <div class="section">
-    <h2>Project Summary</h2>
-    <p>This project explored the application of machine learning techniques to professional Counter-Strike 2 match data, with the primary goal of predicting round winners and discovering patterns in player behavior. Through extensive experimentation with both supervised and unsupervised methods, several key insights emerged that have implications for competitive gaming analysis and machine learning practice.</p>
+    <p>This project demonstrated that machine learning can effectively predict Counter-Strike 2 round outcomes with 86.65% accuracy when provided with appropriate game state features. The journey from initial models that performed no better than random guessing to a final model that correctly predicts five out of six rounds illustrates the critical importance of understanding what to measure. The most significant finding is that economic advantage—how much money teams have invested in weapons and armor—dominates all other factors in determining who wins a round. This insight, while intuitive to experienced players, is now quantified: equipment advantage alone accounts for nearly 30% of the predictive signal. For competitive players and coaches, this reinforces that strategic economic decisions about when to save, when to force buy, and when to invest in full equipment matter more than raw mechanical skill in determining match outcomes.</p>
   </div>
 
   <div class="section">
-    <h2>Key Findings</h2>
-    
-    <h3>1. Economy Dominates Round Outcomes</h3>
-    <p>The most significant finding across all supervised learning methods is that <strong>economic advantage is the primary predictor of round success</strong>. Equipment advantage alone accounts for 28.2% of feature importance in the best-performing model, with armor and equipment values contributing an additional 50%+ of predictive power. This quantitatively confirms what experienced players understand intuitively: teams with more money to buy superior weapons and armor have dramatically higher win probability. For competitive players, this suggests that strategic economic decisions—when to save, when to force buy, when to full buy—are more controllable and impactful than relying solely on mechanical skill execution.</p>
-    
-    <h3>2. Feature Engineering Matters More Than Algorithm Selection</h3>
-    <p>The journey from 58.70% baseline accuracy to 86.65% final accuracy was primarily driven by feature engineering, not algorithm tuning. Switching from outcome-based features (kills, deaths) to state-based features (equipment values, player counts, health) produced a 27.95 percentage point improvement. This demonstrates that in machine learning, <strong>what is measured matters more than which algorithm is chosen</strong>. State-based features that exist before the outcome provide true predictive signal, while outcome-based features merely describe what already happened.</p>
-    
-    <h3>3. Time-Series Sampling Captures Game Dynamics</h3>
-    <p>Sampling game state at multiple time points throughout each round (every 10 seconds) rather than once at the end provided crucial benefits: an 8.7x increase in training data (288 to 2,507 samples), capture of temporal dynamics showing how advantages develop, and training data representing various game phases. This approach enabled the boosting models to learn how early-round advantages translate into final outcomes.</p>
-    
-    <h3>4. Ensemble Methods Outperform Simple Models</h3>
-    <p>Gradient Boosting achieved 86.65% accuracy with a ROC AUC of 0.942, dramatically outperforming individual decision trees (50-57%) and Naive Bayes classifiers (52-54%). The ensemble approach of combining many weak learners (shallow decision trees) into a strong learner proved highly effective for this prediction task. The sequential nature of boosting, where each model corrects the errors of its predecessors, captured complex interactions between economy, time, and player states.</p>
-    
-    <h3>5. Two Distinct Player Archetypes Exist</h3>
-    <p>Unsupervised clustering analysis revealed that professional CS2 players broadly fall into two categories: <strong>Entry Fraggers</strong> (aggressive, high kills, more deaths, opening kills) and <strong>Support/Finishing Players</strong> (conservative, higher survival, post-plant kills). PCA analysis showed that 70.3% of player behavior variance can be captured in just two dimensions representing overall activity level and playstyle aggressiveness. This finding could inform team composition strategies and player role optimization.</p>
+    <p>The analysis also revealed that professional CS2 players naturally cluster into two distinct roles based on their statistical patterns. Entry fraggers take aggressive positions, secure opening kills, and accept higher death counts in exchange for creating opportunities. Support players survive longer, secure kills in post-plant situations, and provide stability for their teams. Principal component analysis confirmed that just two dimensions capture over 70% of the variation in player behavior, suggesting that despite the apparent complexity of professional gameplay, player performance can be meaningfully summarized along simple axes of activity level and aggression. These findings could inform team composition decisions, player development strategies, and performance evaluation metrics for esports organizations.</p>
   </div>
 
   <div class="section">
-    <h2>Method Performance Summary</h2>
-    <p>The following table summarizes the performance of all machine learning methods applied in this project:</p>
-    
-    <table class="summary-table">
-      <thead>
-        <tr>
-          <th>Method</th>
-          <th>Best Accuracy</th>
-          <th>Key Insight</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="highlight">
-          <td>Gradient Boosting</td>
-          <td>86.65%</td>
-          <td>Best performer; ROC AUC 0.942; economy features dominate</td>
-        </tr>
-        <tr>
-          <td>AdaBoost</td>
-          <td>83.33%</td>
-          <td>Strong sample reweighting performance</td>
-        </tr>
-        <tr>
-          <td>XGBoost</td>
-          <td>83.33%</td>
-          <td>Consistent with built-in regularization</td>
-        </tr>
-        <tr>
-          <td>Decision Trees</td>
-          <td>50-57%</td>
-          <td>Overfitting or underfitting; limited predictive power alone</td>
-        </tr>
-        <tr>
-          <td>Naive Bayes</td>
-          <td>52-54%</td>
-          <td>Independence assumption violated; near random performance</td>
-        </tr>
-        <tr>
-          <td>K-Means Clustering</td>
-          <td>2 clusters</td>
-          <td>Identified Entry Fragger vs Support player types</td>
-        </tr>
-        <tr>
-          <td>PCA</td>
-          <td>70.3% variance</td>
-          <td>Reduced 17 features to 2 components for visualization</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="section">
-    <h2>Implications for Competitive Gaming</h2>
-    <p>The findings from this analysis have practical implications for competitive CS2 players and teams:</p>
-    
-    <ul>
-      <li><strong>Prioritize Economy:</strong> Strategic saving, forcing opponent eco rounds, and preserving weapons should be prioritized as the most controllable factor influencing match outcomes</li>
-      <li><strong>Team Composition:</strong> Understanding the Entry Fragger vs Support dichotomy can inform roster building and role assignment</li>
-      <li><strong>Mid-Round Decisions:</strong> The high importance of player count advantage and health totals suggests that trading kills efficiently and avoiding unnecessary deaths are crucial</li>
-      <li><strong>Armor Investment:</strong> Armor metrics showed surprisingly high importance (CT: 19.8%, T: 10.2%), suggesting armor purchases may be undervalued in some strategies</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h2>Lessons for Machine Learning Practice</h2>
-    <p>Beyond the domain-specific findings, this project reinforced several important machine learning principles:</p>
-    
-    <ul>
-      <li><strong>Data Quality Over Algorithm Complexity:</strong> Proper feature engineering produced larger gains than algorithm selection or hyperparameter tuning</li>
-      <li><strong>Beware of Data Leakage:</strong> Using outcome-based features to predict outcomes is a subtle but critical error that produces meaningless models</li>
-      <li><strong>Match Algorithm to Data:</strong> Naive Bayes assumptions were violated by correlated game features; algorithm selection must consider data characteristics</li>
-      <li><strong>Ensemble Methods Provide Robustness:</strong> Combining weak learners through boosting provided both accuracy and resistance to overfitting</li>
-      <li><strong>Validation Strategy Matters:</strong> Group-aware cross-validation was essential when using time-series sampling to prevent information leakage</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h2>Final Thoughts</h2>
-    <p>This project demonstrated that machine learning can effectively predict Counter-Strike 2 round outcomes with 86.65% accuracy when provided with appropriate state-based features. The dominance of economic factors in the predictions quantitatively confirms strategic principles that experienced players have developed through intuition. The journey from 50% (random guessing) to 86.65% accuracy illustrates the importance of understanding the problem domain, engineering meaningful features, and selecting appropriate algorithms for the data characteristics.</p>
-    
-    <p>Future work could extend this analysis to incorporate positional data, utility usage, and player-specific models. Real-time prediction during live matches represents an exciting application possibility, potentially providing strategic insights for coaches and analysts. The techniques developed here could also be adapted to other competitive games with similar structured data availability.</p>
-    
-    <p>Ultimately, this project showcases how machine learning can extract actionable insights from competitive gaming data, bridging the gap between intuitive player knowledge and quantitative analysis.</p>
+    <p>Looking forward, this project establishes a foundation for more sophisticated esports analytics. The techniques developed here—parsing game demos, engineering predictive features, and applying ensemble machine learning methods—could be extended to other competitive games with similar data availability. The 86.65% accuracy achieved suggests that real-time prediction systems for live matches are feasible, potentially providing coaches with strategic insights during tactical timeouts or analysts with probability estimates for broadcast commentary. While challenges remain in scaling data collection and incorporating positional analysis, this work demonstrates that competitive gaming generates rich data that, when properly processed, yields actionable insights about what separates winning teams from losing ones.</p>
   </div>
 
   <style>
@@ -120,55 +22,10 @@
       border-left: 4px solid #28a745;
     }
     
-    .section h2 {
-      color: #28a745;
-      border-bottom: 2px solid #28a745;
-      padding-bottom: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
-    
-    .section h3 {
-      color: #495057;
-      margin-top: 1.5rem;
-      margin-bottom: 1rem;
-    }
-    
-    ul {
-      padding-left: 2rem;
-    }
-    
-    li {
-      margin-bottom: 0.5rem;
-    }
-    
-    .summary-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1rem 0;
-    }
-    
-    .summary-table th, .summary-table td {
-      padding: 12px 15px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
-    
-    .summary-table thead {
-      background-color: #28a745;
-      color: white;
-    }
-    
-    .summary-table tbody tr:hover {
-      background-color: #f1f1f1;
-    }
-    
-    .summary-table .highlight {
-      background-color: #d4edda;
-      font-weight: 600;
-    }
-    
-    strong {
-      color: #212529;
+    p {
+      line-height: 1.8;
+      text-align: justify;
+      font-size: 1.05rem;
     }
   </style>
 {{/main}}
