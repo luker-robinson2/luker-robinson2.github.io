@@ -1,0 +1,219 @@
+{{#> main title="Project Challenges" }}
+  <h1>Project Challenges</h1>
+  
+  <div class="section">
+    <h2>Overview</h2>
+    <p>This project presented numerous technical and scientific challenges throughout the semester. From data collection to model development, each phase revealed important lessons about applying machine learning to competitive gaming data. This section provides a detailed scientific analysis of the obstacles encountered and how they were addressed.</p>
+  </div>
+
+  <div class="section">
+    <h2>Challenge 1: Demo File Parsing and Data Extraction</h2>
+    <p>The first major challenge involved extracting meaningful data from Counter-Strike 2 demo files. CS2 demo files (.dem) are compressed binary formats that store complete match replays, including player positions, weapon states, health values, and game events at every game tick (64-128 times per second).</p>
+    
+    <h3>Technical Issues Encountered</h3>
+    <ul>
+      <li><strong>Library Compatibility:</strong> The demoparser2 Python library required specific versions and had limited documentation for CS2's updated demo format</li>
+      <li><strong>Corrupted Demo Files:</strong> Of the 20 demo files collected, 7 were corrupted or incomplete, requiring robust error handling</li>
+      <li><strong>Integer Overflow Bug:</strong> Equipment advantage calculations using uint64 caused negative values to overflow. This was fixed by explicitly converting to int64</li>
+      <li><strong>Winner Detection:</strong> Round winner values in the parsed data were strings ('T', 'CT') rather than integers (2, 3), requiring logic updates</li>
+      <li><strong>Round Boundary Detection:</strong> The first round in each match is a warmup with tick=1, which had to be filtered out using consecutive round_end event ticks</li>
+    </ul>
+    
+    <h3>Solution Approach</h3>
+    <p>A custom extraction pipeline was developed that parsed game state at specific tick intervals, handled missing data gracefully, and validated output against known match results. Error handling was implemented at multiple levels to skip corrupted rounds while preserving valid data.</p>
+  </div>
+
+  <div class="section">
+    <h2>Challenge 2: Feature Engineering - Outcome vs State-Based Features</h2>
+    <p>The most significant scientific challenge was understanding why initial models performed barely above random guessing (50-58% accuracy). This required fundamental rethinking of the feature engineering approach.</p>
+    
+    <h3>The Problem: Outcome-Based Features</h3>
+    <p>Initial features were extracted at round end and included metrics like:</p>
+    <ul>
+      <li>Total kills per team</li>
+      <li>Headshot percentage</li>
+      <li>Bomb explosions/defuses</li>
+      <li>Damage dealt</li>
+    </ul>
+    <p>These features describe <strong>what happened</strong> after the round concluded, not <strong>what predicted</strong> the outcome. Using kills to predict winner is essentially using the outcome to predict itself - a form of data leakage that produces meaningless models.</p>
+    
+    <h3>The Solution: State-Based Time-Series Features</h3>
+    <p>The breakthrough came from switching to state-based features that exist <strong>before</strong> the outcome is determined:</p>
+    <ul>
+      <li><strong>Economy Features:</strong> Equipment values, equipment advantage, per-player equipment</li>
+      <li><strong>Player State:</strong> Players alive, health totals, armor values</li>
+      <li><strong>Bomb State:</strong> Planted status, time since plant, time until explosion</li>
+      <li><strong>Time Features:</strong> Time elapsed, time remaining, round phase (early/mid/late)</li>
+      <li><strong>Weapon Features:</strong> AWP counts, rifle counts per team</li>
+    </ul>
+    
+    <h3>Time-Series Sampling Innovation</h3>
+    <p>Instead of extracting one sample per round, game state was sampled at 10 different time points (every 10 seconds: 10s, 20s, 30s, ..., 100s). This approach:</p>
+    <ul>
+      <li>Increased dataset size from 288 to 2,507 samples</li>
+      <li>Captured temporal dynamics of how advantages develop</li>
+      <li>Provided training data at various game phases</li>
+      <li>Required group-aware train/test splitting to prevent data leakage</li>
+    </ul>
+    
+    <p>This single innovation improved accuracy from 58.70% to 86.65% - a 27.95 percentage point gain.</p>
+  </div>
+
+  <div class="section">
+    <h2>Challenge 3: Data Leakage Prevention</h2>
+    <p>When using time-series sampling with multiple samples per round, standard train/test splitting could leak information between training and test sets. If samples from the same round appeared in both sets, the model could memorize round-specific patterns rather than learning generalizable features.</p>
+    
+    <h3>Group-Aware Splitting</h3>
+    <p>The solution implemented GroupShuffleSplit to ensure all samples from the same match stayed together in either training or test sets:</p>
+    <ul>
+      <li>Training Set: 2,005 samples from 10 matches</li>
+      <li>Test Set: 502 samples from 3 matches</li>
+      <li>No round appeared in both sets</li>
+      <li>Cross-validation also used group-aware folds</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Challenge 4: Naive Bayes Independence Assumption Violation</h2>
+    <p>Naive Bayes classifiers assume feature independence, but CS2 gameplay features are highly correlated:</p>
+    <ul>
+      <li>Kill count correlates with damage output</li>
+      <li>Headshot rate influences overall effectiveness</li>
+      <li>Weapon usage patterns correlate with tactical positioning</li>
+      <li>Equipment values correlate with weapon types</li>
+    </ul>
+    
+    <h3>Scientific Analysis</h3>
+    <p>Both Multinomial (52.17%) and Bernoulli (54.35%) Naive Bayes variants performed barely above random guessing. The Bernoulli variant showed extreme bias, predicting CT wins for almost all rounds due to inappropriate binary conversion of continuous features. This demonstrated that the "naive" independence assumption fundamentally mismatches the interconnected nature of competitive gaming data.</p>
+    
+    <h3>Lesson Learned</h3>
+    <p>Not all algorithms are suitable for all problem types. Naive Bayes excels at text classification and categorical data but struggles with the continuous, correlated features found in game state data.</p>
+  </div>
+
+  <div class="section">
+    <h2>Challenge 5: Decision Tree Overfitting</h2>
+    <p>Unrestricted decision trees achieved 100% training accuracy but poor test performance, demonstrating classic overfitting:</p>
+    <ul>
+      <li>Deep trees memorized training examples rather than learning patterns</li>
+      <li>Each sample could receive its own leaf node</li>
+      <li>Small dataset size (288 samples initially) exacerbated the problem</li>
+    </ul>
+    
+    <h3>Mitigation Strategies</h3>
+    <ul>
+      <li><strong>Depth Limiting:</strong> Restricting max_depth to 3-5 prevented memorization</li>
+      <li><strong>Ensemble Methods:</strong> Boosting with shallow trees (weak learners) provided regularization</li>
+      <li><strong>More Data:</strong> Time-series sampling increased data availability</li>
+    </ul>
+    
+    <p>The boosting methods ultimately achieved 86.65% accuracy by combining many shallow trees, each contributing small pieces of predictive power without overfitting.</p>
+  </div>
+
+  <div class="section">
+    <h2>Challenge 6: Class Imbalance and Bias</h2>
+    <p>Counter-Strike 2 professional matches showed CT-sided tendencies with approximately 53% CT wins vs 47% T wins. While not severe, this imbalance affected some models:</p>
+    <ul>
+      <li>Bernoulli Naive Bayes predicted CT for nearly all rounds (0% T recall)</li>
+      <li>Decision trees showed bias toward majority class</li>
+      <li>Early models had higher CT precision but lower T recall</li>
+    </ul>
+    
+    <h3>Solutions Implemented</h3>
+    <ul>
+      <li>Stratified train/test splits to maintain class distribution</li>
+      <li>Evaluation using both precision and recall for each class</li>
+      <li>ROC AUC as a class-imbalance-robust metric (achieved 0.942)</li>
+      <li>Confusion matrix analysis to identify bias patterns</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Challenge 7: Unsupervised Learning Interpretation</h2>
+    <p>Clustering and PCA analyses for player role discovery presented interpretation challenges:</p>
+    <ul>
+      <li><strong>Optimal K Selection:</strong> Elbow method and silhouette analysis suggested k=2, which was simpler than expected</li>
+      <li><strong>Cluster Naming:</strong> Assigning meaningful labels (Entry Fragger, Support) required domain expertise</li>
+      <li><strong>PCA Interpretation:</strong> Understanding what principal components represent required analyzing loading plots</li>
+    </ul>
+    
+    <h3>Insights Gained</h3>
+    <p>The clustering analysis revealed that professional CS2 players broadly fall into two archetypes: aggressive entry fraggers and supportive finishing players. PCA showed that 70.3% of variance could be captured in just two dimensions, with PC1 representing overall activity level and PC2 distinguishing playstyle aggressiveness.</p>
+  </div>
+
+  <div class="section">
+    <h2>What Worked Well</h2>
+    <ul>
+      <li><strong>State-Based Features:</strong> Switching from outcome to state-based features produced the largest accuracy improvement</li>
+      <li><strong>Time-Series Sampling:</strong> Multiple samples per round captured game dynamics and increased data volume</li>
+      <li><strong>Ensemble Methods:</strong> Boosting algorithms effectively combined weak learners without overfitting</li>
+      <li><strong>Economy Features:</strong> Equipment advantage emerged as the dominant predictor across all methods</li>
+      <li><strong>Demo Parsing:</strong> The demoparser2 library enabled extraction of detailed game state information</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>What Did Not Work Well</h2>
+    <ul>
+      <li><strong>Outcome-Based Features:</strong> Initial approach using post-round statistics was fundamentally flawed</li>
+      <li><strong>Naive Bayes:</strong> Independence assumption violated by correlated game features</li>
+      <li><strong>Simple Decision Trees:</strong> Either overfitted (deep) or underfitted (shallow) on small datasets</li>
+      <li><strong>Demo Corruption:</strong> 35% of collected demo files were corrupted and unusable</li>
+      <li><strong>Limited Positional Data:</strong> Player positions were available but not fully utilized due to complexity</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Future Research Directions</h2>
+    <ul>
+      <li><strong>Positional Features:</strong> Incorporating player positions, map zones, and distances to objectives</li>
+      <li><strong>Utility Usage:</strong> Tracking grenade usage patterns and their impact on round outcomes</li>
+      <li><strong>Economy Modeling:</strong> Predicting round-to-round economic carry-over effects</li>
+      <li><strong>Ensemble Stacking:</strong> Combining predictions from multiple boosting algorithms</li>
+      <li><strong>Deep Learning:</strong> LSTM networks for sequential modeling of round progression</li>
+      <li><strong>Real-Time Prediction:</strong> Optimizing models for live game prediction during matches</li>
+      <li><strong>Player-Specific Models:</strong> Building models that account for individual player tendencies</li>
+      <li><strong>Map-Specific Analysis:</strong> Understanding how different map geometries affect predictions</li>
+    </ul>
+  </div>
+
+  <style>
+    .section {
+      margin-bottom: 3rem;
+      padding: 1.5rem;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #dc3545;
+    }
+    
+    .section h2 {
+      color: #dc3545;
+      border-bottom: 2px solid #dc3545;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .section h3 {
+      color: #495057;
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .section h4 {
+      color: #6c757d;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    ul, ol {
+      padding-left: 2rem;
+    }
+    
+    li {
+      margin-bottom: 0.5rem;
+    }
+    
+    strong {
+      color: #212529;
+    }
+  </style>
+{{/main}}

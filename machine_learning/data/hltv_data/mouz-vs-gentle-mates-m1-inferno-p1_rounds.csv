@@ -1,0 +1,5 @@
+round_num,winning_team,round_end_reason,bomb_planted,demo_type,map_name,parsing_status
+1,,,False,cs2,de_inferno,success
+2,CT,t_killed,False,cs2,de_inferno,success
+3,CT,t_killed,False,cs2,de_inferno,success
+4,CT,t_killed,False,cs2,de_inferno,success

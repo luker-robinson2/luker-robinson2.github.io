@@ -1,0 +1,445 @@
+{{#> main title="Results" }}
+  <h1>Results Summary: Machine Learning Methods Comparison</h1>
+  
+  <div class="section">
+    <h2>Overview</h2>
+    <p>This page presents a comprehensive comparison of all machine learning methods applied to Counter-Strike 2 professional match data throughout this project. The analysis covered both supervised and unsupervised learning approaches, each providing unique insights into player behavior and round outcome prediction.</p>
+    
+    <p>The primary prediction task was determining the winner of individual game rounds based on features extracted from professional match demos. Additionally, unsupervised methods were used to discover natural groupings in player behavior data.</p>
+  </div>
+
+  <div class="section">
+    <h2>Method Comparison Table</h2>
+    <div class="table-container">
+      <table class="results-table">
+        <thead>
+          <tr>
+            <th>Method</th>
+            <th>Type</th>
+            <th>Task</th>
+            <th>Best Accuracy / Result</th>
+            <th>Key Findings</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="highlight-row">
+            <td><strong>Gradient Boosting</strong></td>
+            <td>Supervised (Ensemble)</td>
+            <td>Round Winner Prediction</td>
+            <td><strong>86.65%</strong> 🏆</td>
+            <td>Best performer with 2,507 samples; ROC AUC of 0.942; economy features dominate</td>
+          </tr>
+          <tr>
+            <td><strong>AdaBoost</strong></td>
+            <td>Supervised (Ensemble)</td>
+            <td>Round Winner Prediction</td>
+            <td><strong>83.33%</strong></td>
+            <td>Strong sample reweighting with larger dataset</td>
+          </tr>
+          <tr>
+            <td><strong>XGBoost</strong></td>
+            <td>Supervised (Ensemble)</td>
+            <td>Round Winner Prediction</td>
+            <td><strong>83.33%</strong></td>
+            <td>Regularization prevents overfitting; consistent performance</td>
+          </tr>
+          <tr>
+            <td><strong>Decision Tree (Deep)</strong></td>
+            <td>Supervised</td>
+            <td>Round Winner Prediction</td>
+            <td><strong>56.52%</strong></td>
+            <td>Shows overfitting; poor generalization despite higher accuracy</td>
+          </tr>
+          <tr>
+            <td><strong>Bernoulli Naive Bayes</strong></td>
+            <td>Supervised</td>
+            <td>Round Winner Prediction</td>
+            <td><strong>54.35%</strong></td>
+            <td>Strong bias toward CT prediction; binary features lose information</td>
+          </tr>
+          <tr>
+            <td><strong>Multinomial Naive Bayes</strong></td>
+            <td>Supervised</td>
+            <td>Round Winner Prediction</td>
+            <td><strong>52.17%</strong></td>
+            <td>Independence assumption violated; features highly correlated</td>
+          </tr>
+          <tr>
+            <td><strong>Decision Tree (Gini)</strong></td>
+            <td>Supervised</td>
+            <td>Round Winner Prediction</td>
+            <td><strong>51.09%</strong></td>
+            <td>Limited depth prevents overfitting but constrains learning</td>
+          </tr>
+          <tr>
+            <td><strong>Decision Tree (Entropy)</strong></td>
+            <td>Supervised</td>
+            <td>Round Winner Prediction</td>
+            <td><strong>50.00%</strong></td>
+            <td>Essentially random guessing; entropy criterion less effective</td>
+          </tr>
+          <tr class="unsupervised-row">
+            <td><strong>K-Means Clustering</strong></td>
+            <td>Unsupervised</td>
+            <td>Player Role Discovery</td>
+            <td><strong>2 clusters optimal</strong></td>
+            <td>Identified Entry Fraggers vs Support/Finishing players</td>
+          </tr>
+          <tr class="unsupervised-row">
+            <td><strong>Hierarchical Clustering</strong></td>
+            <td>Unsupervised</td>
+            <td>Player Role Discovery</td>
+            <td><strong>Dendrogram analysis</strong></td>
+            <td>Confirmed K-Means findings with cosine similarity</td>
+          </tr>
+          <tr class="unsupervised-row">
+            <td><strong>PCA</strong></td>
+            <td>Unsupervised</td>
+            <td>Dimensionality Reduction</td>
+            <td><strong>70.3% variance (2 PCs)</strong></td>
+            <td>Reduced 17 features to 2 components; enabled visualization</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Performance Ranking (Supervised Methods)</h2>
+    <div class="ranking-container">
+      <div class="rank-item gold">
+        <span class="rank">1</span>
+        <span class="method">Gradient Boosting</span>
+        <span class="accuracy">86.65%</span>
+        <span class="improvement">+27.95pp vs baseline</span>
+      </div>
+      <div class="rank-item silver">
+        <span class="rank">2</span>
+        <span class="method">AdaBoost</span>
+        <span class="accuracy">83.33%</span>
+        <span class="improvement">+24.63pp vs baseline</span>
+      </div>
+      <div class="rank-item silver">
+        <span class="rank">2</span>
+        <span class="method">XGBoost</span>
+        <span class="accuracy">83.33%</span>
+        <span class="improvement">+24.63pp vs baseline</span>
+      </div>
+      <div class="rank-item">
+        <span class="rank">4</span>
+        <span class="method">Decision Tree (Deep)</span>
+        <span class="accuracy">56.52%</span>
+        <span class="improvement">Overfitting concerns</span>
+      </div>
+      <div class="rank-item">
+        <span class="rank">5</span>
+        <span class="method">Bernoulli Naive Bayes</span>
+        <span class="accuracy">54.35%</span>
+        <span class="improvement">CT bias</span>
+      </div>
+      <div class="rank-item">
+        <span class="rank">6</span>
+        <span class="method">Multinomial Naive Bayes</span>
+        <span class="accuracy">52.17%</span>
+        <span class="improvement">Near random</span>
+      </div>
+      <div class="rank-item">
+        <span class="rank">7</span>
+        <span class="method">Decision Tree (Gini)</span>
+        <span class="accuracy">51.09%</span>
+        <span class="improvement">Near random</span>
+      </div>
+      <div class="rank-item">
+        <span class="rank">8</span>
+        <span class="method">Decision Tree (Entropy)</span>
+        <span class="accuracy">50.00%</span>
+        <span class="improvement">Random baseline</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Key Feature Importance Findings</h2>
+    <p>Across all supervised learning methods, certain features consistently emerged as the strongest predictors of round outcomes:</p>
+    
+    <div class="features-grid">
+      <div class="feature-card">
+        <h4>🥇 Equipment Advantage</h4>
+        <p>The difference in team equipment values was the #1 predictor across all boosting methods. Teams with superior weapon loadouts have significantly higher win probabilities.</p>
+      </div>
+      <div class="feature-card">
+        <h4>🥈 Player Count</h4>
+        <p>Number of players alive on each team strongly predicts outcomes. Numerical superiority translates directly to higher win probability.</p>
+      </div>
+      <div class="feature-card">
+        <h4>🥉 Time Elapsed</h4>
+        <p>Round phase matters significantly - early, mid, and late game dynamics affect team advantages and strategies differently.</p>
+      </div>
+      <div class="feature-card">
+        <h4>Health Metrics</h4>
+        <p>Total and average HP per team provide additional predictive signal, indicating team condition and survivability.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Unsupervised Learning Insights</h2>
+    <div class="insights-container">
+      <div class="insight-box">
+        <h3>Clustering Results</h3>
+        <p>K-Means and Hierarchical clustering identified <strong>two distinct player archetypes</strong> in professional CS2:</p>
+        <ul>
+          <li><strong>Entry Fraggers:</strong> High K/D ratios, elevated opening kill counts, aggressive engagement patterns</li>
+          <li><strong>Support/Finishing Players:</strong> Higher survival rates, more kills after bomb planting, supportive positioning</li>
+        </ul>
+      </div>
+      <div class="insight-box">
+        <h3>PCA Results</h3>
+        <p>Principal Component Analysis reduced <strong>17 features to 2 components</strong> while retaining 70.3% of variance:</p>
+        <ul>
+          <li><strong>PC1 (58.0%):</strong> Overall player activity and performance level</li>
+          <li><strong>PC2 (12.3%):</strong> Aggressive vs supportive playstyle distinction</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Dataset Comparison</h2>
+    <table class="results-table">
+      <thead>
+        <tr>
+          <th>Analysis</th>
+          <th>Dataset Size</th>
+          <th>Features</th>
+          <th>Matches</th>
+          <th>Feature Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Naive Bayes & Decision Trees</td>
+          <td>474 rounds</td>
+          <td>11 features</td>
+          <td>21 matches</td>
+          <td>Outcome-based</td>
+        </tr>
+        <tr>
+          <td>Boosting (Enhanced)</td>
+          <td>2,507 samples</td>
+          <td>28 features</td>
+          <td>13 matches</td>
+          <td>State-based time-series</td>
+        </tr>
+        <tr>
+          <td>Clustering & PCA</td>
+          <td>Multiple players</td>
+          <td>16-17 features</td>
+          <td>Various</td>
+          <td>Player behavior metrics</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Key Takeaways</h2>
+    <div class="takeaways">
+      <div class="takeaway">
+        <h4>Feature Engineering Matters Most</h4>
+        <p>The 10+ percentage point improvement from state-based time-series features over outcome-based features demonstrates that <strong>what is measured matters more than which algorithm is chosen</strong>. Proper feature engineering produced larger gains than algorithm selection.</p>
+      </div>
+      <div class="takeaway">
+        <h4>Economy Dominates Round Outcomes</h4>
+        <p>Equipment advantage emerged as the single strongest predictor across all methods. This quantitatively confirms that <strong>winning the economy war is the most controllable factor</strong> in competitive CS2.</p>
+      </div>
+      <div class="takeaway">
+        <h4>Ensemble Methods Outperform Simple Models</h4>
+        <p>Boosting methods (AdaBoost, XGBoost, Gradient Boosting) significantly outperformed individual decision trees and Naive Bayes classifiers, demonstrating the power of combining multiple weak learners.</p>
+      </div>
+      <div class="takeaway">
+        <h4>More Data Enables Better Learning</h4>
+        <p>The increase in dataset size to 2,507 samples through time-series sampling enabled Gradient Boosting to achieve 86.65% accuracy with 0.942 ROC AUC, demonstrating the importance of sufficient training data.</p>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .section {
+      margin-bottom: 3rem;
+      padding: 1.5rem;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #007bff;
+    }
+    
+    .section h2 {
+      color: #007bff;
+      border-bottom: 2px solid #007bff;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .table-container {
+      overflow-x: auto;
+    }
+    
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+    }
+    
+    .results-table th, .results-table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .results-table thead {
+      background-color: #007bff;
+      color: white;
+    }
+    
+    .results-table tbody tr:hover {
+      background-color: #f1f1f1;
+    }
+    
+    .results-table .highlight-row {
+      background-color: #d4edda;
+    }
+    
+    .results-table .unsupervised-row {
+      background-color: #e7e3ff;
+    }
+    
+    .ranking-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .rank-item {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .rank-item.gold {
+      border-left: 4px solid #FFD700;
+      background: linear-gradient(to right, #fff9e6, white);
+    }
+    
+    .rank-item.silver {
+      border-left: 4px solid #C0C0C0;
+      background: linear-gradient(to right, #f5f5f5, white);
+    }
+    
+    .rank-item.bronze {
+      border-left: 4px solid #CD7F32;
+      background: linear-gradient(to right, #fef0e6, white);
+    }
+    
+    .rank-item .rank {
+      font-size: 1.5rem;
+      font-weight: bold;
+      width: 40px;
+      color: #007bff;
+    }
+    
+    .rank-item .method {
+      flex: 1;
+      font-weight: 600;
+    }
+    
+    .rank-item .accuracy {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #28a745;
+      width: 100px;
+      text-align: right;
+    }
+    
+    .rank-item .improvement {
+      width: 180px;
+      text-align: right;
+      color: #6c757d;
+      font-size: 0.9rem;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .feature-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      border-top: 3px solid #28a745;
+    }
+    
+    .feature-card h4 {
+      margin-top: 0;
+      color: #28a745;
+    }
+    
+    .insights-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .insight-box {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      border-left: 4px solid #6f42c1;
+    }
+    
+    .insight-box h3 {
+      color: #6f42c1;
+      margin-top: 0;
+    }
+    
+    .takeaways {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .takeaway {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      border-top: 4px solid #17a2b8;
+    }
+    
+    .takeaway h4 {
+      color: #17a2b8;
+      margin-top: 0;
+    }
+    
+    @media (max-width: 768px) {
+      .rank-item {
+        flex-wrap: wrap;
+      }
+      
+      .rank-item .accuracy,
+      .rank-item .improvement {
+        width: 100%;
+        text-align: left;
+        margin-top: 0.5rem;
+      }
+    }
+  </style>
+{{/main}}
